@@ -1,12 +1,13 @@
 import roles from '../../routes/roles';
 import Role from '../../models/role';
+import { createDefaultRoles } from '../../startup/db';
 import request from 'supertest';
 import server from '../../index';
 import 'babel-polyfill';
 
 //test Creating a role
 describe('Roles, /', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     server; //start server
   });
   afterEach(async () => {
@@ -36,6 +37,13 @@ describe('Roles, /', () => {
         .post('/api/roles')
         .send({});
       expect(res.status).toBe(400);
+    }); //test end
+
+    //test that admin and regular roles exist
+    test('that admin role exist on the system', async () => {
+      const admin = await Role.findOne({ title: 'admin' });
+      expect(admin).toBeTruthy();
+      expect(admin).toHaveProperty('title');
     }); //test end
   }); //end of describe (POST)
 }); //end of describe (Roles)
