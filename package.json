@@ -10,6 +10,7 @@
     "express-async-errors": "^3.1.1",
     "mongoose": "^5.5.1",
     "regenerator-runtime": "^0.13.2",
+    "supertest": "^4.0.2",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
   },
