@@ -1,16 +1,11 @@
-import roles from '../../routes/roles';
+import 'babel-polyfill';
 import Role from '../../models/role';
 import { createDefaultRoles } from '../../startup/db';
 import request from 'supertest';
 import server from '../../index';
-import 'babel-polyfill';
-import { notDeepEqual } from 'assert';
 
 //test Creating a role
 describe('Roles, /', () => {
-  // beforeAll(async () => {
-  //   await Role.deleteMany({}); //empty roles collection in db
-  // });
   beforeEach(async () => {
     server; //start server
   });

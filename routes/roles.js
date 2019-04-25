@@ -3,8 +3,6 @@ import _ from 'lodash';
 import validate from '../api-validations/role';
 import Role from '../models/role';
 
-import 'babel-polyfill';
-
 const router = express.Router();
 
 //endpoint to create a new router
