@@ -14,3 +14,5 @@ const roleSchema = new mongoose.Schema({
 
 //compiling the role schema into a model Class
 const Role = mongoose.model('roles', roleSchema);
+
+export default Role;

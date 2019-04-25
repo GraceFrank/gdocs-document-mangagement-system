@@ -7,17 +7,18 @@ import 'babel-polyfill';
 //test Creating a role
 describe('Roles, /', () => {
   beforeEach(() => {
-    const server = server;
+    server;
   });
   afterEach(async () => {
     await server.close();
+    await Role.remove({});
   });
 
   describe('POST/ ', () => {
     test('that the created role has title property', async () => {
       const res = await request(server)
         .post('/api/roles')
-        .send({ title: 'premium' });
+        .send({ title: 'premiummmm' });
       expect(res.body).toHaveProperty('title');
     });
   });
