@@ -3,11 +3,14 @@ import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
 import mongoose from 'mongoose';
+import Role from '../../models/role';
+
 /*TODO: 
-Write a test that validates that a new user created is unique.
+
 Write a test that validates that a new user created has a role defined.
 Write a test that validates that a new user created has both first and last names.
 Write a test that validates that all users are returned only when requested by admin.
+test that user actually saves to database
  */
 
 describe('users', () => {
@@ -29,6 +32,7 @@ describe('users', () => {
   });
   describe('POST /', () => {
     // validates that a new user created is unique.
+
     test('that new user cannot use exsitig email', async () => {
       const res = await request(server)
         .post('/api/users')
@@ -42,7 +46,7 @@ describe('users', () => {
       expect(res.status).toBe(400);
     }); //test End
 
-    test('that new user cannot use existing username', async () => {
+    test('that new user cannot use exsitig username', async () => {
       const res = await request(server)
         .post('/api/users')
         .send({
@@ -53,6 +57,6 @@ describe('users', () => {
           roleId: new mongoose.Types.ObjectId()
         });
       expect(res.status).toBe(400);
-    });
+    }); //test End
   }); //end of describe('POST')
 }); //end of describe('users')
