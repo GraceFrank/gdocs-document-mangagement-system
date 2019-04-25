@@ -72,5 +72,4 @@ describe('Roles, /', () => {
 }); //end of describe (Roles)
 
 //test that role can only be created, updated and deleted by admin
-//test that role title is unique
 //roles can be viewed (admin will not be visible)
