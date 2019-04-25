@@ -7,12 +7,16 @@ import 'babel-polyfill';
 
 //test Creating a role
 describe('Roles, /', () => {
+  // beforeAll(async () => {
+  //   await Role.deleteMany({}); //empty roles collection in db
+  // });
   beforeEach(async () => {
     server; //start server
+    createDefaultRoles();
   });
   afterEach(async () => {
     await server.close(); //close server
-    await Role.remove({}); //empty roles collection in db
+    await Role.deleteMany({}); //empty roles collection in db
   });
 
   describe('POST/ ', () => {

@@ -1,8 +1,9 @@
 import express from 'express';
 import _ from 'lodash';
-import 'babel-polyfill';
 import validate from '../api-validations/role';
 import Role from '../models/role';
+
+import 'babel-polyfill';
 
 const router = express.Router();
 

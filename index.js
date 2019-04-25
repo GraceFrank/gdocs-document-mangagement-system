@@ -1,5 +1,7 @@
 import express from 'express';
-import connectToDb from './startup/db';
+import { connectToDb } from './startup/db';
+import { createDefaultRoles } from './startup/db';
+
 import routes from './startup/routes';
 
 const app = express();
@@ -9,7 +11,7 @@ import logger from './startup/logger';
 
 //connecting to database
 connectToDb();
-
+createDefaultRoles();
 //defining routes
 routes(app);
 
