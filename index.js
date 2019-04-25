@@ -11,7 +11,7 @@ import logger from './startup/logger';
 
 //connecting to database
 connectToDb();
-createDefaultRoles();
+if (process.env.NODE_ENV !== 'test') createDefaultRoles();
 //defining routes
 routes(app);
 

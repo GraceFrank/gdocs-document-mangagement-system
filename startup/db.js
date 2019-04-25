@@ -21,8 +21,9 @@ function connectToDb() {
 //create admin and regular  roles
 const createDefaultRoles = async () => {
   let admin = await Role.findOne({ title: 'admin' });
-  console.log(admin);
-  if (!admin) admin = await Role.create({ title: 'admin' });
+
+  if (admin) return;
+  admin = await Role.create({ title: 'admin' });
 };
 
 export { connectToDb, createDefaultRoles };
