@@ -24,6 +24,11 @@ const createDefaultRoles = async () => {
 
   if (admin) return;
   admin = await Role.create({ title: 'admin' });
+
+  let user = await Role.findOne({ title: 'user' });
+
+  if (user) return;
+  user = await Role.create({ title: 'user' });
 };
 
 export { connectToDb, createDefaultRoles };

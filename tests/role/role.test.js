@@ -4,6 +4,7 @@ import { createDefaultRoles } from '../../startup/db';
 import request from 'supertest';
 import server from '../../index';
 import 'babel-polyfill';
+import { notDeepEqual } from 'assert';
 
 //test Creating a role
 describe('Roles, /', () => {
@@ -12,7 +13,6 @@ describe('Roles, /', () => {
   // });
   beforeEach(async () => {
     server; //start server
-    createDefaultRoles();
   });
   afterEach(async () => {
     await server.close(); //close server
@@ -45,16 +45,29 @@ describe('Roles, /', () => {
 
     //test that admin and regular roles exist
     test('that admin role exist on the system', async () => {
+      await createDefaultRoles();
+
       const admin = await Role.findOne({ title: 'admin' });
       expect(admin).toBeTruthy();
       expect(admin).toHaveProperty('title');
     }); //test end
 
     test('that user role exist on the system', async () => {
+      await createDefaultRoles();
       const user = await Role.findOne({ title: 'user' });
       expect(user).toBeTruthy();
       expect(user).toHaveProperty('title');
     }); //test end
+
+    //test that role title is unique
+    test('that title is unique', async () => {
+      await createDefaultRoles();
+      const res = await request(server)
+        .post('/api/roles')
+        .send({ title: 'admin' });
+      expect(res.status).toBe(400);
+      expect(res.body.title).not.toBeTruthy();
+    });
   }); //end of describe (POST)
 }); //end of describe (Roles)
 
