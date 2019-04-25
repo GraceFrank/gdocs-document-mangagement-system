@@ -49,6 +49,12 @@ describe('Roles, /', () => {
       expect(admin).toBeTruthy();
       expect(admin).toHaveProperty('title');
     }); //test end
+
+    test('that user role exist on the system', async () => {
+      const user = await Role.findOne({ title: 'user' });
+      expect(user).toBeTruthy();
+      expect(user).toHaveProperty('title');
+    }); //test end
   }); //end of describe (POST)
 }); //end of describe (Roles)
 
