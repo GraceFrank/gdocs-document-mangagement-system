@@ -10,25 +10,31 @@ import Role from '../../models/role';
 Write a test that validates that a new user created has a role defined.
 Write a test that validates that a new user created has both first and last names.
 Write a test that validates that all users are returned only when requested by admin.
+
+todo later
 test that user actually saves to database
  */
-
+let regular;
 describe('users', () => {
   beforeEach(async () => {
     server; //start server
+    await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
+    regular = await Role.findOne({ title: 'regular' });
+
     await User.insertMany([
       {
         name: { first: 'damilare', last: 'solomon' },
         email: 'dare@gmail',
         userName: 'darelawal',
         password: 'sweetlove',
-        role: new mongoose.Types.ObjectId()
+        role: regular._id
       }
     ]);
   });
   afterEach(async () => {
     await server.close(); //close server
     await User.deleteMany({});
+    await Role.deleteMany({});
   });
   describe('POST /', () => {
     // validates that a new user created is unique.
@@ -40,8 +46,7 @@ describe('users', () => {
           name: { first: 'dare', last: 'lawal' },
           email: 'dare@gmail',
           userName: 'lawaldare',
-          password: 'sweetlove',
-          roleId: new mongoose.Types.ObjectId()
+          password: 'sweetlove'
         });
       expect(res.status).toBe(400);
     }); //test End
@@ -53,8 +58,7 @@ describe('users', () => {
           name: { first: 'dare', last: 'lawal' },
           email: 'darelawal@gmail',
           userName: 'darelawal',
-          password: 'sweetlove',
-          roleId: new mongoose.Types.ObjectId()
+          password: 'sweetlove'
         });
       expect(res.status).toBe(400);
     }); //test End

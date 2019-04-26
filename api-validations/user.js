@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import joiObjectId from 'joi-objectid';
-Joi.objectId = joiObjectId(Joi);
 
 function validateUser(user) {
   const schema = {
@@ -28,10 +27,8 @@ function validateUser(user) {
     password: Joi.string()
       .required()
       .min(8)
-      .max(255),
-    roleId: Joi.objectId().required()
+      .max(255)
   };
   return Joi.validate(user, schema);
 }
-
 export default validateUser;

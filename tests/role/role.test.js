@@ -1,6 +1,5 @@
 import 'babel-polyfill';
 import Role from '../../models/role';
-import { createDefaultRoles } from '../../startup/db';
 import request from 'supertest';
 import server from '../../index';
 
@@ -8,6 +7,7 @@ import server from '../../index';
 describe('Roles, /', () => {
   beforeEach(async () => {
     server; //start server
+    await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
   });
   afterEach(async () => {
     await server.close(); //close server
@@ -40,23 +40,19 @@ describe('Roles, /', () => {
 
     //test that admin and regular roles exist
     test('that admin role exist on the system', async () => {
-      await createDefaultRoles();
-
       const admin = await Role.findOne({ title: 'admin' });
       expect(admin).toBeTruthy();
       expect(admin).toHaveProperty('title');
     }); //test end
 
-    test('that user role exist on the system', async () => {
-      await createDefaultRoles();
-      const user = await Role.findOne({ title: 'user' });
+    test('that regular role exist on the system', async () => {
+      const user = await Role.findOne({ title: 'regular' });
       expect(user).toBeTruthy();
       expect(user).toHaveProperty('title');
     }); //test end
 
     //test that role title is unique
     test('that title is unique', async () => {
-      await createDefaultRoles();
       const res = await request(server)
         .post('/api/roles')
         .send({ title: 'admin' });
