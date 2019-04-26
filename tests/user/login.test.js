@@ -51,7 +51,14 @@ describe('login', () => {
         .post('/api/login')
         .send({ email: 'user1@mail.com', password: 'sweetlove' });
 
-      expect(res.header).toHaveProperty('x-auth-token');
+      expect(res.status).toBe(200);
     });
+    it('should set the header a token in the header', async () => {
+      const res = await request(server)
+        .post('/api/login')
+        .send({ email: 'user1@mail.com', password: 'sweetlove' });
+
+      expect(res.header).toHaveProperty('x-auth-token');
+    }); //test end
   });
 });
