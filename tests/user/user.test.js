@@ -4,6 +4,7 @@ import server from '../../index';
 import User from '../../models/user';
 import mongoose from 'mongoose';
 import Role from '../../models/role';
+import { Mongoose } from 'mongoose';
 
 /*TODO: 
 
@@ -29,6 +30,13 @@ describe('users', () => {
         userName: 'darelawal',
         password: 'sweetlove',
         role: regular._id
+      },
+      {
+        name: { first: 'user11', last: 'solomon' },
+        email: 'user11@mail.com',
+        userName: 'user11',
+        password: 'sweetlove',
+        role: admin._id
       }
     ]);
   });
@@ -121,4 +129,14 @@ describe('users', () => {
       expect(res.status).toBe(400);
     }); //test end
   }); //end of describe('POST')
+
+  describe('GET/', () => {
+    test('that admin can view all users', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .get('/api/users')
+        .set('user', token);
+      expect(res.status).toBe(200);
+    });
+  });
 }); //end of describe('users')
