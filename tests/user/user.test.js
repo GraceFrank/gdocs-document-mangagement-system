@@ -7,14 +7,11 @@ import { Mongoose } from 'mongoose';
 
 //Todo:
 /**
- *
- * only admin can view any user by id
  * user can create, update, view and delete their account
- */
-/*TODO: 
-todo later
+ TODO: later
  that it actuall deletes or update users in db
 test that user actually saves to database
+test that admin can get a user by a given id
  */
 let regular;
 let admin;
@@ -146,5 +143,23 @@ describe('users', () => {
         .set('x-auth-token', token);
       expect(res.status).toBe(403);
     });
+  });
+
+  //test for user to view account
+  describe('GET/me', () => {
+    test('that logged in user can view his details', async () => {
+      const token = new User({ role: regular._id }).generateToken();
+      const res = await request(server)
+        .get('/api/users/me')
+        .set('x-auth-token', token);
+      expect(res.status).toBe(200);
+    }); //test end;
+
+    test('that user not logged in can view details details', async () => {
+      const res = await request(server)
+        .get('/api/users/me')
+        .set('x-auth-token', token);
+      expect(res.status).toBe(401);
+    }); //test end;
   });
 }); //end of describe('users')
