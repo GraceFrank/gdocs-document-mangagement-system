@@ -7,7 +7,6 @@ import Role from '../../models/role';
 
 /*TODO: 
 
-Write a test that validates that a new user created has a role defined.
 Write a test that validates that a new user created has both first and last names.
 Write a test that validates that all users are returned only when requested by admin.
 
@@ -62,5 +61,21 @@ describe('users', () => {
         });
       expect(res.status).toBe(400);
     }); //test End
+
+    test('that new user created has role defined', async () => {
+      const res = await request(server)
+        .post('/api/users')
+        .send({
+          name: { first: 'user1', last: 'lawal' },
+          email: 'user1@gmail',
+          userName: 'user1',
+          password: 'sweetlove'
+        });
+
+      expect(res.body).toHaveProperty('role');
+      expect(res.body.role).toBe(regular._id.toHexString());
+    }); //test end
+
+    // validate that a new user created has both first and last names.
   }); //end of describe('POST')
 }); //end of describe('users')

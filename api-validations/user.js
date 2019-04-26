@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import joiObjectId from 'joi-objectid';
+import objId from 'joi-objectid';
 
 function validateUser(user) {
   const schema = {
