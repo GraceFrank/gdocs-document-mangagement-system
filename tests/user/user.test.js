@@ -7,7 +7,7 @@ import { Mongoose } from 'mongoose';
 
 //Todo:
 /**
- * user can create, update, view and delete their account
+ * user can , update,  and delete their account
  TODO: later
  that it actuall deletes or update users in db
 test that user actually saves to database
@@ -156,9 +156,7 @@ describe('users', () => {
     }); //test end;
 
     test('that user not logged in can view details details', async () => {
-      const res = await request(server)
-        .get('/api/users/me')
-        .set('x-auth-token', token);
+      const res = await request(server).get('/api/users/me');
       expect(res.status).toBe(401);
     }); //test end;
   });

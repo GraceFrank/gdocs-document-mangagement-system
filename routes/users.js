@@ -46,4 +46,8 @@ router.get('/', [authenticate, authorizeAdmin], async (req, res) => {
   return res.send(users);
 });
 
+router.get('/me', [authenticate], async (req, res) => {
+  const users = await User.findById(req.user._id);
+  return res.send(users);
+});
 export default router;
