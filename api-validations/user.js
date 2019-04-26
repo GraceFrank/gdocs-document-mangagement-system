@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import objId from 'joi-objectid';
+Joi.objectId = objId(Joi);
 
 function validateUser(user) {
   const schema = {
@@ -19,7 +20,8 @@ function validateUser(user) {
     email: Joi.string()
       .required()
       .min(5)
-      .max(255),
+      .max(255)
+      .email(),
     userName: Joi.string()
       .required()
       .min(3)
@@ -27,7 +29,8 @@ function validateUser(user) {
     password: Joi.string()
       .required()
       .min(8)
-      .max(255)
+      .max(255),
+    roleId: Joi.objectId()
   };
   return Joi.validate(user, schema);
 }

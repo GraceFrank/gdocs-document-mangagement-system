@@ -25,9 +25,13 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   newUser.password = await bcrypt.hash(newUser.password, salt);
 
-  //assigning default role of regular to user
+  //assigning default role of regular to user when
+  let role;
+  if (req.body.roleId) {
+    role = await Role.findById(req.body.roleId);
+  }
   const regular = await Role.findOne({ title: 'regular' });
-  newUser.role = regular._id;
+  newUser.role = role || regular._id;
 
   //saving new user to data base and returning response
   newUser = await newUser.save();
