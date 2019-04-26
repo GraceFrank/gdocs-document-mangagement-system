@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import config from 'config';
 
 //name schema
 const nameschema = new mongoose.Schema({
@@ -57,6 +59,13 @@ const userSchema = new mongoose.Schema({
     required: true
   }
 });
+
+userSchema.methods.generateToken = function() {
+  return jwt.sign(
+    { _id: this._id, role: this.role },
+    config.get('jwtPrivateKey')
+  );
+};
 
 //defining the user model
 const User = mongoose.model('users', userSchema);
