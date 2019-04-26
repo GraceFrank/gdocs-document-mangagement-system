@@ -6,14 +6,6 @@ import Role from '../../models/role';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 
-//Todo:
-/*
-  test that user can login in with correct credentials
-  test that if wrong credentials are provided userr is not logged in
-  test that the header is set with valid token
-  test that header token contains 
-
- */
 let regular;
 let admin;
 
@@ -53,6 +45,13 @@ describe('login', () => {
         .post('/api/login')
         .send({ email: 'user1@mail.com', password: 'sweetlove' });
       expect(res.status).toBe(200);
+    }); //test end
+
+    it('should return a status of 400 when user provides incorrect login credentials', async () => {
+      const res = await request(server)
+        .post('/api/login')
+        .send({ email: 'user1@mail.com', password: 'sweetlover' });
+      expect(res.status).toBe(400);
     }); //test end
 
     it('should set the header a token in the header', async () => {

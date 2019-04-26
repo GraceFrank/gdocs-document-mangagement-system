@@ -4,14 +4,15 @@ import server from '../../index';
 import User from '../../models/user';
 import Role from '../../models/role';
 
+//Todo:
+/**
+ * only admin can view all users
+ * only admin can view any user by id
+ * user can create, update, view and delete their account
+ */
 /*TODO: 
-
-Write a test that validates that all users are returned only when requested by admin.
-test that users can only view thier profile usins users/me
-users can update only their profile, test that it actually updates in the db
-users can delete their profile test that it actuall deletes
-
 todo later
+ that it actuall deletes or update users in db
 test that user actually saves to database
  */
 let regular;
