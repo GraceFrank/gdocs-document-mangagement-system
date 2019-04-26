@@ -7,11 +7,11 @@ import Role from '../../models/role';
 
 /*TODO: 
 
-Write a test that validates that a new user created has both first and last names.
 Write a test that validates that all users are returned only when requested by admin.
 
 todo later
 test that user actually saves to database
+test that invalid properties cannot be used to create user
  */
 let regular;
 describe('users', () => {
@@ -74,8 +74,22 @@ describe('users', () => {
 
       expect(res.body).toHaveProperty('role');
       expect(res.body.role).toBe(regular._id.toHexString());
-    }); //test end
+    });
 
     // validate that a new user created has both first and last names.
+    test('that new user created has role both first and last name defined', async () => {
+      const res = await request(server)
+        .post('/api/users')
+        .send({
+          name: { first: 'user2', last: 'lawal' },
+          email: 'user2@gmail',
+          userName: 'user2',
+          password: 'sweetlove'
+        });
+
+      expect(res.body).toHaveProperty('name');
+      expect(res.body.name).toHaveProperty('first', 'user2');
+      expect(res.body.name).toHaveProperty('last', 'lawal');
+    });
   }); //end of describe('POST')
 }); //end of describe('users')
