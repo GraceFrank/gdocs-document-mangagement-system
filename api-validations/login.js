@@ -6,9 +6,10 @@ function validateLoginDetails(payload) {
   const schema = {
     email: Joi.string()
       .email()
-      .max(1)
-      .min(5),
-    password: Joi.string().min(8)
+      .max(255)
+      .min(5)
+      .required(),
+    password: Joi.string().required()
   };
 
   return Joi.validate(payload, schema);
