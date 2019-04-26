@@ -7,7 +7,7 @@ import { Mongoose } from 'mongoose';
 
 //Todo:
 /**
- * only admin can view all users
+ *
  * only admin can view any user by id
  * user can create, update, view and delete their account
  */
@@ -136,8 +136,15 @@ describe('users', () => {
       const token = new User({ role: admin._id }).generateToken();
       const res = await request(server)
         .get('/api/users')
-        .set('user', token);
+        .set('x-auth-token', token);
       expect(res.status).toBe(200);
+    });
+    test('that a non-admin cannot  view all users', async () => {
+      const token = new User({ role: regular._id }).generateToken();
+      const res = await request(server)
+        .get('/api/users')
+        .set('x-auth-token', token);
+      expect(res.status).toBe(403);
     });
   });
 }); //end of describe('users')
