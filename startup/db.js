@@ -2,7 +2,6 @@
 import mongoose from 'mongoose';
 import config from 'config';
 import logger from './logger';
-import Role from '../models/role';
 
 function connectToDb() {
   //get db from config module, depending on the node environment
@@ -18,5 +17,4 @@ function connectToDb() {
     });
 }
 
-
-export { connectToDb,  };
+export { connectToDb };

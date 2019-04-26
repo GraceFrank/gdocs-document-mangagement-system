@@ -2,17 +2,19 @@ import 'babel-polyfill';
 import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
-import mongoose from 'mongoose';
 import Role from '../../models/role';
 import { Mongoose } from 'mongoose';
 
+//Todo:
+/**
+ * only admin can view all users
+ * only admin can view any user by id
+ * user can create, update, view and delete their account
+ */
 /*TODO: 
-
-Write a test that validates that all users are returned only when requested by admin.
-
 todo later
+ that it actuall deletes or update users in db
 test that user actually saves to database
-test that invalid properties cannot be used to create user
  */
 let regular;
 let admin;
@@ -26,7 +28,7 @@ describe('users', () => {
     await User.insertMany([
       {
         name: { first: 'damilare', last: 'solomon' },
-        email: 'dare@gmail',
+        email: 'dare@mail.com',
         userName: 'darelawal',
         password: 'sweetlove',
         role: regular._id
@@ -53,7 +55,7 @@ describe('users', () => {
         .post('/api/users')
         .send({
           name: { first: 'dare', last: 'lawal' },
-          email: 'dare@gmail',
+          email: 'dare@mail.com',
           userName: 'lawaldare',
           password: 'sweetlove'
         });
@@ -69,7 +71,6 @@ describe('users', () => {
           userName: 'darelawal',
           password: 'sweetlove'
         });
-      console.log(res.body);
       expect(res.status).toBe(400);
     }); //test End
 
