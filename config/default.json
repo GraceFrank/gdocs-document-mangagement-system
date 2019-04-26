@@ -1,3 +1,4 @@
 {
-  "db": "mongodb://localhost/gdocs"
+  "db": "mongodb://localhost/gdocs",
+  "jwtPrivateKey": ""
 }
