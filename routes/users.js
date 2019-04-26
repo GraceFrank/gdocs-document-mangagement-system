@@ -1,9 +1,12 @@
+import bcrypt from 'bcrypt';
 import express from 'express';
 import _ from 'lodash';
+
 import validate from '../api-validations/user';
 import User from '../models/user';
 import Role from '../models/role';
-import bcrypt from 'bcrypt';
+import authenticate from '../middleware/authentication';
+import authorizeAdmin from '../middleware/admin-authorisation';
 
 const router = express.Router();
 router.post('/', async (req, res) => {
@@ -38,7 +41,7 @@ router.post('/', async (req, res) => {
   return res.status(201).send(newUser);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', [authenticate, authorizeAdmin], async (req, res) => {
   const users = await User.find();
   return res.send(users);
 });
