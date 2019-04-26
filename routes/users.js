@@ -38,4 +38,9 @@ router.post('/', async (req, res) => {
   return res.status(201).send(newUser);
 });
 
+router.get('/', async (req, res) => {
+  const users = await User.find();
+  return res.send(users);
+});
+
 export default router;
