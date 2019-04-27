@@ -6,7 +6,7 @@ import validate from '../api-validations/user';
 import User from '../models/user';
 import Role from '../models/role';
 import authenticate from '../middleware/authentication';
-import authorizeAdmin from '../middleware/admin-authorisation';
+import authorizeAdmin from '../middleware/admin-authorization';
 
 const router = express.Router();
 router.post('/', async (req, res) => {
@@ -38,7 +38,9 @@ router.post('/', async (req, res) => {
 
   //saving new user to data base and returning response
   newUser = await newUser.save();
-  return res.status(201).send(newUser);
+  return res
+    .status(201)
+    .send(_.pick(newUser, ['name', 'email', 'userName', 'role']));
 });
 
 router.get('/', [authenticate, authorizeAdmin], async (req, res) => {
@@ -60,7 +62,7 @@ router.put('/', authenticate, async (req, res) => {
   const user = await User.findByIdAndUpdate(req.user._id, req.body, {
     new: true
   });
-  return res.send(user);
+  return res.send(_.pick(user, ['name', 'email', 'userName', 'role']));
 });
 
 router.delete('/', authenticate, async (req, res) => {

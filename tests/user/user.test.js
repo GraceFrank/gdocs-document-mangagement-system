@@ -8,7 +8,7 @@ import { Mongoose } from 'mongoose';
 //Todo:
 /**
  TODO: later
- that it actuall deletes or update users in db
+ that it actual deletes or update users in db
 test that user actually saves to database
 test that admin can get a user by a given id
  */
