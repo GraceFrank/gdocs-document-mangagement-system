@@ -8,7 +8,8 @@ const docSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 1000
+    maxlength: 1000,
+    unique: true
   },
   content: {
     type: String,
@@ -28,6 +29,10 @@ const docSchema = new mongoose.Schema({
     type: String,
     enum: ['public', 'private', 'role'],
     default: 'public'
+  },
+  role: {
+    type: mongoose.Types.ObjectId,
+    required: true
   }
 });
 
