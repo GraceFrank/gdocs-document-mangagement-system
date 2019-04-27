@@ -102,7 +102,28 @@ describe('Roles, /', () => {
       expect(res.status).toBe(403);
     }); //test end
   }); //end of describe (POST)
+
+  describe('GET /', () => {
+    //happy path
+    it('should return a 200 ', async () => {
+      const res = await request(server).get('/api/roles');
+      expect(res.status).toBe(200);
+    });
+    it('should return all roles', async () => {
+      const res = await request(server).get('/api/roles');
+      expect(res.body.length).toBe(2);
+      expect(
+        res.body.some(value => {
+          return value.title === 'regular';
+        })
+      ).toBeTruthy();
+      expect(
+        res.body.some(value => {
+          return value.title === 'admin';
+        })
+      ).toBeTruthy();
+    });
+  });
 }); //end of describe (Roles)
 
-//test that role can only be created, updated and deleted by admin
-//roles can be viewed (admin will not be visible)
+// Todo: test that role can only be created, updated and deleted by admin
