@@ -5,6 +5,7 @@ import User from '../../models/user';
 import Role from '../../models/role';
 import jwt from 'jsonwebtoken';
 import config from 'config';
+import bcrypt from 'bcrypt';
 
 let regular;
 let admin;
@@ -22,14 +23,14 @@ describe('login', () => {
           name: { first: 'user1', last: 'solomon' },
           email: 'user1@mail.com',
           userName: 'user1',
-          password: 'sweetlove',
+          password: await bcrypt.hash('sweetlove', 10),
           role: regular._id
         },
         {
           name: { first: 'user2', last: 'solomon' },
           email: 'user2@mail.com',
           userName: 'user2',
-          password: 'sweetlove',
+          password: await bcrypt.hash('sweetlove', 10),
           role: admin._id
         }
       ]);
