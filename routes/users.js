@@ -62,3 +62,8 @@ router.put('/', authenticate, async (req, res) => {
   });
   return res.send(user);
 });
+
+router.delete('/', authenticate, async (req, res) => {
+  const user = await User.findByIdAndDelete(req.user._id);
+  return res.send(user);
+});

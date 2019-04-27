@@ -7,7 +7,6 @@ import { Mongoose } from 'mongoose';
 
 //Todo:
 /**
- * user can , update,  and delete their account
  TODO: later
  that it actuall deletes or update users in db
 test that user actually saves to database
@@ -198,5 +197,31 @@ describe('users', () => {
         });
       expect(res.status).toBe(401);
     }); //test end
-  });
+  }); //put
+
+  describe('DELETE/', () => {
+    beforeEach(async () => {
+      randomUser = await User.create({
+        name: { first: 'user1', last: 'lawal' },
+        email: 'user22gmail',
+        userName: 'user22',
+        password: 'sweetlove',
+        role: regular._id
+      });
+    });
+
+    it('should return a status of 200 when Logged in user attempts to delete ', async () => {
+      const token = randomUser.generateToken();
+      const res = await request(server)
+        .delete('/api/users')
+        .set('x-auth-token', token);
+      expect(res.status).toBe(200);
+    }); //test end
+
+    it('should return a status of 401 when  user is not Logged in ', async () => {
+      const token = randomUser.generateToken();
+      const res = await request(server).delete('/api/users');
+      expect(res.status).toBe(401);
+    }); //test end
+  }); //DELETE
 }); //end of describe('users')
