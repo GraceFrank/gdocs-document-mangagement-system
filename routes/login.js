@@ -1,6 +1,7 @@
 import express from 'express';
 import validate from '../api-validations/login';
 import User from '../models/user';
+import bcrypt from 'bcrypt';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -8,7 +9,8 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const user = await User.findOne({ email: req.body.email });
-  if (!user || user.password !== req.body.password)
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!user || !validPassword)
     return res.status(400).send('invalid email or password');
 
   const token = user.generateToken();
