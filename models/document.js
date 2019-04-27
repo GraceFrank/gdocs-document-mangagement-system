@@ -8,7 +8,7 @@ const docSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    minlength: 1000
+    maxlength: 1000
   },
   content: {
     type: String,
