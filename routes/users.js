@@ -48,6 +48,17 @@ router.get('/', [authenticate, authorizeAdmin], async (req, res) => {
 
 router.get('/me', [authenticate], async (req, res) => {
   const users = await User.findById(req.user._id);
+
   return res.send(users);
 });
 export default router;
+
+router.put('/', authenticate, async (req, res) => {
+  const { error } = validate(req.body);
+  console.log(error);
+  if (error) return res.status(400).send(error.details[0].message);
+  const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true
+  });
+  return res.send(user);
+});
