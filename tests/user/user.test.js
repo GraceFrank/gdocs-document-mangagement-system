@@ -15,6 +15,7 @@ test that admin can get a user by a given id
  */
 let regular;
 let admin;
+let randomUser;
 describe('users', () => {
   beforeEach(async () => {
     server; //start server
@@ -54,7 +55,8 @@ describe('users', () => {
           name: { first: 'dare', last: 'lawal' },
           email: 'dare@mail.com',
           userName: 'lawaldare',
-          password: 'sweetlove'
+          password: 'sweetlove',
+          role: regular._id
         });
       expect(res.status).toBe(400);
     }); //test End
@@ -159,5 +161,42 @@ describe('users', () => {
       const res = await request(server).get('/api/users/me');
       expect(res.status).toBe(401);
     }); //test end;
+  });
+
+  describe('PUT/', () => {
+    beforeEach(async () => {
+      randomUser = await User.create({
+        name: { first: 'user1', last: 'lawal' },
+        email: 'user22gmail',
+        userName: 'user22',
+        password: 'sweetlove',
+        role: regular._id
+      });
+    });
+    it('should return a status of 200 when valid properties are passed ', async () => {
+      const token = randomUser.generateToken();
+      const res = await request(server)
+        .put('/api/users')
+        .set('x-auth-token', token)
+        .send({
+          name: { first: 'user12', last: 'lawal' },
+          email: 'user12@gmail.com',
+          userName: 'user1',
+          password: 'sweetlove'
+        });
+      expect(res.status).toBe(200);
+    }); //test end
+
+    it('should return a status of 401 when user is not logged in ', async () => {
+      const res = await request(server)
+        .put('/api/users')
+        .send({
+          name: { first: 'user12', last: 'lawal' },
+          email: 'user12gmai',
+          userName: 'user1',
+          password: 'sweetlove'
+        });
+      expect(res.status).toBe(401);
+    }); //test end
   });
 }); //end of describe('users')
