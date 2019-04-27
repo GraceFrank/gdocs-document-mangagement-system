@@ -2,11 +2,13 @@ import express from 'express';
 import _ from 'lodash';
 import validate from '../api-validations/role';
 import Role from '../models/role';
+import authenticate from '../middleware/authentication';
+import adminAuthorization from '../middleware/admin-authorization';
 
 const router = express.Router();
 
 //endpoint to create a new router
-router.post('/', async (req, res) => {
+router.post('/', [authenticate, adminAuthorization], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
