@@ -55,9 +55,14 @@ describe('documents/put', () => {
       .send({ title: 'Document1' });
     expect(res.status).toBe(403);
   });
+
+  test('that invalid id returns a status of 400', async () => {
+    const res = await request(server)
+      .put(`/api/documents/090024ikjfj`)
+      .send({ title: 'Document1' });
+    expect(res.status).toBe(404);
+  }); //test end
 }); //end of describe
 
-//test that only logged in user can update document
-//test that invalid id returns a status of 404
 //test that it is updated in the database
 //test that if title is updated it, the new title is updated
