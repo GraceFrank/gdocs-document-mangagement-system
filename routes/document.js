@@ -28,4 +28,26 @@ router.post('/', authenticate, async (req, res) => {
   res.status(201).send(doc);
 });
 
+router.put('/:id', [validateId, authenticate], async (req, res) => {
+  //validating users input
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  //checking if document exist on db
+  const doc = await Document.findById(req.params.id);
+  if (!doc) return res.status(404).send('document not found');
+  //check if user is the author of document
+  if (doc.ownerId != req.user._id)
+    return res.status(403).send('access denied, only author can modify docs');
+
+  const update = await Document.findOneAndUpdate(
+    { _id: req.params.id },
+    req.body,
+    {
+      new: true
+    }
+  );
+  res.send(update);
+});
+
 export default router;

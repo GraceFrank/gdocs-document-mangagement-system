@@ -6,30 +6,11 @@ import Role from '../../models/role';
 import Document from '../../models/document';
 
 let regular;
-let admin;
 describe('documents/post', () => {
   beforeEach(async () => {
     server; //start server
-    await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
+    await Role.insertMany([{ title: 'regular' }]);
     regular = await Role.findOne({ title: 'regular' });
-    admin = await Role.findOne({ title: 'admin' });
-
-    await User.insertMany([
-      {
-        name: { first: 'damilare', last: 'solomon' },
-        email: 'dare@mail.com',
-        userName: 'darelawal',
-        password: 'sweetlove',
-        role: regular._id
-      },
-      {
-        name: { first: 'user11', last: 'solomon' },
-        email: 'user11@mail.com',
-        userName: 'user11',
-        password: 'sweetlove',
-        role: admin._id
-      }
-    ]);
   });
   afterEach(async () => {
     await server.close(); //close server
@@ -134,5 +115,19 @@ describe('documents/post', () => {
     expect(doc).toBeDefined();
     expect(doc.title).toBe(res.body.title);
     expect(doc._id.toHexString()).toBe(res.body._id);
+  });
+
+  test('that invalid payload content returns a status of 400', async () => {
+    const user = new User({ role: regular._id });
+    const token = user.generateToken();
+
+    const res = await request(server)
+      .post('/api/documents')
+      .set('x-auth-token', token)
+      .send({
+        title: '',
+        content: 'Document1   kfklflkgnklllk'
+      });
+    expect(res.status).toBe(400);
   });
 });

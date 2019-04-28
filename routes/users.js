@@ -57,7 +57,6 @@ export default router;
 
 router.put('/', authenticate, async (req, res) => {
   const { error } = validate(req.body);
-  console.log(error);
   if (error) return res.status(400).send(error.details[0].message);
   const user = await User.findByIdAndUpdate(req.user._id, req.body, {
     new: true
