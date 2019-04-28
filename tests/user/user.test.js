@@ -3,7 +3,6 @@ import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
 import Role from '../../models/role';
-import { Mongoose } from 'mongoose';
 
 //Todo:
 /**
