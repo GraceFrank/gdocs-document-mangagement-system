@@ -4,6 +4,7 @@ import server from '../../index';
 import User from '../../models/user';
 import Role from '../../models/role';
 import Document from '../../models/document';
+import mongoose from 'mongoose';
 
 let doc1;
 let user1;
@@ -23,7 +24,7 @@ describe('documents/put', () => {
 
     doc1 = await Document.create({
       access: 'role',
-      ownerId: '5cc33f7e04fc5f18a52d8354',
+      ownerId: user1._id,
       title: 'Document1',
       content: 'Document',
       role: regular._id
@@ -48,7 +49,6 @@ describe('documents/put', () => {
   //test that only user that created the document can modify it
   test('that only user that created the document can modify it', async () => {
     const token = new User().generateToken();
-    const cc = await Document.find();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
       .set('x-auth-token', token)
@@ -62,7 +62,19 @@ describe('documents/put', () => {
       .send({ title: 'Document1' });
     expect(res.status).toBe(404);
   }); //test end
+
+  test('that update are reflected in the database t', async () => {
+    const token = user1.generateToken();
+    const res = await request(server)
+      .put(`/api/documents/${doc1._id}`)
+      .set('x-auth-token', token)
+      .send({ title: 'Document1111' });
+
+    const dbVersion = await Document.findById(doc1._id);
+    expect(res.status).toBe(200);
+    expect(dbVersion.title).not.toBe(doc1.title);
+    expect(dbVersion.title).toBe(res.body.title);
+  }); //test end
 }); //end of describe
 
-//test that it is updated in the database
 //test that if title is updated it, the new title is updated
