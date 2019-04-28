@@ -40,6 +40,9 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   if (doc.ownerId.toHexString() !== req.user._id)
     return res.status(403).send('access denied, only author can modify docs');
 
+  const existingDoc = await Document.findOne({ title: req.body.title });
+  if (existingDoc) return res.status(400).send('document already exists');
+
   const update = await Document.findOneAndUpdate(
     { _id: req.params.id },
     req.body,

@@ -75,6 +75,32 @@ describe('documents/put', () => {
     expect(dbVersion.title).not.toBe(doc1.title);
     expect(dbVersion.title).toBe(res.body.title);
   }); //test end
-}); //end of describe
 
-//test that if title is updated it, the new title is updated
+  test('that if document doses not exist in db a 404 is returned', async () => {
+    const token = user1.generateToken();
+    const res = await request(server)
+      .put(`/api/documents/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', token)
+      .send({ title: 'Document1111' });
+
+    expect(res.status).toBe(404);
+  }); //test end
+
+  test('that updated doc title is still unique', async () => {
+    await Document.create({
+      access: 'role',
+      ownerId: user1._id,
+      title: 'sameTitle',
+      content: 'Document',
+      role: user1.role
+    });
+
+    const token = user1.generateToken();
+    const res = await request(server)
+      .put(`/api/documents/${doc1._id}`)
+      .set('x-auth-token', token)
+      .send({ title: 'sameTitle' });
+
+    expect(res.status).toBe(400);
+  }); //test end
+}); //end of describe
