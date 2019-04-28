@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const docSchema = new mongoose.Schema({
   ownerId: {
     type: mongoose.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'users'
   },
   title: {
     type: String,
@@ -32,7 +33,8 @@ const docSchema = new mongoose.Schema({
   },
   role: {
     type: mongoose.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'roles'
   }
 });
 
