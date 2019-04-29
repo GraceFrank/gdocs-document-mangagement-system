@@ -93,4 +93,39 @@ describe('documents/put', () => {
     expect(res.body).toHaveProperty('title');
     expect(res.body).toHaveProperty('_id', publicDoc._id.toHexString());
   }); //test end
+
+  test('that if the document access is set to role  it can be viewed by user with same role as author', async () => {
+    const token = regularUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${roleAccessDoc._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body).toHaveProperty('_id', roleAccessDoc._id.toHexString());
+  }); //test end
+
+  test('that if the document access is set to role  it can be viewed by an admin user', async () => {
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${roleAccessDoc._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body).toHaveProperty('_id', roleAccessDoc._id.toHexString());
+  }); //test end
+
+  test('that if the document access is set to role  it cannot be viewed by a user with different role from the author', async () => {
+    const token = new User({
+      role: new mongoose.Types.ObjectId()
+    }).generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${roleAccessDoc._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(403);
+    expect(res.body).not.toHaveProperty('title');
+    expect(res.body).not.toHaveProperty('_id', roleAccessDoc._id.toHexString());
+  }); //test end
 }); //describe end
