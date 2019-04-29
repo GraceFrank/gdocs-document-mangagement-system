@@ -48,9 +48,26 @@ describe('documents/put', () => {
 
     const docInDb = await Document.findById(doc1._id);
     expect(res.status).toBe(200);
-    expect(docInDb).notToBeDefined();
+    expect(docInDb).not.toBeTruthy();
+  }); //test end
+
+  test('that only the author can delete his doc from db', async () => {
+    const token = new User().generateToken();
+    const res = await request(server)
+      .delete(`/api/documents/${doc1._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(403);
+  }); //test end
+
+  test('that it deletes from db', async () => {
+    const token = user1.generateToken();
+    const res = await request(server)
+      .delete(`/api/documents/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(404);
   }); //test end
 }); //end of describe
-//test that it deletes from db
-//test that only author can delete
+//
 //test that if doc dosent exist on db 404 is returned
