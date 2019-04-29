@@ -53,4 +53,17 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   res.send(update);
 });
 
+router.delete('/:id', [validateId, authenticate], async (req, res) => {
+  //checking if document exist on db
+  const doc = await Document.findById(req.params.id);
+  if (!doc) return res.status(404).send('document not found');
+
+  //check if user is the author of document
+  if (doc.ownerId.toHexString() != req.user._id)
+    return res.status(403).send('access denied, only author can modify docs');
+
+  const deleted = await Document.findByIdAndDelete(doc._id);
+  res.send('deleted');
+});
+
 export default router;

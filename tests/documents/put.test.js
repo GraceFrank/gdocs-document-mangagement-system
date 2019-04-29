@@ -95,7 +95,7 @@ describe('documents/put', () => {
       role: user1.role
     });
 
-    const token = user1.generateToken();
+    const token = await user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
       .set('x-auth-token', token)
