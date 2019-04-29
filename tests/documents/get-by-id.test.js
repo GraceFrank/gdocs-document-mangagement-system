@@ -128,4 +128,26 @@ describe('documents/put', () => {
     expect(res.body).not.toHaveProperty('title');
     expect(res.body).not.toHaveProperty('_id', roleAccessDoc._id.toHexString());
   }); //test end
+
+  test('that if the document access is set to private  it can be viewed by the author', async () => {
+    const token = author.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${privateDoc._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body).toHaveProperty('_id', privateDoc._id.toHexString());
+  }); //test end
+
+  test('that private docs can oly be viewed by author', async () => {
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${privateDoc._id}`)
+      .set('x-auth-token', token);
+
+    expect(res.status).toBe(403);
+    expect(res.body).not.toHaveProperty('title');
+    expect(res.body).not.toHaveProperty('_id', privateDoc._id.toHexString());
+  }); //test end
 }); //describe end
