@@ -85,4 +85,12 @@ describe('documents/put', () => {
 
     expect(res.status).toBe(404);
   }); //test end
+
+  test('that if the document access is public it can be viewed by anyone', async () => {
+    const res = await request(server).get(`/api/documents/${publicDoc._id}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('title');
+    expect(res.body).toHaveProperty('_id', publicDoc._id.toHexString());
+  }); //test end
 }); //describe end
