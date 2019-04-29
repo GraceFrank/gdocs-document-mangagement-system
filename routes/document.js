@@ -66,4 +66,36 @@ router.delete('/:id', [validateId, authenticate], async (req, res) => {
   res.send('deleted');
 });
 
+router.get('/:id', [validateId, login], async (req, res) => {
+  const doc = await Document.findById(req.params.id);
+  if (!doc) return res.status(404).send('document not found');
+
+  class GrantAccess {
+    isAdmin() {
+      const admin = Role.findOne({ title: admin });
+      return req.user.role == admin._id;
+    }
+    public() {
+      res.send(doc);
+    }
+
+    role() {
+      if (doc.role == req.user.role || this.isAdmin()) {
+        return res.send(doc);
+      } else return res.status(403).send('unauthorized access denied');
+    }
+
+    private() {
+      if (doc.ownerId == req.user._id) {
+        return res.send(doc);
+      } else
+        return res
+          .status(403)
+          .send('unauthorized access denied, private document ');
+    }
+  }
+
+  new GrantAccess()[doc.access]();
+});
+
 export default router;
