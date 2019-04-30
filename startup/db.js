@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import config from 'config';
 import logger from './logger';
 
-export default function() {
+function connectToDb() {
   //get db from config module, depending on the node environment
   const db = config.get('db');
 
@@ -16,3 +16,5 @@ export default function() {
       logger.info(`connected to database ${db}`);
     });
 }
+
+export { connectToDb };

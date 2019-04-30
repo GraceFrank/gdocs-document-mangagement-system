@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
+    "bcrypt": "^3.0.6",
     "config": "^3.1.0",
     "express": "^4.16.4",
     "express-async-errors": "^3.1.1",
+    "joi": "^14.3.1",
+    "joi-objectid": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
     "mongoose": "^5.5.1",
     "regenerator-runtime": "^0.13.2",
+    "supertest": "^4.0.2",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
   },
@@ -17,6 +22,8 @@
     "@babel/core": "^7.4.3",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "babel-polyfill": "^6.26.0",
     "jest": "^24.7.1"
   },
   "scripts": {

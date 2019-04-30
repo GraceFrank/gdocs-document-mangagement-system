@@ -1,3 +1,4 @@
 {
-  "db": "mongodb://localhost/gdocs_test"
+  "db": "mongodb://localhost/gdocs_test",
+  "jwtPrivateKey" : "1234"
 }
