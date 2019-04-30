@@ -182,4 +182,10 @@ describe('documents/Get all', () => {
     expect(res.status).toBe(200);
     expect(roleDoc).toBeTruthy();
   });
+  test('that a user not logged in can view only public docs', async () => {
+    const res = await request(server).get(`/api/documents/all?page=1&limit=10`);
+
+    const roleDoc = res.body.find(doc => doc.access === 'role');
+    expect(roleDoc).not.toBeTruthy();
+  });
 });
