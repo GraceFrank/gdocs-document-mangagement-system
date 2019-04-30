@@ -53,6 +53,46 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   res.send(update);
 });
 
+router.get('/all', login, async (req, res) => {
+  const page = req.query.page * 1;
+  const limit = req.query.limit * 1;
+
+  if (!page || !limit) res.status(400).send('invalid query');
+  if (!req.user) {
+    docs = await Document.find({ access: 'public' })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ date: -1 });
+    return res.send(docs);
+  }
+
+  const admin = await Role.findOne({ title: 'admin' });
+  let docs;
+
+  if (req.user.role == admin._id.toHexString()) {
+    docs = await Document.find()
+      .or([
+        { access: 'private', ownerId: req.user._id },
+        { access: { $ne: 'private' } }
+      ])
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ date: -1 });
+    return res.send(docs);
+  }
+
+  docs = await Document.find()
+    .or([
+      { access: 'private', ownerId: req.user._id },
+      { access: 'public' },
+      { role: req.user.role, access: 'role' }
+    ])
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ date: -1 });
+  return res.send(docs);
+});
+
 router.delete('/:id', [validateId, authenticate], async (req, res) => {
   //checking if document exist on db
   const doc = await Document.findById(req.params.id);
@@ -63,7 +103,7 @@ router.delete('/:id', [validateId, authenticate], async (req, res) => {
     return res.status(403).send('access denied, only author can modify docs');
 
   const deleted = await Document.findByIdAndDelete(doc._id);
-  res.send('deleted');
+  res.send(deleted);
 });
 
 router.get('/:id', [validateId, login], async (req, res) => {
