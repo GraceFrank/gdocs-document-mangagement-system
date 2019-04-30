@@ -188,4 +188,22 @@ describe('documents/Get all', () => {
     const roleDoc = res.body.find(doc => doc.access === 'role');
     expect(roleDoc).not.toBeTruthy();
   });
+
+  test('that document are paginated ', async () => {
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/all?page=1&limit=3`)
+      .set('x-auth-token', token);
+
+    expect(res.body.length).toBe(3);
+  });
+
+  test('that document are sorted by date ', async () => {
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/all?page=1&limit=3`)
+      .set('x-auth-token', token);
+
+    expect(res.body[0].timestamp).toBeGreaterThanOrEqual(res.body[1].timestamp);
+  });
 });
