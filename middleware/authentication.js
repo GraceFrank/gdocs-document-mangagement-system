@@ -8,7 +8,7 @@ function authenticate(req, res, next) {
     if (decoded) {
       req.user = decoded;
       next();
-    } else return res.status(401).send('access denied, invalid signature');
+    } else res.status(401).send('access denied, invalid signature');
   });
 }
 

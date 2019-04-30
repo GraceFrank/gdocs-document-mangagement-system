@@ -25,6 +25,12 @@ router.post('/', [authenticate, adminAuthorization], async (req, res) => {
 router.get('/', async (req, res) => {
   res.send(await Role.find());
 });
+
+//endpoint to get route by its id
+router.get('/:id', validateId, async (req, res) => {
+  res.send(await Role.findById(req.params.id));
+});
+
 //endpoint to create a new role
 router.put(
   '/:id',

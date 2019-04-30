@@ -47,6 +47,7 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     const docInDb = await Document.findById(doc1._id);
+    expect(res.body).toHaveProperty('_id');
     expect(res.status).toBe(200);
     expect(docInDb).not.toBeTruthy();
   }); //test end
@@ -70,4 +71,4 @@ describe('documents/put', () => {
   }); //test end
 }); //end of describe
 //
-//test that if doc dosent exist on db 404 is returned
+//test that if doc dosen't exist on db 404 is returned
