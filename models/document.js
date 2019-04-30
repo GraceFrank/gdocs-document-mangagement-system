@@ -35,7 +35,8 @@ const docSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
     ref: 'roles'
-  }
+  },
+  timestamp: { type: Number, default: new Date().getTime() }
 });
 
 const Document = mongoose.model('documents', docSchema);
