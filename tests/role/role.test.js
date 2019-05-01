@@ -3,6 +3,7 @@ import Role from '../../models/role';
 import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
+import mongoose from 'mongoose';
 
 //test Creating a role
 
@@ -132,6 +133,30 @@ describe('Roles, /', () => {
       expect(res.status).toBe(200);
     });
   });
+
+  describe('put/:id', () => {
+    test('that admin can update a role', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vip' });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('title');
+    }); //test end
+
+    test('that non-admin cannot update a role', async () => {
+      const token = new User({ role: regular._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vip' });
+
+      expect(res.status).toBe(403);
+    }); //test end
+
+   
 }); //end of describe (Roles)
 
 // Todo: test that role can only be created, updated and deleted by admin
