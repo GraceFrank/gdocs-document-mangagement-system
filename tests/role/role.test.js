@@ -165,6 +165,16 @@ describe('Roles, /', () => {
 
       expect(res.status).toBe(409);
     }); //test end
+
+    test('that a status code of 404 is returned when title with given id does not exist ', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vipp' });
+
+      expect(res.status).toBe(404);
+    }); //test end
   });
 }); //end of describe (Roles)
 
