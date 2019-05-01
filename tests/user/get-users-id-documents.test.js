@@ -6,7 +6,7 @@ import Role from '../../models/role';
 import Document from '../../models/document';
 import mongoose from 'mongoose';
 
-describe('documents/put', () => {
+describe('documents/Get all', () => {
   let roleAccessDoc;
   let publicDoc;
   let privateDoc;
@@ -50,7 +50,7 @@ describe('documents/put', () => {
       email: 'adminUser@mail.com',
       userName: 'adminUser',
       password: 'sweetlove',
-      role: regular._id
+      role: admin._id
     });
     //documents
     await Document.insertMany([
@@ -128,53 +128,54 @@ describe('documents/put', () => {
     await Document.deleteMany({});
   });
 
-  test('that a non-author of a private doc can a private doc', async () => {
-    const token = regularUser.generateToken();
-    const res = await request(server)
-      .get(`/api/documents/all`)
-      .set('x-auth-token', token);
-
+  test('that a user not logged in can view only public documents', async () => {
+    const res = await request(server).get(
+      `/api/users/${author._id}/documents?page=1&limit=10`
+    );
     const privateDocs = res.body.find(doc => doc.access === 'private');
+    const publicDocs = res.body.find(doc => doc.access === 'public');
+
     expect(res.status).toBe(200);
-    expect(privateDocs).not.ToBeTruthy();
+    expect(privateDocs).not.toBeTruthy();
+    expect(publicDocs).toBeTruthy();
   });
 
-  test('that  the  author of a private doc can retrieve a private doc', async () => {
-    const token = author.generateToken();
+  test('that a an admin user  can view all documents except private', async () => {
+    const token = adminUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all`)
+      .get(`/api/users/${author._id}/documents?page=1&limit=10`)
       .set('x-auth-token', token);
-
     const privateDocs = res.body.find(doc => doc.access === 'private');
+    const publicDocs = res.body.find(doc => doc.access === 'public');
+    const roleDocs = res.body.find(doc => doc.access === 'role');
+
     expect(res.status).toBe(200);
-    expect(privateDocs).ToBeTruthy();
+    expect(privateDocs).not.toBeTruthy();
+    expect(publicDocs).toBeTruthy();
+    expect(roleDocs).toBeTruthy();
   });
 
-  test('that  the  author of a private doc can retrieve a private doc', async () => {
-    const token = author.generateToken();
+  test('that a an non-admin user  cannot view docs with access role from an author of different  role', async () => {
+    const token = premiumUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all`)
+      .get(`/api/users/${author._id}/documents?page=1&limit=10`)
+      .set('x-auth-token', token);
+    const privateDocs = res.body.find(doc => doc.access === 'private');
+    const publicDocs = res.body.find(doc => doc.access === 'public');
+    const roleDocs = res.body.find(doc => doc.access === 'role');
+
+    expect(res.status).toBe(200);
+    expect(privateDocs).not.toBeTruthy();
+    expect(publicDocs).toBeTruthy();
+    expect(roleDocs).not.toBeTruthy();
+  });
+
+  test('that a status of 400 is returned when invalid queries are passed', async () => {
+    const token = premiumUser.generateToken();
+    const res = await request(server)
+      .get(`/api/users/${author._id}/documents?page=a&limit=10`)
       .set('x-auth-token', token);
 
-    const privateDocs = res.body.find(doc => doc.access === 'private');
-    expect(res.status).toBe(200);
-    expect(privateDocs).ToBeTruthy();
+    expect(res.status).toBe(400);
   });
 });
-
-/**
- * Write a test that validates ONLY the creator of a document can retrieve a file with “access” set as “private” 
-Write a test that validates ONLY user’s with the same role as the creator, can access documents with property “access” set to “role”.
-Write a test that validates that all documents are returned, limited by a specified number, when Documents.all is called with a query parameter limit. All documents should only include:
-Documents marked as public
-Documents that have role level access i.e created by a user with the same role level
-Documents created by the logged in user
-If user is admin, then all available documents
-Write a test that also employs the limit above with an offset as well (pagination). So documents could be fetched in chunks e.g 1st 10 document, next 10 documents (skipping the 1st 10) and so on.
-Write a test that validates that all documents are returned in order of their published dates, starting from the most recent when Documents.all is called.
-Create a test suite called `Search`.
-Write a test that validates that all documents returned, given a search criteria, can be limited by a specified number, ordered by published date and were created by a specified role.
-Write a test that validates that all documents returned, can be limited by a specified number and were published on a certain date.
-Write code to make all tests pass and publish the project as a Github repository.
-
- */

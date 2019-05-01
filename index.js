@@ -2,11 +2,10 @@ import express from 'express';
 import { connectToDb } from './startup/db';
 
 import routes from './startup/routes';
-
-const app = express();
-
 //logger for logging errors and info
 import logger from './startup/logger';
+
+const app = express();
 
 //connecting to database
 connectToDb();

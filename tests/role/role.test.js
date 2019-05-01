@@ -3,13 +3,15 @@ import Role from '../../models/role';
 import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
+import mongoose from 'mongoose';
 
-let adminUser;
-let regularUser;
-let admin;
-let regular;
 //test Creating a role
+
 describe('Roles, /', () => {
+  let adminUser;
+  let regularUser;
+  let admin;
+  let regular;
   beforeEach(async () => {
     server; //start server
     await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
@@ -124,6 +126,84 @@ describe('Roles, /', () => {
       ).toBeTruthy();
     });
   });
-}); //end of describe (Roles)
 
-// Todo: test that role can only be created, updated and deleted by admin
+  describe('get/:id', () => {
+    test('that role can be retrive by its id', async () => {
+      const res = await request(server).get(`/api/roles/${admin._id}`);
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('put/:id', () => {
+    test('that admin can update a role', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vip' });
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('title');
+    }); //test end
+
+    test('that non-admin cannot update a role', async () => {
+      const token = new User({ role: regular._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vip' });
+
+      expect(res.status).toBe(403);
+    }); //test end
+
+    test('that updated title is unique ', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'admin' });
+
+      expect(res.status).toBe(409);
+    }); //test end
+
+    test('that a status code of 404 is returned when title with given id does not exist ', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+        .set('x-auth-token', token)
+        .send({ title: 'vipp' });
+
+      expect(res.status).toBe(404);
+    }); //test end
+
+    test('that a status code of 400 is returned when invalid payload is received from client ', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+        .set('x-auth-token', token)
+        .send({ title: '' });
+
+      expect(res.status).toBe(400);
+    }); //test end
+  });
+
+  test('that a status code of 400 is returned when invalid payload is received from client ', async () => {
+    const token = new User({ role: admin._id }).generateToken();
+    const res = await request(server)
+      .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', token)
+      .send({ title: '' });
+
+    expect(res.status).toBe(400);
+  }); //test end
+
+  test('that a status code of 401 is returned when invalid token is given ', async () => {
+    const token = new User({ role: admin._id }).generateToken();
+    const res = await request(server)
+      .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', 'kjgkgkl r t s ,bd .grjk gs j')
+      .send({ title: '' });
+
+    expect(res.status).toBe(401);
+  }); //test end
+}); //end of describe (Roles)

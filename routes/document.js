@@ -36,10 +36,13 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   //checking if document exist on db
   const doc = await Document.findById(req.params.id);
   if (!doc) return res.status(404).send('document not found');
+
+  //Todo: refactor
   //check if user is the author of document
   if (doc.ownerId.toHexString() !== req.user._id)
     return res.status(403).send('access denied, only author can modify docs');
 
+  //check that doc title is unique
   const existingDoc = await Document.findOne({ title: req.body.title });
   if (existingDoc) return res.status(400).send('document already exists');
 
@@ -54,10 +57,12 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
 });
 
 router.get('/all', login, async (req, res) => {
+  //Todo: validate query
   const page = req.query.page * 1;
   const limit = req.query.limit * 1;
 
   if (!page || !limit) res.status(400).send('invalid query');
+
   if (!req.user) {
     docs = await Document.find({ access: 'public' })
       .skip((page - 1) * limit)

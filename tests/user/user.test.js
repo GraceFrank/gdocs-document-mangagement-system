@@ -184,7 +184,19 @@ describe('users', () => {
         });
       expect(res.status).toBe(200);
     }); //test end
-
+    it('should return a status of 400 when invalid properties are passed in the payload ', async () => {
+      const token = randomUser.generateToken();
+      const res = await request(server)
+        .put('/api/users')
+        .set('x-auth-token', token)
+        .send({
+          name: { first: 'user12', last: 'lawal' },
+          email: 'user12gmail.com',
+          userName: 'user1',
+          password: 'sweetlove'
+        });
+      expect(res.status).toBe(400);
+    }); //test end
     it('should return a status of 401 when user is not logged in ', async () => {
       const res = await request(server)
         .put('/api/users')

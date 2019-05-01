@@ -139,6 +139,12 @@ describe('documents/Get all', () => {
     expect(privateDocs).not.toBeTruthy();
   });
 
+  test('that a status code of 400 is returned when invalid queries are passed', async () => {
+    const res = await request(server).get(`/api/documents/all?page=l&limit=10`);
+
+    expect(res.status).toBe(400);
+  });
+
   test('that the author of a private doc can retrieve private docs  authored by him', async () => {
     const token = author.generateToken();
     const res = await request(server)
