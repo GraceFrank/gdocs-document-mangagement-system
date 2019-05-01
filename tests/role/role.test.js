@@ -186,6 +186,24 @@ describe('Roles, /', () => {
       expect(res.status).toBe(400);
     }); //test end
   });
-}); //end of describe (Roles)
 
-// Todo: test that role can only be created, updated and deleted by admin
+  test('that a status code of 400 is returned when invalid payload is received from client ', async () => {
+    const token = new User({ role: admin._id }).generateToken();
+    const res = await request(server)
+      .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', token)
+      .send({ title: '' });
+
+    expect(res.status).toBe(400);
+  }); //test end
+
+  test('that a status code of 401 is returned when invalid token is given ', async () => {
+    const token = new User({ role: admin._id }).generateToken();
+    const res = await request(server)
+      .put(`/api/roles/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', 'kjgkgkl r t s ,bd .grjk gs j')
+      .send({ title: '' });
+
+    expect(res.status).toBe(401);
+  }); //test end
+}); //end of describe (Roles)
