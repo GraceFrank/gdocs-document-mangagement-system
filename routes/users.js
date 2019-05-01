@@ -19,11 +19,11 @@ router.post('/', async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   //validating that new user is unique by checking if email or username is already in use
-  const email = await User.findOne({ email: req.body.email });
-  if (email) return res.status(400).send('email already in use');
-
-  const userName = await User.findOne({ userName: req.body.userName });
-  if (userName) return res.status(400).send('user name not available');
+  const existingUser = await User.findOne().or([
+    { email: req.body.email },
+    { userName: req.body.userName }
+  ]);
+  if (existingUser) return res.status(400).send('email already in use');
 
   //instantiating new user
   let newUser = new User(req.body);
