@@ -40,8 +40,11 @@ router.put(
     if (error) return res.status(400).send(error.details[0].message);
 
     //search if a role with given title exist
-    const existingRole = await Role.findOne({ title: req.body.title });
-    if (existingRole) return res.status(400).send('role already exists');
+    const existingRole = await Role.findOne({
+      title: req.body.title,
+      _id: { $ne: req.params._id }
+    });
+    if (existingRole) return res.status(409).send('role already exists');
     //Todo: find status code for conflict
 
     const role = await Role.findByIdAndUpdate(req.params.id, req.body, {

@@ -156,7 +156,16 @@ describe('Roles, /', () => {
       expect(res.status).toBe(403);
     }); //test end
 
-   
+    test('that updated title is unique ', async () => {
+      const token = new User({ role: admin._id }).generateToken();
+      const res = await request(server)
+        .put(`/api/roles/${regular._id}`)
+        .set('x-auth-token', token)
+        .send({ title: 'admin' });
+
+      expect(res.status).toBe(409);
+    }); //test end
+  });
 }); //end of describe (Roles)
 
 // Todo: test that role can only be created, updated and deleted by admin
