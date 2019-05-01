@@ -55,6 +55,20 @@ describe('login', () => {
       expect(res.status).toBe(400);
     }); //test end
 
+    it('should return a status of 400 when client sends invalid payload contennt', async () => {
+      const res = await request(server)
+        .post('/api/login')
+        .send({ email: 'user1mail.com', password: 'sweetlover' });
+      expect(res.status).toBe(400);
+    }); //test end
+
+    it('should return a status of 400 if the email provided does not exist in db', async () => {
+      const res = await request(server)
+        .post('/api/login')
+        .send({ email: 'random@mail.com', password: 'sweetlover' });
+      expect(res.status).toBe(400);
+    }); //test end
+
     it('should set the header a token in the header', async () => {
       const res = await request(server)
         .post('/api/login')
