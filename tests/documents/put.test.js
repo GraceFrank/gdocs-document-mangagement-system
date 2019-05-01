@@ -63,7 +63,7 @@ describe('documents/put', () => {
     expect(res.status).toBe(404);
   }); //test end
 
-  test('that update are reflected in the database t', async () => {
+  test('that update are reflected in the database', async () => {
     const token = user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
@@ -74,6 +74,16 @@ describe('documents/put', () => {
     expect(res.status).toBe(200);
     expect(dbVersion.title).not.toBe(doc1.title);
     expect(dbVersion.title).toBe(res.body.title);
+  }); //test end
+
+  test('that a 400 is returned when invalid payload is provided', async () => {
+    const token = user1.generateToken();
+    const res = await request(server)
+      .put(`/api/documents/${doc1._id}`)
+      .set('x-auth-token', token)
+      .send({ title: '' });
+
+    expect(res.status).toBe(400);
   }); //test end
 
   test('that if document doses not exist in db a 404 is returned', async () => {
