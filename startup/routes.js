@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
 import roles from '../routes/roles';
 import users from '../routes/users';
 import login from '../routes/login';
 import documents from '../routes/document';
+
 function routes(app) {
   app.use(express.json());
 

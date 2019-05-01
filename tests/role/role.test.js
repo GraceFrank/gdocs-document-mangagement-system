@@ -4,12 +4,13 @@ import request from 'supertest';
 import server from '../../index';
 import User from '../../models/user';
 
-let adminUser;
-let regularUser;
-let admin;
-let regular;
 //test Creating a role
+
 describe('Roles, /', () => {
+  let adminUser;
+  let regularUser;
+  let admin;
+  let regular;
   beforeEach(async () => {
     server; //start server
     await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
@@ -122,6 +123,13 @@ describe('Roles, /', () => {
           return value.title === 'admin';
         })
       ).toBeTruthy();
+    });
+  });
+
+  describe('get/:id', () => {
+    test('that role can be retrive by its id', async () => {
+      const res = await request(server).get(`/api/roles/${admin._id}`);
+      expect(res.status).toBe(200);
     });
   });
 }); //end of describe (Roles)
