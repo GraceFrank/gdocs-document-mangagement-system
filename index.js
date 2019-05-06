@@ -3,12 +3,19 @@ import { connectToDb } from './startup/db';
 import routes from './startup/routes';
 import logger from './startup/logger';
 import prodDevs from './startup/prod';
+import seeder from './seeder/seeder';
 
 const app = express();
 
 //connecting to database
 connectToDb();
 //defining routes
+
+//seed database
+seeder.fakeUsers(20).then(() => {
+  seeder.fakeDocuments();
+});
+
 routes(app);
 prodDevs(app);
 

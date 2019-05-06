@@ -25,6 +25,37 @@ class Seeder {
       await User.create(user);
     }
   } //seedUsers method
+
+  async fakeDocuments() {
+    const docs = await Document.find();
+    if (docs.length >= 1) return;
+    const users = await User.find();
+    for (const user of users) {
+      await Document.insertMany([
+        {
+          ownerId: user._id,
+          title: faker.fake('{{lorem.words}}'),
+          content: faker.fake('{{lorem.sentences}}'),
+          role: user.role,
+          access: 'public'
+        },
+        {
+          ownerId: user._id,
+          title: faker.fake('{{lorem.words}}'),
+          content: faker.fake('{{lorem.sentences}}'),
+          role: user.role,
+          access: 'role'
+        },
+        {
+          ownerId: user._id,
+          title: faker.fake('{{lorem.words}}'),
+          content: faker.fake('{{lorem.sentences}}'),
+          role: user.role,
+          access: 'private'
+        }
+      ]);
+    }
+  } //fakeDocuments Method
 } //seeder class
 
 export default new Seeder();
