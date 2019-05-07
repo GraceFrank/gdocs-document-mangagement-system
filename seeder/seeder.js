@@ -5,22 +5,21 @@ import Document from '../models/document';
 import Role from '../models/role';
 
 class Seeder {
-  async fakeRoles() {
+  //method to insert default roles to the role collection in database
+  async insertDefaultRoles() {
     const roles = await Role.find();
-    if (roles.length > 0) {
-      return;
+    //only insert roles if none exist in the database
+    if (!roles.length > 0) {
+      return await Role.insertMany([{ title: 'admin' }, { title: 'regular' }]);
     }
-    await Role.insertMany([{ title: 'admin' }, { title: 'regular' }]);
   }
 
-  async fakeUsers(quantity) {
-    const users = await User.find();
-    if (users.length >= 1) return;
-
+  //method to seed the users collection in database
+  async insertUsers(quantity) {
+    //get all roles in the db since all users must have a role
     let roles = await Role.find();
-
     for (let i = 1; i <= quantity; i++) {
-      const user = {
+      await User.create({
         name: {
           first: faker.fake('{{name.firstName}}'),
           last: faker.fake('{{name.lastName}}')
@@ -28,25 +27,25 @@ class Seeder {
         email: faker.fake('{{internet.email}}'),
         userName: faker.fake('{{internet.userName}}'),
         password: await bcrypt.hash('sweetlove', 10),
+        //random role from the existing roles is assigned to user
         role: roles[Math.floor(Math.random() * roles.length)]._id
-      };
-      await User.create(user);
+      });
     }
   } //seedUsers method
 
-  async fakeDocuments(quantity) {
-    const docs = await Document.find();
-    if (docs.length >= 1) return;
-
+  //method to seed the documents collection in database
+  async insertDocuments(quantity) {
     const users = await User.find();
+    const access = ['public', 'private', 'role'];
     for (let i = 1; i <= quantity; i++) {
-      const access = ['public', 'private', 'role'];
+      //any user is drawn randomly from the fetched users as the document owner
       const user = users[Math.floor(Math.random() * users.length)];
       await Document.create({
         ownerId: user._id,
         title: faker.fake('{{lorem.words}}'),
         content: faker.fake('{{lorem.sentences}}'),
         role: user.role,
+        //access type is assigned randomly to documents
         access: access[Math.floor(Math.random() * 3)]
       });
     }
