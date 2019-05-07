@@ -13,9 +13,9 @@ connectToDb();
 
 //seed database
 
-seeder.fakeRoles().then(() => {
-  seeder.fakeUsers(20).then(() => {
-    seeder.fakeDocuments(200);
+seeder.insertDefaultRoles().then(() => {
+  seeder.insertUsers(20).then(() => {
+    seeder.insertDocuments(200);
   });
 });
 
