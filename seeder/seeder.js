@@ -12,6 +12,7 @@ class Seeder {
     }
     await Role.insertMany([{ title: 'admin' }, { title: 'regular' }]);
   }
+
   async fakeUsers(quantity) {
     const users = await User.find();
     if (users.length >= 1) return;
