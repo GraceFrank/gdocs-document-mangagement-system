@@ -12,8 +12,11 @@ connectToDb();
 //defining routes
 
 //seed database
-seeder.fakeUsers(20).then(() => {
-  seeder.fakeDocuments(200);
+
+seeder.fakeRoles().then(() => {
+  seeder.fakeUsers(20).then(() => {
+    seeder.fakeDocuments(200);
+  });
 });
 
 routes(app);
