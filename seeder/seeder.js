@@ -26,34 +26,21 @@ class Seeder {
     }
   } //seedUsers method
 
-  async fakeDocuments() {
+  async fakeDocuments(quantity) {
     const docs = await Document.find();
     if (docs.length >= 1) return;
+
     const users = await User.find();
-    for (const user of users) {
-      await Document.insertMany([
-        {
-          ownerId: user._id,
-          title: faker.fake('{{lorem.words}}'),
-          content: faker.fake('{{lorem.sentences}}'),
-          role: user.role,
-          access: 'public'
-        },
-        {
-          ownerId: user._id,
-          title: faker.fake('{{lorem.words}}'),
-          content: faker.fake('{{lorem.sentences}}'),
-          role: user.role,
-          access: 'role'
-        },
-        {
-          ownerId: user._id,
-          title: faker.fake('{{lorem.words}}'),
-          content: faker.fake('{{lorem.sentences}}'),
-          role: user.role,
-          access: 'private'
-        }
-      ]);
+    for (let i = 1; i <= quantity; i++) {
+      const access = ['public', 'private', 'role'];
+      const user = users[Math.floor(Math.random() * users.length)];
+      await Document.create({
+        ownerId: user._id,
+        title: faker.fake('{{lorem.words}}'),
+        content: faker.fake('{{lorem.sentences}}'),
+        role: user.role,
+        access: access[Math.floor(Math.random() * 3)]
+      });
     }
   } //fakeDocuments Method
 } //seeder class

@@ -13,7 +13,7 @@ connectToDb();
 
 //seed database
 seeder.fakeUsers(20).then(() => {
-  seeder.fakeDocuments();
+  seeder.fakeDocuments(200);
 });
 
 routes(app);
