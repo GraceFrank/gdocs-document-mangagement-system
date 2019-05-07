@@ -5,6 +5,13 @@ import Document from '../models/document';
 import Role from '../models/role';
 
 class Seeder {
+  async fakeRoles() {
+    const roles = await Role.find();
+    if (roles.length > 0) {
+      return;
+    }
+    await Role.insertMany([{ title: 'admin' }, { title: 'regular' }]);
+  }
   async fakeUsers(quantity) {
     const users = await User.find();
     if (users.length >= 1) return;
