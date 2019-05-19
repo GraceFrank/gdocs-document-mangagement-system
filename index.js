@@ -11,14 +11,6 @@ const app = express();
 connectToDb();
 //defining routes
 
-//seed database
-
-seeder.insertDefaultRoles().then(() => {
-  seeder.insertUsers(20).then(() => {
-    seeder.insertDocuments(200);
-  });
-});
-
 routes(app);
 prodDevs(app);
 
