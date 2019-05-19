@@ -94,7 +94,7 @@ router.get('/:id/documents', login, async (req, res) => {
 //endpoint to  view all users, only admin can view all users
 router.get('/', [authenticate, authorizeAdmin], async (req, res) => {
   const users = await User.find();
-  return res.send(users);
+  return res.send({ message: 'ok', data: users });
 });
 
 //endpoint for logged in user to view his details
