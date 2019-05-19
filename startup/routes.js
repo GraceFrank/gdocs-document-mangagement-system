@@ -3,6 +3,7 @@ import roles from '../routes/roles';
 import users from '../routes/users';
 import login from '../routes/login';
 import documents from '../routes/document';
+import swagger from '../documentation/swagger';
 
 function routes(app) {
   app.use(express.json());
@@ -11,6 +12,7 @@ function routes(app) {
   app.use('/api/users', users);
   app.use('/api/login', login);
   app.use('/api/documents', documents);
+  app.use('/api-docs', swagger);
 }
 
 export default routes;
