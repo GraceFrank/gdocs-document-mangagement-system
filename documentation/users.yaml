@@ -1,0 +1,66 @@
+
+path:
+  /api/users/:
+    get:
+      tags: 
+        - User
+      description: returns All users when requested by admins
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-auth-token
+          schema: 
+            type: string
+      responses:
+        200:
+          description: ok  successful
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: ok
+              data: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type:
+                    name:
+                      type: object
+                      properties:
+                        first:
+                          type: string
+                          example: Grace
+                        last:
+                          type: string
+                          example: frank
+                    userName:
+                      type: string
+                      example: graceyfrank
+                    email:
+                      type: string
+                      example: frankgracey@mail.com
+                    password:
+                      type: string
+                    role:    
+                      type: string
+        401:
+          description: only a logged in Admin user can access this route. so if a user is not logged in a status code of 401 is sent
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: 'access denied no token provided'
+        403:
+          description: only an in Admin user can access this route. so if a logged in user who  is not an Admin tries to access this route, a status code of 403 is sent
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: 'access denied no token provided'
+
