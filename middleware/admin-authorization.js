@@ -6,7 +6,7 @@ async function authAdmin(req, res, next) {
 
   //check if the the person is and admin and grants access else deny access
   if (req.user.role !== admin._id.toHexString())
-    return res.status(403).send({message:'forbidden, unauthorized access'});
+    return res.status(403).send({error:'forbidden, unauthorized access'});
   next();
 }
 
