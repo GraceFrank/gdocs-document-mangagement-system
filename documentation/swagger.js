@@ -13,10 +13,11 @@ const options = {
     },
     tags: [
       { name: 'doc', description: 'Everything about the users' },
-      { name: 'User', description: 'Everything about the users' }
+      { name: 'User', description: 'Everything about the users' },
+      { name: 'User Login', description: 'user Login' }
     ]
   },
-  apis: ['./documentation/users.yaml']
+  apis: ['./documentation/*.yaml']
 };
 
 const spec = jsDocs(options);
@@ -26,6 +27,6 @@ router.get('/', swaggerUi.setup(spec));
 
 // export default function(app) {
 //   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spec));
-// }
+//
 
 module.exports = router;
