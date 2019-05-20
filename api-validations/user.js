@@ -27,8 +27,7 @@ function validateUser(user) {
     password: Joi.string()
       .required()
       .min(8)
-      .max(255),
-    roleId: Joi.objectId()
+      .max(255)
   };
   return Joi.validate(user, schema);
 }
