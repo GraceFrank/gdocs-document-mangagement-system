@@ -36,7 +36,7 @@
   },
   "scripts": {
     "test": "export NODE_ENV=test && jest --watchAll --verbose --coverage --runInBand ",
-    "start": "nodemon --exec babel-node index.js"
+    "startdev": "nodemon --exec babel-node index.js"
   },
   "author": "",
   "license": "ISC"
