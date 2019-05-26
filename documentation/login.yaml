@@ -2,7 +2,7 @@ path:
   /api/login/:
     post:
       tags: 
-        - User Login
+        - User
       description: an existing user can login
       parameters:
         - name: payload
