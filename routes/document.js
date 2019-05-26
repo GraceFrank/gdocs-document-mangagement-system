@@ -13,7 +13,6 @@ router.post('/', authenticate, async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   //search if role already exists
-  //TODO: write a function that checks if a doc exist in db use the function in both roles and users too
   const existingDoc = await Document.findOne({ title: req.body.title });
   if (existingDoc) return res.status(400).send('document already exists');
 
@@ -34,13 +33,8 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   //checking if document exist on db
-  const doc = await Document.findById(req.params.id);
+  const doc = await Document.findOne({ _id: req.params.id });
   if (!doc) return res.status(404).send('document not found');
-
-  //Todo: refactor
-  //check if user is the author of document
-  if (doc.ownerId.toHexString() !== req.user._id)
-    return res.status(403).send('access denied, only author can modify docs');
 
   //check that doc title is unique
   const existingDoc = await Document.findOne({ title: req.body.title });
@@ -56,7 +50,7 @@ router.put('/:id', [validateId, authenticate], async (req, res) => {
   res.send(update);
 });
 
-router.get('/all', login, async (req, res) => {
+router.get('/', login, async (req, res) => {
   //Todo: validate query
   const page = req.query.page * 1;
   const limit = req.query.limit * 1;
