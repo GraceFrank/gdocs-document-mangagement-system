@@ -14,7 +14,8 @@ const options = {
     tags: [
       { name: 'doc', description: 'Everything about the users' },
       { name: 'User', description: 'Everything about the users' },
-      { name: 'User Login', description: 'user Login' }
+      { name: 'Role', description: 'Everything about roles' },
+      { name: 'Description', description: 'everything about documents' }
     ]
   },
   apis: ['./documentation/*.yaml']
