@@ -14,7 +14,7 @@ class UserController {
     //validating the payload sent by client
     const { error } = validate(req.body);
     if (error) return res.status(400).send({ error: error.details[0].message });
-    const update = request.body;
+    const update = req.body;
     update.password = await bcrypt.hash(update.password, 10);
     const user = await User.findByIdAndUpdate(req.user._id, update, {
       new: true
@@ -22,7 +22,7 @@ class UserController {
     //any update the role of all documents created by the user
     await Document.updateMany({ ownerId: user._id }, { role: user.role });
     return res.send({
-      message: ok,
+      message: 'ok',
       data: _.pick(user, ['name', 'email', 'userName', 'role'])
     });
   }
@@ -34,7 +34,7 @@ class UserController {
 
   async getMe(req, res) {
     const user = await User.findById(req.user._id);
-    return res.send({ message: ok, data: user });
+    return res.send({ message: 'ok', data: user });
   }
 
   async post(req, res) {

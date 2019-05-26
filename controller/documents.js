@@ -69,7 +69,7 @@ class Documents {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    //checking if document exist on db
+    //checking if document exist on db, and is authored by user
     const doc = await Document.findOne({ _id: req.params.id });
     if (!doc) return res.status(404).send('document not found');
 
