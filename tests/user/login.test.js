@@ -69,22 +69,22 @@ describe('login', () => {
       expect(res.status).toBe(400);
     }); //test end
 
-    it('should set the header a token in the header', async () => {
+    it('should send a token ', async () => {
       const res = await request(server)
         .post('/api/login')
         .send({ email: 'user1@mail.com', password: 'sweetlove' });
 
-      expect(res.header).toHaveProperty('x-auth-token');
+      expect(res.body).toHaveProperty('x-auth-token');
     }); //test end
 
-    test('token set in the header is valid', async () => {
+    test('token sent in the body is valid', async () => {
       const res = await request(server)
         .post('/api/login')
         .send({ email: 'user1@mail.com', password: 'sweetlove' });
 
       //decoding the header set in response
       const decoded = jwt.decode(
-        res.header['x-auth-token'],
+        res.body['x-auth-token'],
         config.get('jwtPrivateKey')
       );
 

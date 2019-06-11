@@ -53,7 +53,7 @@ describe('documents/put', () => {
       .put(`/api/documents/${doc1._id}`)
       .set('x-auth-token', token)
       .send({ title: 'Document1' });
-    expect(res.status).toBe(403);
+    expect(res.status).toBe(404);
   });
 
   test('that invalid id returns a status of 400', async () => {

@@ -131,7 +131,7 @@ describe('documents/Get all', () => {
   test('that a non-author of a private doc cannot retrieve private docs not authored by him', async () => {
     const token = regularUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=10`)
+      .get(`/api/documents?page=1&limit=10`)
       .set('x-auth-token', token);
 
     const privateDocs = res.body.find(doc => doc.access === 'private');
@@ -140,7 +140,7 @@ describe('documents/Get all', () => {
   });
 
   test('that a status code of 400 is returned when invalid queries are passed', async () => {
-    const res = await request(server).get(`/api/documents/all?page=l&limit=10`);
+    const res = await request(server).get(`/api/documents?page=l&limit=10`);
 
     expect(res.status).toBe(400);
   });
@@ -148,7 +148,7 @@ describe('documents/Get all', () => {
   test('that the author of a private doc can retrieve private docs  authored by him', async () => {
     const token = author.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=10`)
+      .get(`/api/documents?page=1&limit=10`)
       .set('x-auth-token', token);
 
     const privateDocs = res.body.find(doc => doc.access === 'private');
@@ -159,7 +159,7 @@ describe('documents/Get all', () => {
   test('that docs with role access cannot be accessed by users with different roles from the author', async () => {
     const token = premiumUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=10`)
+      .get(`/api/documents?page=1&limit=10`)
       .set('x-auth-token', token);
 
     const roleDoc = res.body.find(doc => doc.access === 'role');
@@ -170,7 +170,7 @@ describe('documents/Get all', () => {
   test('that docs with role access can be accessed by users with the same roles from the author', async () => {
     const token = regularUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=10`)
+      .get(`/api/documents?page=1&limit=10`)
       .set('x-auth-token', token);
 
     const roleDoc = res.body.find(doc => doc.access === 'role');
@@ -181,7 +181,7 @@ describe('documents/Get all', () => {
   test('that docs with role access can be accessed by admin ', async () => {
     const token = adminUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=10`)
+      .get(`/api/documents?page=1&limit=10`)
       .set('x-auth-token', token);
 
     const roleDoc = res.body.find(doc => doc.access === 'role');
@@ -189,7 +189,7 @@ describe('documents/Get all', () => {
     expect(roleDoc).toBeTruthy();
   });
   test('that a user not logged in can view only public docs', async () => {
-    const res = await request(server).get(`/api/documents/all?page=1&limit=10`);
+    const res = await request(server).get(`/api/documents?page=1&limit=10`);
 
     const roleDoc = res.body.find(doc => doc.access === 'role');
     expect(roleDoc).not.toBeTruthy();
@@ -198,7 +198,7 @@ describe('documents/Get all', () => {
   test('that document are paginated ', async () => {
     const token = adminUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=3`)
+      .get(`/api/documents?page=1&limit=3`)
       .set('x-auth-token', token);
 
     expect(res.body.length).toBe(3);
@@ -207,7 +207,7 @@ describe('documents/Get all', () => {
   test('that document are sorted by date ', async () => {
     const token = adminUser.generateToken();
     const res = await request(server)
-      .get(`/api/documents/all?page=1&limit=3`)
+      .get(`/api/documents?page=1&limit=3`)
       .set('x-auth-token', token);
 
     expect(res.body[0].timestamp).toBeGreaterThanOrEqual(res.body[1].timestamp);
