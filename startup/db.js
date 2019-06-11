@@ -10,7 +10,8 @@ function connectToDb() {
   //connect to the database
   mongoose
     .connect(db, {
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useCreateIndex: true
     })
     .then(() => {
       logger.info(`connected to database ${db}`);
