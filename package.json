@@ -47,7 +47,7 @@
     "test": "export NODE_ENV=test && jest --watchAll --verbose --coverage --runInBand ",
     "startdev": "nodemon --exec babel-node server/index.js",
     "build": "babel server -d build",
-    "start": "npm run build && node ./build/index.js"
+    "start": "node ./build/index.js"
   },
   "author": "",
   "license": "ISC"
