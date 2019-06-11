@@ -1,0 +1,39 @@
+path:
+  /api/login/:
+    post:
+      tags: 
+        - User
+      description: an existing user can login
+      parameters:
+        - name: payload
+          in: body
+          description: data required for user login
+          schema:
+            type: object
+            properties:
+              email: 
+                type: string
+                example: 'frankgracey@gmail.com'
+              password: 
+                type: string
+                example: "jambalay123"
+      responses:
+        200:
+          description: successfully logged in
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: welcome user
+              x-auth-token: 
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYjI5OWZmOWQwYTIyMDIzZDA1N2M3MCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTU1NTM3Mzc2NH0.LTKrqRV16tICCeoANOUROTnWN6JGE-eY53_lrgM0FIM
+        400:
+          description: a 400 is sent when a user passes invalid contents in the body payload
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'invalid email or password'    

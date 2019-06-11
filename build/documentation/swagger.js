@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var swaggerUi = require('swagger-ui-express');
 
@@ -18,19 +18,24 @@ var options = {
         phone: '+2348137038977'
       }
     },
-    tags: [{
-      name: 'doc',
-      description: 'Everything about the users'
-    }, {
-      name: 'User',
-      description: 'Everything about the users'
-    }, {
-      name: 'Role',
-      description: 'Everything about roles'
-    }, {
-      name: 'Description',
-      description: 'everything about documents'
-    }]
+    tags: [
+      {
+        name: 'doc',
+        description: 'Everything about the users'
+      },
+      {
+        name: 'User',
+        description: 'Everything about the users'
+      },
+      {
+        name: 'Role',
+        description: 'Everything about roles'
+      },
+      {
+        name: 'Description',
+        description: 'everything about documentsgfgfh'
+      }
+    ]
   },
   apis: ['./documentation/*.yaml']
 };

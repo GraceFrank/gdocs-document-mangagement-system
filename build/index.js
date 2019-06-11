@@ -5,8 +5,8 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports['default'] = void 0;
 
-require('babel-core');
 require('babel-polyfill');
+require('babel-core');
 
 var _express = _interopRequireDefault(require('express'));
 
