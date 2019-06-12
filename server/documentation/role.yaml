@@ -26,7 +26,7 @@ path:
                   type: object
                   properties:
                     _id:
-                      type:
+                      type:string
                     title:
                       type: string
                       example: admin
@@ -111,7 +111,7 @@ path:
           in: body
           description: data required for updating a role
           schema:
-            $ref: "#/definitions/newRole"
+            $ref: "#/definitions/createdRole"
       responses:
         200:
           description: ok  successfully updated role
@@ -171,7 +171,7 @@ path:
                   type: object
                   properties:
                     _id:
-                      type:
+                      type: string
                     title:
                       type: string
                       example: admin

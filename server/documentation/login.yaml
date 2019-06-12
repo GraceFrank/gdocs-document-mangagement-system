@@ -25,12 +25,36 @@ path:
             properties:
               message: 
                 type: string
-                example: welcome user
+                example: ok
               x-auth-token: 
                 type: string
                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYjI5OWZmOWQwYTIyMDIzZDA1N2M3MCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTU1NTM3Mzc2NH0.LTKrqRV16tICCeoANOUROTnWN6JGE-eY53_lrgM0FIM
+              data:
+                type: object
+                properties:
+                  _id:
+                    type:
+                  name:
+                    type: object
+                    properties:
+                      _id: 
+                        type: string
+                      first:
+                        type: string
+                        example: Grace
+                      last:
+                        type: string
+                        example: frank
+                  userName:
+                    type: string
+                    example: graceyfrank
+                  email:
+                    type: string
+                    example: frankgracey@mail.com
+                  role:    
+                    type: string
         400:
-          description: a 400 is sent when a user passes invalid contents in the body payload
+          description: a 400 is sent when a user passes wrong/invalid username/password
           schema:
             type: object
             properties:
