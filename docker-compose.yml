@@ -1,0 +1,26 @@
+version: '3.6'
+
+services:
+  gdoc-app-api:
+    container_name: api
+    # image: node:'11.15.0'
+    build: ./
+    command: npm run startdev
+    working_dir: /usr/src/gdoc-api
+    environment: 
+      NODE_ENV: development
+      gdoc_db: "mongodb+srv://grace:12345@cluster0-7txuj.gcp.mongodb.net/test?retryWrites=true&w=majority"
+      gdoc_jwtPrivateKey: 12345
+    ports: 
+      - "3000:3000"
+    links:
+      - mongoDb
+    volumes:
+      - ./:/usr/src/gdoc-api
+      - /usr/src/gdoc-api/node_modules/
+
+  mongoDb:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
