@@ -1,12 +1,13 @@
-import config from 'config';
 import winston from 'winston';
 import 'winston-mongodb';
 import 'express-async-errors';
 
 //creating a winston logger object for logging errors
+const { combine, timestamp, prettyPrint } = winston.format;
+
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: combine(timestamp(), prettyPrint()),
   //transports are the means by which the errors or info are logged
   transports: [
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
