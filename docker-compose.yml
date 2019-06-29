@@ -11,10 +11,12 @@ services:
       NODE_ENV: development
       gdoc_db: "mongodb+srv://grace:12345@cluster0-7txuj.gcp.mongodb.net/test?retryWrites=true&w=majority"
       gdoc_jwtPrivateKey: 12345
+      redis: ""
     ports: 
       - "3000:3000"
     links:
       - mongoDb
+      - redis
     volumes:
       - ./:/usr/src/gdoc-api
       - /usr/src/gdoc-api/node_modules/
@@ -24,3 +26,9 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+
+  redis:
+    image: redis
+    container_name: cache
+    ports:
+    - "6380:6380"

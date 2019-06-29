@@ -25029,3 +25029,183 @@
        method: 'afterConnect [as oncomplete]',
        native: false } ],
   timestamp: '2019-06-29T12:20:35.654Z' }
+{ error:
+   Error: /usr/src/gdoc-api/node_modules/bcrypt/lib/binding/bcrypt_lib.node: invalid ELF header
+       at Object.Module._extensions..node (internal/modules/cjs/loader.js:857:18)
+       at Module.load (internal/modules/cjs/loader.js:685:32)
+       at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+       at Module.require (internal/modules/cjs/loader.js:723:19)
+       at require (internal/modules/cjs/helpers.js:14:16)
+       at Object.<anonymous> (/usr/src/gdoc-api/node_modules/bcrypt/bcrypt.js:6:16)
+       at Module._compile (internal/modules/cjs/loader.js:816:30)
+       at Module._compile (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:99:24)
+       at Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+       at Object.newLoader [as .js] (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:104:7)
+       at Module.load (internal/modules/cjs/loader.js:685:32)
+       at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+       at Module.require (internal/modules/cjs/loader.js:723:19)
+       at require (internal/modules/cjs/helpers.js:14:16)
+       at Object.<anonymous> (/usr/src/gdoc-api/server/controller/user.js:1:1)
+       at Module._compile (internal/modules/cjs/loader.js:816:30),
+  level: 'error',
+  message:
+   'uncaughtException: /usr/src/gdoc-api/node_modules/bcrypt/lib/binding/bcrypt_lib.node: invalid ELF header\nError: /usr/src/gdoc-api/node_modules/bcrypt/lib/binding/bcrypt_lib.node: invalid ELF header\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:857:18)\n    at Module.load (internal/modules/cjs/loader.js:685:32)\n    at Function.Module._load (internal/modules/cjs/loader.js:620:12)\n    at Module.require (internal/modules/cjs/loader.js:723:19)\n    at require (internal/modules/cjs/helpers.js:14:16)\n    at Object.<anonymous> (/usr/src/gdoc-api/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:816:30)\n    at Module._compile (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:827:10)\n    at Object.newLoader [as .js] (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:685:32)\n    at Function.Module._load (internal/modules/cjs/loader.js:620:12)\n    at Module.require (internal/modules/cjs/loader.js:723:19)\n    at require (internal/modules/cjs/helpers.js:14:16)\n    at Object.<anonymous> (/usr/src/gdoc-api/server/controller/user.js:1:1)\n    at Module._compile (internal/modules/cjs/loader.js:816:30)',
+  stack:
+   'Error: /usr/src/gdoc-api/node_modules/bcrypt/lib/binding/bcrypt_lib.node: invalid ELF header\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:857:18)\n    at Module.load (internal/modules/cjs/loader.js:685:32)\n    at Function.Module._load (internal/modules/cjs/loader.js:620:12)\n    at Module.require (internal/modules/cjs/loader.js:723:19)\n    at require (internal/modules/cjs/helpers.js:14:16)\n    at Object.<anonymous> (/usr/src/gdoc-api/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:816:30)\n    at Module._compile (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:827:10)\n    at Object.newLoader [as .js] (/usr/src/gdoc-api/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:685:32)\n    at Function.Module._load (internal/modules/cjs/loader.js:620:12)\n    at Module.require (internal/modules/cjs/loader.js:723:19)\n    at require (internal/modules/cjs/helpers.js:14:16)\n    at Object.<anonymous> (/usr/src/gdoc-api/server/controller/user.js:1:1)\n    at Module._compile (internal/modules/cjs/loader.js:816:30)',
+  exception: true,
+  date:
+   'Sat Jun 29 2019 12:49:33 GMT+0000 (Coordinated Universal Time)',
+  process:
+   { pid: 3711,
+     uid: 0,
+     gid: 0,
+     cwd: '/usr/src/gdoc-api',
+     execPath: '/usr/local/bin/node',
+     version: 'v11.15.0',
+     argv: [ 'node', '/usr/src/gdoc-api/server/index.js' ],
+     memoryUsage:
+      { rss: 107470848,
+        heapTotal: 73814016,
+        heapUsed: 39931920,
+        external: 18303886 } },
+  os:
+   { loadavg: [ 0.10791015625, 0.04638671875, 0.005859375 ],
+     uptime: 296492 },
+  trace:
+   [ { column: 18,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..node',
+       line: 857,
+       method: '.node',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 685,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 620,
+       method: '_load',
+       native: false },
+     { column: 19,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 723,
+       method: 'require',
+       native: false },
+     { column: 16,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 14,
+       method: null,
+       native: false },
+     { column: 16,
+       file: '/usr/src/gdoc-api/node_modules/bcrypt/bcrypt.js',
+       function: null,
+       line: 6,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 816,
+       method: '_compile',
+       native: false },
+     { column: 24,
+       file: '/usr/src/gdoc-api/node_modules/pirates/lib/index.js',
+       function: 'Module._compile',
+       line: 99,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..js',
+       line: 827,
+       method: '.js',
+       native: false },
+     { column: 7,
+       file: '/usr/src/gdoc-api/node_modules/pirates/lib/index.js',
+       function: 'Object.newLoader [as .js]',
+       line: 104,
+       method: 'js]',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 685,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 620,
+       method: '_load',
+       native: false },
+     { column: 19,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 723,
+       method: 'require',
+       native: false },
+     { column: 16,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 14,
+       method: null,
+       native: false },
+     { column: 1,
+       file: '/usr/src/gdoc-api/server/controller/user.js',
+       function: null,
+       line: 1,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 816,
+       method: '_compile',
+       native: false } ],
+  timestamp: '2019-06-29T12:49:33.303Z' }
+{ error:
+   { Error: Redis connection to 127.0.0.1:6379 failed - connect ECONNREFUSED 127.0.0.1:6379
+       at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1088:14)
+     errno: 'ECONNREFUSED',
+     code: 'ECONNREFUSED',
+     syscall: 'connect',
+     address: '127.0.0.1',
+     port: 6379 },
+  level: 'error',
+  message:
+   'uncaughtException: Redis connection to 127.0.0.1:6379 failed - connect ECONNREFUSED 127.0.0.1:6379\nError: Redis connection to 127.0.0.1:6379 failed - connect ECONNREFUSED 127.0.0.1:6379\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1088:14)',
+  stack:
+   'Error: Redis connection to 127.0.0.1:6379 failed - connect ECONNREFUSED 127.0.0.1:6379\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1088:14)',
+  exception: true,
+  date:
+   'Sat Jun 29 2019 12:49:33 GMT+0000 (Coordinated Universal Time)',
+  process:
+   { pid: 3711,
+     uid: 0,
+     gid: 0,
+     cwd: '/usr/src/gdoc-api',
+     execPath: '/usr/local/bin/node',
+     version: 'v11.15.0',
+     argv: [ 'node', '/usr/src/gdoc-api/server/index.js' ],
+     memoryUsage:
+      { rss: 111181824,
+        heapTotal: 75472896,
+        heapUsed: 43660112,
+        external: 18304006 } },
+  os:
+   { loadavg: [ 0.10791015625, 0.04638671875, 0.005859375 ],
+     uptime: 296492 },
+  trace:
+   [ { column: 14,
+       file: 'net.js',
+       function: 'TCPConnectWrap.afterConnect [as oncomplete]',
+       line: 1088,
+       method: 'afterConnect [as oncomplete]',
+       native: false } ],
+  timestamp: '2019-06-29T12:49:33.343Z' }

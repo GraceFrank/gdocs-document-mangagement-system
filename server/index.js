@@ -1,11 +1,14 @@
 import express from 'express';
 import { connectToDb } from './startup/db';
+import { client, connectToRedis } from './startup/cache';
 import routes from './startup/routes';
 import logger from './startup/logger';
 import prodDevs from './startup/prod';
-import seeder from './seeder/seeder';
 
 const app = express();
+
+//connect to redis cache
+connectToRedis();
 
 //connecting to database
 connectToDb();
@@ -14,7 +17,7 @@ connectToDb();
 routes(app);
 prodDevs(app);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const server = app.listen(port, () => {
   logger.info(`listening on port ${port}`);
 });

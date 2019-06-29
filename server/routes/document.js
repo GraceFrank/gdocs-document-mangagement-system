@@ -13,6 +13,6 @@ router.get('/', login, documentController.get);
 
 router.delete('/:id', [validateId, authenticate], documentController.delete);
 
-router.get('/:id', [validateId, login], documentController.getById);
+router.get('/:id', [validateId, authenticate], documentController.getById);
 
 export default router;
