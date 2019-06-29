@@ -1,8 +1,9 @@
+//
 import redis from 'redis';
 import logger from './logger';
 import util from 'util';
 
-const client = redis.createClient();
+const client = redis.createClient({ host: 'redis' });
 client.hget = util.promisify(client.hget);
 client.hset = util.promisify(client.hset);
 client.hdel = util.promisify(client.hdel);

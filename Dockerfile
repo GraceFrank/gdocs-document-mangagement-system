@@ -8,8 +8,7 @@ RUN npm install
 
 RUN npm install bcrypt@latest --save
 
-RUN npm install -g redis
-
+RUN npm i redis
 RUN npm audit fix
 
 CMD [ "/bin/bash" ]
