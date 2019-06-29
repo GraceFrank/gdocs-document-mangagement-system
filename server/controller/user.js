@@ -4,12 +4,31 @@ import validate from '../api-validations/user';
 import User from '../models/user';
 import Role from '../models/role';
 import Document from '../models/document';
+import { client } from '../startup/cache.js';
+import logger from '../startup/logger';
 
 class UserController {
   async get(req, res) {
-    const users = await User.find();
-    return res.send({ message: 'ok', data: users });
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 20;
+
+    let users = await client.hget(users, `page=${page}&limit=${limit}`);
+    if (doc) {
+      logger.info('fetching users from cache');
+      return res.send({ message: 'ok', data: JSON.parse(users) });
+    } else {
+      users = await User.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
+      await client.hset(
+        users,
+        `page=${page}&limit=${limit}`,
+        JSON.stringify(users)
+      );
+      return res.send({ message: 'ok', data: users });
+    }
   }
+
   async put(req, res) {
     //validating the payload sent by client
     const { error } = validate(req.body);
@@ -33,8 +52,14 @@ class UserController {
   }
 
   async getMe(req, res) {
-    const user = await User.findById(req.user._id);
-    return res.send({ message: 'ok', data: user });
+    let user = await client.hget('userById', req.user._id);
+
+    if (!user) {
+      user = await User.findById(req.user._id);
+      await client.hset('userById', req.user._id, JSON.stringify(user));
+      return res.send({ message: 'ok', data: user });
+    }
+    return res.send({ message: 'ok', data: JSON.parse(user) });
   }
 
   async post(req, res) {
