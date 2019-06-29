@@ -20,6 +20,8 @@ class Documents {
       access: req.body.access || 'public',
       role: req.user.role
     });
+    //clear cache
+    await client.del('documents');
 
     res.status(201).send(doc);
   }
@@ -129,6 +131,9 @@ class Documents {
         new: true
       }
     );
+    await client.del('documents');
+    const docIsCached = await client.hexists('documentById', req.params.id);
+    if (docIsCached) await client.hdel('documentById', req.params.id);
     res.send(update);
   }
 
@@ -142,6 +147,9 @@ class Documents {
       return res.status(403).send('access denied, only author can modify docs');
 
     const deleted = await Document.findByIdAndDelete(doc._id);
+    await client.del('documents');
+    const docIsCached = await client.hexists('documentById', req.params.id);
+    if (docIsCached) await client.hdel('documentById', req.params.id);
     res.send(deleted);
   }
 
