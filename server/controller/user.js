@@ -12,8 +12,8 @@ class UserController {
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 20;
 
-    let users = await client.hget(users, `page=${page}&limit=${limit}`);
-    if (doc) {
+    let users = await client.hget('users', `page=${page}&limit=${limit}`);
+    if (users) {
       logger.info('fetching users from cache');
       return res.send({ message: 'ok', data: JSON.parse(users) });
     } else {
@@ -21,7 +21,7 @@ class UserController {
         .skip((page - 1) * limit)
         .limit(limit);
       await client.hset(
-        users,
+        'users',
         `page=${page}&limit=${limit}`,
         JSON.stringify(users)
       );
@@ -40,6 +40,9 @@ class UserController {
     });
     //any update the role of all documents created by the user
     await Document.updateMany({ ownerId: user._id }, { role: user.role });
+    await client.del('users');
+    const cachedUser = await client.hexists('userById', req.user._id);
+    if (cachedUser) await client.hdel('userById', req.user._id);
     return res.send({
       message: 'ok',
       data: _.pick(user, ['name', 'email', 'userName', 'role'])
@@ -48,6 +51,9 @@ class UserController {
 
   async delete(req, res) {
     const user = await User.findByIdAndDelete(req.user._id);
+    await client.del('users');
+    const cachedUser = await client.hexists('userById', req.user._id);
+    if (cachedUser) await client.hdel('userById', req.user._id);
     return res.send(user);
   }
 
@@ -57,8 +63,10 @@ class UserController {
     if (!user) {
       user = await User.findById(req.user._id);
       await client.hset('userById', req.user._id, JSON.stringify(user));
+      logger.info('fetching from mongo');
       return res.send({ message: 'ok', data: user });
     }
+    logger.info('fetching from cache');
     return res.send({ message: 'ok', data: JSON.parse(user) });
   }
 
@@ -88,6 +96,7 @@ class UserController {
 
     //saving new user to data base and returning response
     newUser = await newUser.save();
+    await client.del('users');
     return res
       .status(201)
       .send(_.pick(newUser, ['_id', 'name', 'email', 'userName', 'role']));
