@@ -117,7 +117,10 @@ class Documents {
     if (error) return res.status(400).send(error.details[0].message);
 
     //checking if document exist on db, and is authored by user
-    const doc = await Document.findOne({ _id: req.params.id });
+    const doc = await Document.findOne({
+      _id: req.params.id,
+      ownerId: req.user._id
+    });
     if (!doc) return res.status(404).send('document not found');
 
     //check that doc title is unique
