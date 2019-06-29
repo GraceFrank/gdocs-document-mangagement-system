@@ -102,10 +102,20 @@ class UserController {
 
     //if the user is not logged in send only documents with public access
     if (!req.user) {
+      const cachedDocs = await client.hget(
+        'userDocs',
+        `${req.params.id}/public`
+      );
+      if (cachedDocs) return res.send(cachedDocs);
       docs = await Document.find({ ownerId: req.params.id, access: 'public' })
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ date: -1 });
+      await client.hset(
+        'userDocs',
+        `${req.params.id}/public`,
+        JSON.stringify(docs)
+      );
       return res.send(docs);
     }
 
@@ -113,6 +123,7 @@ class UserController {
     let docs;
 
     //if the user is an admin send him all documents except private access docs
+
     if (req.user.role == admin._id.toHexString()) {
       docs = await Document.find({
         access: { $ne: 'private' },
