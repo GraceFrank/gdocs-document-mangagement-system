@@ -1,6 +1,8 @@
 import validate from '../api-validations/document';
 import Document from '../models/document';
 import Role from '../models/role';
+import { client, connectToRedis } from '../startup/cache';
+import logger from '../startup/logger';
 
 class Documents {
   async post(req, res) {
@@ -22,7 +24,7 @@ class Documents {
     res.status(201).send(doc);
   }
 
-  async get(req, res) {
+  async get(req, res, next) {
     // validate query
     const page = req.query.page * 1;
     const limit = req.query.limit * 1;
@@ -30,17 +32,39 @@ class Documents {
     if (!page || !limit) res.status(400).send('invalid query');
 
     if (!req.user) {
-      docs = await Document.find({ access: 'public' })
+      const cachedDocs = await client.hget(
+        'documents',
+        `public-${page}-${limit}`
+      );
+      if (cachedDocs) {
+        logger.info('fetching from cache');
+        return res.send(JSON.parse(cachedDocs));
+      }
+      const docs = await Document.find({ access: 'public' })
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ date: -1 });
-      return res.send(docs);
+
+      logger.info('fetcing from MongoDB');
+      res.send(docs);
+
+      client.hset('documents', `public-${page}-${limit}`, JSON.stringify(docs));
+      return;
     }
 
     const admin = await Role.findOne({ title: 'admin' });
     let docs;
 
     if (req.user.role == admin._id.toHexString()) {
+      const cachedDocs = await client.hget(
+        'documents',
+        `${req.user._id}-${page}-${limit}`
+      );
+      if (cachedDocs) {
+        logger.info('fetching from cache');
+        return res.send(JSON.parse(cachedDocs));
+      }
+
       docs = await Document.find()
         .or([
           { access: 'private', ownerId: req.user._id },
@@ -49,9 +73,24 @@ class Documents {
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({ date: -1 });
-      return res.send(docs);
+      res.send(docs);
+      logger.info('fetching from mongoDb');
+      client.hset(
+        'documents',
+        `${req.user._id}-${page}-${limit}`,
+        JSON.stringify(docs)
+      );
+      return;
     }
 
+    const cachedDocs = await client.hget(
+      'documents',
+      `${req.user._id}-${page}-${limit}`
+    );
+    if (cachedDocs) {
+      logger.info('fetching from cache');
+      return res.send(JSON.parse(cachedDocs));
+    }
     docs = await Document.find()
       .or([
         { access: 'private', ownerId: req.user._id },
@@ -61,7 +100,13 @@ class Documents {
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ date: -1 });
-    return res.send(docs);
+    res.send(docs);
+    client.hset(
+      'documents',
+      `${req.user._id}-${page}-${limit}`,
+      JSON.stringify(docs)
+    );
+    return;
   }
 
   async put(req, res) {
@@ -101,9 +146,16 @@ class Documents {
   }
 
   async getById(req, res) {
-    const doc = await Document.findById(req.params.id);
-    if (!doc) return res.status(404).send('document not found');
-
+    let doc = await client.hget('documentById', req.params.id);
+    if (doc) {
+      doc = JSON.parse(doc);
+      logger.info('fetching from cache');
+    } else {
+      doc = await Document.findById(req.params.id);
+      if (!doc) return res.status(404).send('document not found');
+      logger.info('fetching from MongoDB');
+      await client.hset('documentById', req.params.id, JSON.stringify(doc));
+    }
     class GrantAccess {
       isAdmin() {
         const admin = Role.findOne({ title: admin });
