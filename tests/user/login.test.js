@@ -4,7 +4,7 @@ import server from '../../index';
 import User from '../../models/user';
 import Role from '../../models/role';
 import jwt from 'jsonwebtoken';
-import config from 'config';
+import config from '../../config/test';
 import bcrypt from 'bcrypt';
 
 let regular;
@@ -85,7 +85,7 @@ describe('login', () => {
       //decoding the header set in response
       const decoded = jwt.decode(
         res.body['x-auth-token'],
-        config.get('jwtPrivateKey')
+        config.privateKey
       );
 
       expect(decoded).toHaveProperty('_id');

@@ -2,8 +2,9 @@
 import redis from 'redis';
 import logger from './logger';
 import util from 'util';
+import config from '../../config/default'
 
-const client = redis.createClient({ host: 'redis' });
+const client = redis.createClient({ host: config.redisHost, port: config.redisPort });
 client.hget = util.promisify(client.hget);
 client.hset = util.promisify(client.hset);
 client.hdel = util.promisify(client.hdel);

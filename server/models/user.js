@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import config from 'config';
+import config from '../../config/default';
 
 //name schema
 const nameschema = new mongoose.Schema({
@@ -60,10 +60,10 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function () {
   return jwt.sign(
     { _id: this._id, role: this.role },
-    config.get('jwtPrivateKey')
+    config.privateKey
   );
 };
 

@@ -26547,3 +26547,749 @@
        method: '_compile',
        native: false } ],
   timestamp: '2019-06-29T14:32:09.659Z' }
+{ error:
+   { Error: getaddrinfo ENOTFOUND mongo mongo:27017
+       at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:58:26)
+     errno: 'ENOTFOUND',
+     code: 'ENOTFOUND',
+     syscall: 'getaddrinfo',
+     hostname: 'mongo',
+     host: 'mongo',
+     port: 27017 },
+  level: 'error',
+  message:
+   'uncaughtException: getaddrinfo ENOTFOUND mongo mongo:27017\nError: getaddrinfo ENOTFOUND mongo mongo:27017\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:58:26)',
+  stack:
+   'Error: getaddrinfo ENOTFOUND mongo mongo:27017\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:58:26)',
+  exception: true,
+  date:
+   'Sun Jun 30 2019 03:11:35 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49943,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v11.9.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 132939776,
+        heapTotal: 101158912,
+        heapUsed: 58024104,
+        external: 20852697 } },
+  os:
+   { loadavg: [ 5.25634765625, 6.0478515625, 4.0390625 ],
+     uptime: 906468 },
+  trace:
+   [ { column: 26,
+       file: 'dns.js',
+       function: 'GetAddrInfoReqWrap.onlookup [as oncomplete]',
+       line: 58,
+       method: 'onlookup [as oncomplete]',
+       native: false } ],
+  timestamp: '2019-06-30T02:11:35.703Z' }
+{ error:
+   Error: The module '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node'
+   was compiled against a different Node.js version using
+   NODE_MODULE_VERSION 67. This version of Node.js requires
+   NODE_MODULE_VERSION 64. Please try re-compiling or re-installing
+   the module (for instance, using `npm rebuild` or `npm install`).
+       at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+       at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
+       at Function.Module._load (internal/modules/cjs/loader.js:585:3)
+       at Module.require (internal/modules/cjs/loader.js:690:17)
+       at require (internal/modules/cjs/helpers.js:25:18)
+       at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)
+       at Module._compile (internal/modules/cjs/loader.js:776:30)
+       at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)
+       at Module._extensions..js (internal/modules/cjs/loader.js:787:10)
+       at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+       at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
+       at Function.Module._load (internal/modules/cjs/loader.js:585:3)
+       at Module.require (internal/modules/cjs/loader.js:690:17)
+       at require (internal/modules/cjs/helpers.js:25:18),
+  level: 'error',
+  message:
+   'uncaughtException: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\nError: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)',
+  stack:
+   'Error: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:40:47 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49320,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 117510144,
+        heapTotal: 91672576,
+        heapUsed: 57823088,
+        external: 18630762 } },
+  os:
+   { loadavg: [ 2.3251953125, 2.154296875, 2.22021484375 ],
+     uptime: 1018106 },
+  trace:
+   [ { column: 18,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..node',
+       line: 805,
+       method: '.node',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'tryModuleLoad',
+       line: 593,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 585,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 690,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 25,
+       method: null,
+       native: false },
+     { column: 16,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js',
+       function: null,
+       line: 6,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 776,
+       method: '_compile',
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Module._compile',
+       line: 99,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..js',
+       line: 787,
+       method: '.js',
+       native: false },
+     { column: 7,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Object.newLoader [as .js]',
+       line: 104,
+       method: 'js]',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'tryModuleLoad',
+       line: 593,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 585,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 690,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 25,
+       method: null,
+       native: false } ],
+  timestamp: '2019-07-15T14:40:47.617Z' }
+{ error:
+   { Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379
+       at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)
+     errno: 'ENOTFOUND',
+     code: 'ENOTFOUND',
+     syscall: 'getaddrinfo',
+     hostname: 'redis',
+     host: 'redis',
+     port: 6379 },
+  level: 'error',
+  message:
+   'uncaughtException: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\nError: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)',
+  stack:
+   'Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:40:47 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49320,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 124432384,
+        heapTotal: 96108544,
+        heapUsed: 65487248,
+        external: 20852093 } },
+  os:
+   { loadavg: [ 2.3251953125, 2.154296875, 2.22021484375 ],
+     uptime: 1018106 },
+  trace:
+   [ { column: 26,
+       file: 'dns.js',
+       function: 'GetAddrInfoReqWrap.onlookup [as oncomplete]',
+       line: 56,
+       method: 'onlookup [as oncomplete]',
+       native: false } ],
+  timestamp: '2019-07-15T14:40:47.645Z' }
+{ error:
+   Error: The module '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node'
+   was compiled against a different Node.js version using
+   NODE_MODULE_VERSION 67. This version of Node.js requires
+   NODE_MODULE_VERSION 64. Please try re-compiling or re-installing
+   the module (for instance, using `npm rebuild` or `npm install`).
+       at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+       at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
+       at Function.Module._load (internal/modules/cjs/loader.js:585:3)
+       at Module.require (internal/modules/cjs/loader.js:690:17)
+       at require (internal/modules/cjs/helpers.js:25:18)
+       at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)
+       at Module._compile (internal/modules/cjs/loader.js:776:30)
+       at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)
+       at Module._extensions..js (internal/modules/cjs/loader.js:787:10)
+       at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+       at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
+       at Function.Module._load (internal/modules/cjs/loader.js:585:3)
+       at Module.require (internal/modules/cjs/loader.js:690:17)
+       at require (internal/modules/cjs/helpers.js:25:18),
+  level: 'error',
+  message:
+   'uncaughtException: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\nError: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)',
+  stack:
+   'Error: The module \'/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/lib/binding/bcrypt_lib.node\'\nwas compiled against a different Node.js version using\nNODE_MODULE_VERSION 67. This version of Node.js requires\nNODE_MODULE_VERSION 64. Please try re-compiling or re-installing\nthe module (for instance, using `npm rebuild` or `npm install`).\n    at Object.Module._extensions..node (internal/modules/cjs/loader.js:805:18)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js:6:16)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:585:3)\n    at Module.require (internal/modules/cjs/loader.js:690:17)\n    at require (internal/modules/cjs/helpers.js:25:18)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:42:37 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49357,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 99110912,
+        heapTotal: 72273920,
+        heapUsed: 44200208,
+        external: 18651901 } },
+  os:
+   { loadavg: [ 2.5654296875, 2.34228515625, 2.28662109375 ],
+     uptime: 1018216 },
+  trace:
+   [ { column: 18,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..node',
+       line: 805,
+       method: '.node',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'tryModuleLoad',
+       line: 593,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 585,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 690,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 25,
+       method: null,
+       native: false },
+     { column: 16,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/bcrypt/bcrypt.js',
+       function: null,
+       line: 6,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 776,
+       method: '_compile',
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Module._compile',
+       line: 99,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..js',
+       line: 787,
+       method: '.js',
+       native: false },
+     { column: 7,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Object.newLoader [as .js]',
+       line: 104,
+       method: 'js]',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false },
+     { column: 12,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'tryModuleLoad',
+       line: 593,
+       method: null,
+       native: false },
+     { column: 3,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._load',
+       line: 585,
+       method: '_load',
+       native: false },
+     { column: 17,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.require',
+       line: 690,
+       method: 'require',
+       native: false },
+     { column: 18,
+       file: 'internal/modules/cjs/helpers.js',
+       function: 'require',
+       line: 25,
+       method: null,
+       native: false } ],
+  timestamp: '2019-07-15T14:42:37.840Z' }
+{ error:
+   { Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379
+       at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)
+     errno: 'ENOTFOUND',
+     code: 'ENOTFOUND',
+     syscall: 'getaddrinfo',
+     hostname: 'redis',
+     host: 'redis',
+     port: 6379 },
+  level: 'error',
+  message:
+   'uncaughtException: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\nError: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)',
+  stack:
+   'Error: Redis connection to redis:6379 failed - getaddrinfo ENOTFOUND redis redis:6379\n    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:42:37 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49357,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 103735296,
+        heapTotal: 74498048,
+        heapUsed: 49070856,
+        external: 20873233 } },
+  os:
+   { loadavg: [ 2.60009765625, 2.35302734375, 2.29052734375 ],
+     uptime: 1018216 },
+  trace:
+   [ { column: 26,
+       file: 'dns.js',
+       function: 'GetAddrInfoReqWrap.onlookup [as oncomplete]',
+       line: 56,
+       method: 'onlookup [as oncomplete]',
+       native: false } ],
+  timestamp: '2019-07-15T14:42:37.865Z' }
+{ error:
+   { MongoParseError: Invalid connection string
+       at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)
+       at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)
+       at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)
+       at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)
+       at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)
+       at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)
+       at new Promise (<anonymous>)
+       at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)
+       at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)
+       at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)
+       at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)
+       at Module._compile (internal/modules/cjs/loader.js:776:30)
+       at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)
+       at Module._extensions..js (internal/modules/cjs/loader.js:787:10)
+       at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+     name: 'MongoParseError',
+     [Symbol(mongoErrorContextSymbol)]: {} },
+  level: 'error',
+  message:
+   'uncaughtException: Invalid connection string\nMongoParseError: Invalid connection string\n    at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)\n    at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)\n    at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)\n    at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)\n    at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)\n    at new Promise (<anonymous>)\n    at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)\n    at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)',
+  stack:
+   'MongoParseError: Invalid connection string\n    at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)\n    at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)\n    at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)\n    at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)\n    at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)\n    at new Promise (<anonymous>)\n    at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)\n    at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:44:44 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49415,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 130494464,
+        heapTotal: 99471360,
+        heapUsed: 65013816,
+        external: 21243157 } },
+  os:
+   { loadavg: [ 2.431640625, 2.32080078125, 2.27783203125 ],
+     uptime: 1018343 },
+  trace:
+   [ { column: 21,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js',
+       function: 'parseConnectionString',
+       line: 412,
+       method: null,
+       native: false },
+     { column: 3,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js',
+       function: 'connect',
+       line: 195,
+       method: null,
+       native: false },
+     { column: 3,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js',
+       function: 'connectOp',
+       line: 284,
+       method: null,
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js',
+       function: 'executeOperation',
+       line: 416,
+       method: null,
+       native: false },
+     { column: 10,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js',
+       function: 'MongoClient.connect',
+       line: 169,
+       method: 'connect',
+       native: false },
+     { column: 12,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js',
+       function: 'Promise',
+       line: 552,
+       method: null,
+       native: false },
+     { column: null,
+       file: null,
+       function: 'new Promise',
+       line: null,
+       method: null,
+       native: false },
+     { column: 19,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js',
+       function: 'NativeConnection.Connection.openUri',
+       line: 549,
+       method: 'openUri',
+       native: false },
+     { column: 15,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js',
+       function: 'Mongoose.connect',
+       line: 289,
+       method: 'connect',
+       native: false },
+     { column: 6,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js',
+       function: 'connect',
+       line: 12,
+       method: null,
+       native: false },
+     { column: 1,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js',
+       function: null,
+       line: 14,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 776,
+       method: '_compile',
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Module._compile',
+       line: 99,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..js',
+       line: 787,
+       method: '.js',
+       native: false },
+     { column: 7,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Object.newLoader [as .js]',
+       line: 104,
+       method: 'js]',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false } ],
+  timestamp: '2019-07-15T14:44:44.938Z' }
+{ error:
+   { MongoParseError: Invalid connection string
+       at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)
+       at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)
+       at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)
+       at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)
+       at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)
+       at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)
+       at new Promise (<anonymous>)
+       at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)
+       at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)
+       at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)
+       at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)
+       at Module._compile (internal/modules/cjs/loader.js:776:30)
+       at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)
+       at Module._extensions..js (internal/modules/cjs/loader.js:787:10)
+       at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)
+       at Module.load (internal/modules/cjs/loader.js:653:32)
+     name: 'MongoParseError',
+     [Symbol(mongoErrorContextSymbol)]: {} },
+  level: 'error',
+  message:
+   'uncaughtException: Invalid connection string\nMongoParseError: Invalid connection string\n    at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)\n    at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)\n    at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)\n    at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)\n    at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)\n    at new Promise (<anonymous>)\n    at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)\n    at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)',
+  stack:
+   'MongoParseError: Invalid connection string\n    at parseConnectionString (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js:412:21)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:195:3)\n    at connectOp (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js:284:3)\n    at executeOperation (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js:416:24)\n    at MongoClient.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js:169:10)\n    at Promise (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:552:12)\n    at new Promise (<anonymous>)\n    at NativeConnection.Connection.openUri (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js:549:19)\n    at Mongoose.connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js:289:15)\n    at connect (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js:12:6)\n    at Object.<anonymous> (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js:14:1)\n    at Module._compile (internal/modules/cjs/loader.js:776:30)\n    at Module._compile (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:99:24)\n    at Module._extensions..js (internal/modules/cjs/loader.js:787:10)\n    at Object.newLoader [as .js] (/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js:104:7)\n    at Module.load (internal/modules/cjs/loader.js:653:32)',
+  exception: true,
+  date:
+   'Mon Jul 15 2019 15:48:39 GMT+0100 (West Africa Standard Time)',
+  process:
+   { pid: 49461,
+     uid: 501,
+     gid: 20,
+     cwd:
+      '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system',
+     execPath: '/usr/local/bin/node',
+     version: 'v10.16.0',
+     argv:
+      [ 'node',
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js' ],
+     memoryUsage:
+      { rss: 125218816,
+        heapTotal: 95277056,
+        heapUsed: 62457416,
+        external: 21115049 } },
+  os:
+   { loadavg: [ 1.814453125, 2.19873046875, 2.24365234375 ],
+     uptime: 1018578 },
+  trace:
+   [ { column: 21,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb-core/lib/uri_parser.js',
+       function: 'parseConnectionString',
+       line: 412,
+       method: null,
+       native: false },
+     { column: 3,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js',
+       function: 'connect',
+       line: 195,
+       method: null,
+       native: false },
+     { column: 3,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/operations/mongo_client_ops.js',
+       function: 'connectOp',
+       line: 284,
+       method: null,
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/utils.js',
+       function: 'executeOperation',
+       line: 416,
+       method: null,
+       native: false },
+     { column: 10,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/node_modules/mongodb/lib/mongo_client.js',
+       function: 'MongoClient.connect',
+       line: 169,
+       method: 'connect',
+       native: false },
+     { column: 12,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js',
+       function: 'Promise',
+       line: 552,
+       method: null,
+       native: false },
+     { column: null,
+       file: null,
+       function: 'new Promise',
+       line: null,
+       method: null,
+       native: false },
+     { column: 19,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/connection.js',
+       function: 'NativeConnection.Connection.openUri',
+       line: 549,
+       method: 'openUri',
+       native: false },
+     { column: 15,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/mongoose/lib/index.js',
+       function: 'Mongoose.connect',
+       line: 289,
+       method: 'connect',
+       native: false },
+     { column: 6,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/startup/db.js',
+       function: 'connect',
+       line: 12,
+       method: null,
+       native: false },
+     { column: 1,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/server/index.js',
+       function: null,
+       line: 14,
+       method: null,
+       native: false },
+     { column: 30,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._compile',
+       line: 776,
+       method: '_compile',
+       native: false },
+     { column: 24,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Module._compile',
+       line: 99,
+       method: '_compile',
+       native: false },
+     { column: 10,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module._extensions..js',
+       line: 787,
+       method: '.js',
+       native: false },
+     { column: 7,
+       file:
+        '/Users/Gracey/Documents/DevTools/Projects/gdocs-document-management-system/node_modules/pirates/lib/index.js',
+       function: 'Object.newLoader [as .js]',
+       line: 104,
+       method: 'js]',
+       native: false },
+     { column: 32,
+       file: 'internal/modules/cjs/loader.js',
+       function: 'Module.load',
+       line: 653,
+       method: 'load',
+       native: false } ],
+  timestamp: '2019-07-15T14:48:39.489Z' }
