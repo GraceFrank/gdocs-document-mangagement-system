@@ -1,4 +1,4 @@
-{
+module.exports = {
   "db": "mongodb://localhost/gdocs_test",
-  "jwtPrivateKey" : "1234"
+  "privateKey": "1234"
 }

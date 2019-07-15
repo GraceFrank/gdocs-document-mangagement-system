@@ -1,4 +1,0 @@
-{
-  "db": "mongodb://mongo:27017/gdocs",
-  "jwtPrivateKey": "1234"
-}
