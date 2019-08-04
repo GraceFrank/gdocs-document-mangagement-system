@@ -1,10 +1,9 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require ('supertest');
+const server = require ('../../index');
+const User = require ('../../models/user');
+const Role = require ('../../models/role');
+const Document = require ('../../models/document');
+const mongoose = require ('mongoose');
 
 describe('documents/put', () => {
   let roleAccessDoc;
@@ -116,7 +115,7 @@ describe('documents/put', () => {
     expect(res.body).toHaveProperty('_id', roleAccessDoc._id.toHexString());
   }); //test end
 
-  test('that if the document access is set to role  it cannot be viewed by a user with different role from the author', async () => {
+  test('that if the document access is set to role  it cannot be viewed by a user with different role = require the author', async () => {
     const token = new User({
       role: new mongoose.Types.ObjectId()
     }).generateToken();

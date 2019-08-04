@@ -1,11 +1,11 @@
-import bcrypt from 'bcrypt';
-import _ from 'lodash';
-import validate from '../api-validations/user';
-import User from '../models/user';
-import Role from '../models/role';
-import Document from '../models/document';
-import { client } from '../startup/cache.js';
-import logger from '../startup/logger';
+const bcrypt = require('bcrypt');
+const _ = require('lodash');
+const validate = require('../api-validations/user');
+const User = require('../models/user');
+const Role = require('../models/role');
+const Document = require('../models/document');
+const { client } = require('../startup/cache.js');
+const logger = require('../startup/logger');
 
 class UserController {
   async get(req, res) {

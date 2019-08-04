@@ -1,7 +1,7 @@
 //module dependencies
-import mongoose from 'mongoose';
-import config from '../../config/default';
-import logger from './logger';
+const mongoose = require ('mongoose');
+const config = require ('../../config/default');
+const logger = require ('./logger');
 
 function connectToDb() {
   //get db from config module, depending on the node environment
@@ -14,8 +14,8 @@ function connectToDb() {
       useCreateIndex: true
     })
     .then(() => {
-      logger.info(`connected to database ${db}`);
+      logger.info(`connected to database`);
     });
 }
 
-export { connectToDb };
+module.exports = { connectToDb };

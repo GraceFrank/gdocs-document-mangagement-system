@@ -1,7 +1,7 @@
-import validate from '../api-validations/login';
-import User from '../models/user';
-import bcrypt from 'bcrypt';
-import _ from 'lodash';
+const  validate = require ('../api-validations/login');
+const  User = require( '../models/user');
+const  bcrypt = require ('bcrypt');
+const  _ = require ('lodash');
 
 class Login {
   async post(req, res) {

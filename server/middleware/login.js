@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import config from '../../config/default';
+const jwt = require('jsonwebtoken');
+const config = require('../../config/default');
 
 //this middle ware is routes that can be accessed by both logged in and not logged in users like the document.get all
 function login(req, res, next) {
@@ -17,4 +17,4 @@ function login(req, res, next) {
   });
 }
 
-export default login;
+module.exports = login;

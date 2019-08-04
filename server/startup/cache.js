@@ -1,8 +1,8 @@
 //
-import redis from 'redis';
-import logger from './logger';
-import util from 'util';
-import config from '../../config/default'
+const redis = require('redis');
+const logger = require('./logger');
+const util = require('util');
+const config = require('../../config/default');
 
 const client = redis.createClient({ host: config.redisHost, port: config.redisPort });
 client.hget = util.promisify(client.hget);
@@ -16,4 +16,4 @@ function connectToRedis() {
   client.on('error', err => logger.info(err));
 }
 
-export { client, connectToRedis };
+module.exports = { client, connectToRedis };

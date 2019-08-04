@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import validate from '../api-validations/role';
-import Role from '../models/role';
+const _ = require ('lodash');
+const validate = require ('../api-validations/role');
+const Role = require ('../models/role');
 
 class Roles {
   async post(req, res) {

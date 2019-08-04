@@ -1,10 +1,9 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require ('supertest');
+const server = require ('../../index');
+const User = require ('../../models/user');
+const Role = require ('../../models/role');
+const Document = require ('../../models/document');
+const mongoose = require ('mongoose');
 
 let doc1;
 let user1;

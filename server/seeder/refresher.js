@@ -1,6 +1,6 @@
-import User from '../models/user';
-import Document from '../models/document';
-import Role from '../models/role';
+const User = require('../models/user');
+const Document = require('../models/document');
+const Role = require('../models/role');
 
 class refresher {
   async dropUsers() {

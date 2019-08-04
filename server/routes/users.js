@@ -1,8 +1,8 @@
-import express from 'express';
-import authenticate from '../middleware/authentication';
-import authorizeAdmin from '../middleware/admin-authorization';
-import login from '../middleware/login';
-import userController from '../controller/user';
+const express = require('express');
+const authenticate = require('../middleware/authentication');
+const authorizeAdmin = require('../middleware/admin-authorization');
+const login = require('../middleware/login');
+const userController = require('../controller/user');
 const router = express.Router();
 
 //end point to create a new user
@@ -23,4 +23,4 @@ router.put('/', authenticate, userController.put);
 //endpoint to delete a user, only a logged in user can delete his own record
 router.delete('/', authenticate, userController.delete);
 
-export default router;
+module.exports = router;

@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const response = require('../helpers/responses');
 
-export default function validateId(req, res, next) {
+module.exports = function validateId(req, res, next) {
   //checking if provided id is a valid mongoose id
   const validId = mongoose.Types.ObjectId.isValid(req.params.id);
 
   //deny access if id is invalid
-  if (!validId) return res.status(404).send({ error: 'invalid Id' });
+  if (!validId) return response.badRequest(res, { message: 'invalid Id' });
   next();
-}
+};

@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require( 'joi');
 
 function validateRole(roleObject) {
   const schema = {
@@ -10,4 +10,4 @@ function validateRole(roleObject) {
   return Joi.validate(roleObject, schema);
 }
 
-export default validateRole;
+module.exports = validateRole;

@@ -1,9 +1,8 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
+const request = require ('supertest');
+const server = require( '../../index');
+const User = require ('../../models/user');
+const Role = require ('../../models/role');
+const Document = require ('../../models/document');
 
 let regular;
 describe('documents/post', () => {

@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import objId from 'joi-objectid';
+const Joi = require('joi');
+const objId = require('joi-objectid');
 Joi.objectId = objId(Joi);
 
 function validateUser(user) {
@@ -31,4 +31,4 @@ function validateUser(user) {
   };
   return Joi.validate(user, schema);
 }
-export default validateUser;
+module.exports = validateUser;

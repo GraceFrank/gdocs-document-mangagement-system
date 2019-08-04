@@ -1,9 +1,9 @@
-import faker from 'faker';
-import User from '../models/user';
-import bcrypt from 'bcrypt';
-import Document from '../models/document';
-import Role from '../models/role';
-import { connectToDb } from '../startup/db';
+const faker = require ('faker');
+const User = require ('../models/user');
+const bcrypt = require ('bcrypt');
+const Document = require ('../models/document');
+const Role = require ('../models/role');
+const { connectToDb } = require ('../startup/db');
 
 connectToDb();
 class Seeder {

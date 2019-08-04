@@ -1,199 +1,203 @@
-import validate from '../api-validations/document';
-import Document from '../models/document';
-import Role from '../models/role';
-import { client, connectToRedis } from '../startup/cache';
-import logger from '../startup/logger';
+const validate = require('../api-validations/document');
+const Document = require('../models/document');
+const Role = require('../models/role');
+const User = require('../models/user');
+const { client } = require('../startup/cache');
+const logger = require('../startup/logger');
+const response = require('../helpers/responses');
 
 class Documents {
+  /**
+   * Method to create a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async post(req, res) {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    try {
+      //validate the request body params
+      const { error } = validate(req.body);
+      if (error)
+        return response.badRequest(res, { message: error.details[0].message });
 
-    //search if role already exists
-    const existingDoc = await Document.findOne({ title: req.body.title });
-    if (existingDoc) return res.status(400).send('document already exists');
+      //search if role already exists
+      const existingDoc = await Document.findOne({
+        title: req.body.title,
+        ownerId: req.user.userId
+      });
+      if (existingDoc)
+        return response.alreadyExists(res, {
+          message: 'document with title already exist'
+        });
 
-    const doc = await Document.create({
-      ownerId: req.user._id,
-      title: req.body.title,
-      content: req.body.content,
-      access: req.body.access || 'public',
-      role: req.user.role
-    });
-    //clear cache
-    await client.del('documents');
+      //creating the new document
+      const doc = await Document.create({
+        ownerId: req.user.userId,
+        title: req.body.title,
+        content: req.body.content,
+        access: req.body.access || 'public',
+        role: req.user.roleId
+      });
 
-    res.status(201).send(doc);
+      return response.created(res, doc);
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
 
+  /**
+   * Method to fetch all documents a user has access to
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async get(req, res, next) {
-    // validate query
-    const page = req.query.page * 1;
-    const limit = req.query.limit * 1;
+    try {
+      // convert query to number
+      let page = Number(req.query.page);
+      let limit = Number(req.query.limit);
 
-    if (!page || !limit) res.status(400).send('invalid query');
+      //assign default values if query params are invalid
+      page = page ? page : 1;
+      limit = limit ? limit : 20;
 
-    if (!req.user) {
-      const cachedDocs = await client.hget(
-        'documents',
-        `public-${page}-${limit}`
-      );
-      if (cachedDocs) {
-        logger.info('fetching from cache');
-        return res.send(JSON.parse(cachedDocs));
-      }
-      const docs = await Document.find({ access: 'public' })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
+      //Queries to run based on the role of the user
+      const roleQuery = {
+        admin: {
+          $or: [
+            { access: 'private', ownerId: req.user.userId },
+            { access: { $ne: 'private' } }
+          ]
+        }, //this query will be run if user is an admin
+        otherRoles: {
+          $or: [
+            { access: 'private', ownerId: req.user._id },
+            { access: 'public' },
+            { role: req.user.role, access: 'role' }
+          ]
+        }, //this query will be run for the other roles
+        public: { access: 'public' } //this query will run if user is not logged in
+      };
 
-      logger.info('fetcing from MongoDB');
-      res.send(docs);
+      //get the role of the user
+      let userRole = await Role.findById(req.user.roleId);
+      userRole = userRole.title;
 
-      client.hset('documents', `public-${page}-${limit}`, JSON.stringify(docs));
-      return;
+      //determining which query should run from the users role
+      let query;
+      if (req.user) query = roleQuery.public;
+      query = userRole === 'admin' ? roleQuery.admin : roleQuery.otherRoles;
+
+      const queryOptions = {
+        skip: (page - 1) * limit,
+        limit: limit,
+        sort: { date: -1 }
+      };
+      const documents = await Document.find(query, queryOptions);
+
+      const message =
+        'Array of 0 or more documents has been fetched successfully';
+      return response.success(res, { message, documents });
+    } catch (error) {
+      return response.internalError(res, { error });
     }
-
-    const admin = await Role.findOne({ title: 'admin' });
-    let docs;
-
-    if (req.user.role == admin._id.toHexString()) {
-      const cachedDocs = await client.hget(
-        'documents',
-        `${req.user._id}-${page}-${limit}`
-      );
-      if (cachedDocs) {
-        logger.info('fetching from cache');
-        return res.send(JSON.parse(cachedDocs));
-      }
-
-      docs = await Document.find()
-        .or([
-          { access: 'private', ownerId: req.user._id },
-          { access: { $ne: 'private' } }
-        ])
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
-      res.send(docs);
-      logger.info('fetching from mongoDb');
-      client.hset(
-        'documents',
-        `${req.user._id}-${page}-${limit}`,
-        JSON.stringify(docs)
-      );
-      return;
-    }
-
-    const cachedDocs = await client.hget(
-      'documents',
-      `${req.user._id}-${page}-${limit}`
-    );
-    if (cachedDocs) {
-      logger.info('fetching from cache');
-      return res.send(JSON.parse(cachedDocs));
-    }
-    docs = await Document.find()
-      .or([
-        { access: 'private', ownerId: req.user._id },
-        { access: 'public' },
-        { role: req.user.role, access: 'role' }
-      ])
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ date: -1 });
-    res.send(docs);
-    client.hset(
-      'documents',
-      `${req.user._id}-${page}-${limit}`,
-      JSON.stringify(docs)
-    );
-    return;
   }
 
+  /**
+   * Method to update a users document
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async put(req, res) {
-    //validating users input
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    try {
+      //validate the request body params
+      const { error } = validate(req.body);
+      if (error)
+        return response.badRequest(res, { message: error.details[0].message });
 
-    //checking if document exist on db, and is authored by user
-    const doc = await Document.findOne({
-      _id: req.params.id,
-      ownerId: req.user._id
-    });
-    if (!doc) return res.status(404).send('document not found');
+      //fetch the required
+      const doc = await Document.findOne({
+        _id: req.params.id,
+        ownerId: req.user.userId
+      });
+      if (!doc)
+        return response.notFound(res, { message: 'Document not found' });
 
-    //check that doc title is unique
-    const existingDoc = await Document.findOne({ title: req.body.title });
-    if (existingDoc) return res.status(400).send('document already exists');
+      //check that new doc title is unique to the user
+      const existingDoc = await Document.findOne({
+        title: req.body.title,
+        _id: { $ne: req.params.id },
+        ownerId: req.userId
+      });
+      if (existingDoc)
+        return response.badRequest(res, { message: 'document already exists' });
 
-    const update = await Document.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      {
-        new: true
-      }
-    );
-    await client.del('documents');
-    const docIsCached = await client.hexists('documentById', req.params.id);
-    if (docIsCached) await client.hdel('documentById', req.params.id);
-    res.send(update);
+      //update the document in the db
+      const update = await Document.findByIdAndUpdate(req.params.id, req.body);
+      return response.success(res, update);
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
 
+  /**
+   * Method to delete a users document
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async delete(req, res) {
-    //checking if document exist on db
-    const doc = await Document.findById(req.params.id);
-    if (!doc) return res.status(404).send('document not found');
+    try {
+      //checking if document exist on db
+      const doc = await Document.findOne({
+        _id: req.params.id,
+        ownerId: req.user.userId
+      });
+      if (!doc)
+        return response.notFound(res, { message: 'document not found' });
 
-    //check if user is the author of document
-    if (doc.ownerId.toHexString() != req.user._id)
-      return res.status(403).send('access denied, only author can modify docs');
-
-    const deleted = await Document.findByIdAndDelete(doc._id);
-    await client.del('documents');
-    const docIsCached = await client.hexists('documentById', req.params.id);
-    if (docIsCached) await client.hdel('documentById', req.params.id);
-    res.send(deleted);
+      //delete the document
+      const deleted = await Document.findByIdAndDelete(doc._id);
+      return response.success(res, deleted);
+    } catch (err) {
+      return response.internalError(res, { error });
+    }
   }
 
+  /**
+   * Method to get a  document by Id
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async getById(req, res) {
-    let doc = await client.hget('documentById', req.params.id);
-    if (doc) {
-      doc = JSON.parse(doc);
-      logger.info('fetching from cache');
-    } else {
-      doc = await Document.findById(req.params.id);
-      if (!doc) return res.status(404).send('document not found');
-      logger.info('fetching from MongoDB');
-      await client.hset('documentById', req.params.id, JSON.stringify(doc));
-    }
-    class GrantAccess {
-      isAdmin() {
-        const admin = Role.findOne({ title: admin });
-        return req.user.role == admin._id;
-      }
-      public() {
-        res.send(doc);
-      }
+    const doc = await Document.findById(req.params.id);
+    if (!doc) return response.notFound(res, { message: 'document not found' });
 
-      role() {
-        if (doc.role == req.user.role || this.isAdmin()) {
-          return res.send(doc);
-        } else return res.status(403).send('unauthorized access denied');
-      }
+    //method is called based on the access type of the document
+    const grantAccess = {
+      public: () => true,
+      private: () => {
+        if (doc.ownerId == req.user.userId) return true;
+      },
+      role: async () => {
+        //check if user is an admin and grant access
+        const roles = await Role.find();
+        const adminRole = roles.find(role => role.title === 'admin');
+        if (req.user.roleId == adminRole._id) return true;
 
-      private() {
-        if (doc.ownerId == req.user._id) {
-          return res.send(doc);
-        } else
-          return res
-            .status(403)
-            .send('unauthorized access denied, private document ');
+        //check if the users role is same as the docOwner's role
+        const docOwner = await User.findById(req.user.userId);
+        if (docOwner.role == req.user.role) return true;
       }
-    }
+    };
 
-    new GrantAccess()[doc.access]();
+    if (grantAccess[doc.access]()) return response.success(res, doc);
+    return response.unAuthorized(res, {
+      message: 'you do not have access to this document'
+    });
   }
 }
 
-export default new Documents();
+module.exports = new Documents();

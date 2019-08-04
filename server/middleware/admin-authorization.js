@@ -1,4 +1,4 @@
-import Role from '../models/role';
+const Role = ('../models/role');
 
 //this middleware is for authorizing admins
 async function authAdmin(req, res, next) {
@@ -10,4 +10,4 @@ async function authAdmin(req, res, next) {
   next();
 }
 
-export default authAdmin;
+module.exports = authAdmin;

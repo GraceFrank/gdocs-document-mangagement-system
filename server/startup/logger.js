@@ -1,6 +1,5 @@
-import winston from 'winston';
-import 'winston-mongodb';
-import 'express-async-errors';
+const winston = require('winston');
+require('winston-mongodb');
 
 //creating a winston logger object for logging errors
 const { combine, timestamp, prettyPrint, colorize } = winston.format;
@@ -28,4 +27,4 @@ process.on('unhandledRejection', ex => {
   throw ex;
   process.exit(1);
 });
-export default logger;
+module.exports = logger;

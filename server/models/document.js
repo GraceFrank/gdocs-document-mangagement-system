@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const docSchema = new mongoose.Schema(
   {
@@ -26,12 +26,80 @@ const docSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
       ref: 'roles'
-    },
-    timestamp: { type: Number, default: new Date().getTime() }
+    }
   },
   { timestamps: true }
 );
 
-const Document = mongoose.model('documents', docSchema);
+const Doc = mongoose.model('documents', docSchema);
 
-export default Document;
+class Documents {
+  constructor(model) {
+    this.model = model;
+  }
+
+  /**
+   * Method to create a document in database
+   * @param {object} doc
+   * @return {object} js object
+   */
+  async create(doc) {
+    return await this.model.create(doc);
+  }
+
+  /**
+   * Method to fetch a document from database
+   * @param {object} queryObject
+   * @return {object} js object
+   */
+  async findOne(queryObject) {
+    return await this.model.findOne(queryObject);
+  }
+
+  /**
+   * Method to fetch documents from database based on search/qyery params
+   * @param {object} queryObject
+   * @return {array} array of objects
+   */
+  async find(queryObject, options) {
+    let query = this.model.find(queryObject);
+
+    if (options) {
+      for (const key in options) {
+        query = query[key](options[key]);
+      }
+    }
+    return await query.exec();
+  }
+
+  /**
+   * Method to update a document in database by using the document Id
+   * @param {string} documentId
+   * @return {object} updated document
+   */
+  async findByIdAndUpdate(documentId, updateObject) {
+    return await this.model.findByIdAndUpdate(documentId, updateObject, {
+      new: true
+    });
+  }
+
+  /**
+   * Method to delete a document from database by using the document Id
+   * @param {string} documentId
+   * @return {object} deleted document
+   */
+  async findByIdAndDelete(documentId) {
+    return await this.model.findByIdAndDelete(documentId);
+  }
+
+  /**
+   * Method to delete a document from database by using the document Id
+   * @param {string} documentId
+   * @return {object} deleted document
+   */
+  async findById(documentId) {
+    return await this.model.findById(documentId);
+  }
+}
+
+module.exports = new Documents(Doc);

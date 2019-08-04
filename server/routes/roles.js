@@ -1,8 +1,8 @@
-import express from 'express';
-import authenticate from '../middleware/authentication';
-import adminAuthorization from '../middleware/admin-authorization';
-import validateId from '../middleware/validate-id';
-import role from '../controller/role';
+const express = require ('express');
+const authenticate = require ('../middleware/authentication');
+const adminAuthorization = require ('../middleware/admin-authorization');
+const validateId = require ('../middleware/validate-id');
+const role = require ('../controller/role');
 
 const router = express.Router();
 
@@ -18,4 +18,4 @@ router.get('/:id', validateId, role.getById);
 //endpoint to update an existing role
 router.put('/:id', [validateId, authenticate, adminAuthorization], role.put);
 
-export default router;
+module.exports = router;
