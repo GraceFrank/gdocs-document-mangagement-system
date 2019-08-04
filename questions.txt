@@ -1,1 +1,0 @@
-in a situation where i have a million users of my sytem will it be advisable to search throuh the entire db just to make sure that a user email is unique?
