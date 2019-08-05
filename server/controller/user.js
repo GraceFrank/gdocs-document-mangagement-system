@@ -1,31 +1,41 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const validate = require('../api-validations/user');
-const User = require('../models/user');
-const Role = require('../models/role');
-const Document = require('../models/document');
+const { User, Document, Role } = require('../models/');
 const { client } = require('../startup/cache.js');
 const logger = require('../startup/logger');
+const response = require('../helpers/responses');
 
 class UserController {
+  /**
+   * Method to get users
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async get(req, res) {
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 20;
+    try {
+      // convert query to number
+      let page = Number(req.query.page);
+      let limit = Number(req.query.limit);
 
-    let users = await client.hget('users', `page=${page}&limit=${limit}`);
-    if (users) {
-      logger.info('fetching users from cache');
-      return res.send({ message: 'ok', data: JSON.parse(users) });
-    } else {
-      users = await User.find()
-        .skip((page - 1) * limit)
-        .limit(limit);
-      await client.hset(
-        'users',
-        `page=${page}&limit=${limit}`,
-        JSON.stringify(users)
+      //assign default values if query params are invalid
+      page = page ? page : 1;
+      limit = limit ? limit : 20;
+
+      const users = await User.find(
+        {},
+        {
+          skip: (page - 1) * limit,
+          limit: limit
+        }
       );
-      return res.send({ message: 'ok', data: users });
+
+      const message =
+        'Array of 0 or more documents has been fetched successfully';
+      return response.success(res, { message, users });
+    } catch (error) {
+      return response.internalError(res, { error });
     }
   }
 

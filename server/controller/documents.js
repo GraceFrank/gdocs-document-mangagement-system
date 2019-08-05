@@ -4,7 +4,7 @@ const response = require('../helpers/responses');
 
 class Documents {
   /**
-   * Method to create a user
+   * Method to create a document
    * @param {object} req
    * @param {object} res
    * @return {object} JSON response
