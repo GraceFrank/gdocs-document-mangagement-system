@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const validate = require('../api-validations/user');
 const { User, Document, Role } = require('../models/');
-const { client } = require('../startup/cache.js');
-const logger = require('../startup/logger');
 const response = require('../helpers/responses');
 
 class UserController {
@@ -39,130 +37,168 @@ class UserController {
     }
   }
 
+  /**
+   * Method to update a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async put(req, res) {
-    //validating the payload sent by client
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send({ error: error.details[0].message });
-    const update = req.body;
-    update.password = await bcrypt.hash(update.password, 10);
-    const user = await User.findByIdAndUpdate(req.user._id, update, {
-      new: true
-    });
-    //any update the role of all documents created by the user
-    await Document.updateMany({ ownerId: user._id }, { role: user.role });
-    await client.del('users');
-    const cachedUser = await client.hexists('userById', req.user._id);
-    if (cachedUser) await client.hdel('userById', req.user._id);
-    return res.send({
-      message: 'ok',
-      data: _.pick(user, ['name', 'email', 'userName', 'role'])
-    });
-  }
+    try {
+      //validating the payload sent by client
+      const { error } = validate(req.body);
+      if (error)
+        return res.status(400).send({ error: error.details[0].message });
+      const update = req.body;
 
-  async delete(req, res) {
-    const user = await User.findByIdAndDelete(req.user._id);
-    await client.del('users');
-    const cachedUser = await client.hexists('userById', req.user._id);
-    if (cachedUser) await client.hdel('userById', req.user._id);
-    return res.send(user);
-  }
+      //hash new passworkd
+      update.password = await bcrypt.hash(update.password, 10);
 
-  async getMe(req, res) {
-    let user = await client.hget('userById', req.user._id);
+      //check if new email address is unique
+      const userWithSameEmail = await User.findOne({
+        email: req.body.email,
+        _id: { $ne: req.user.userId }
+      });
+      if (userWithSameEmail)
+        return response.alreadyExists(res, { message: 'email already in use' });
+      //update the user in database
+      const user = await User.findByIdAndUpdate(req.user.userId, req.body);
 
-    if (!user) {
-      user = await User.findById(req.user._id);
-      await client.hset('userById', req.user._id, JSON.stringify(user));
-      logger.info('fetching from mongo');
-      return res.send({ message: 'ok', data: user });
+      return response.success(
+        res,
+        _.pick(user, ['name', 'email', 'userName', 'role'])
+      );
+    } catch (error) {
+      return response.send(res, { error });
     }
-    logger.info('fetching from cache');
-    return res.send({ message: 'ok', data: JSON.parse(user) });
   }
 
+  /**
+   * Method to delete a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
+  async delete(req, res) {
+    try {
+      const user = await User.findByIdAndDelete(req.user._id);
+      return response.success(res, user);
+    } catch (error) {
+      return response.internalError(res, {
+        message: 'error deleting user',
+        error
+      });
+    }
+  }
+
+  /**
+   * Method to fetch logedin  user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
+  async getMe(req, res) {
+    try {
+      const user = await User.findById(req.user.userId);
+      return response.success(res, user);
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
+  }
+
+  /**
+   * Method to create a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async post(req, res) {
-    //validating request payload
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    try {
+      //validating request payload
+      const { error } = validate(req.body);
+      if (error) return res.status(400).send(error.details[0].message);
 
-    //validating that new user is unique by checking if email or username is already in use
-    const existingUser = await User.findOne().or([
-      { email: req.body.email },
-      { userName: req.body.userName }
-    ]);
-    if (existingUser)
-      return res.status(409).send('email or username already in use');
+      //validating that new user is unique by checking if email or username is already in use
+      const existingUser = await User.findOne({
+        $or: [{ email: req.body.email }, { userName: req.body.userName }]
+      });
+      if (existingUser)
+        return res.status(409).send('email or username already in use');
 
-    //instantiating new user
-    let newUser = new User(req.body);
+      //instantiating new user
+      let newUser = req.body;
 
-    //hashing new user password
-    const salt = await bcrypt.genSalt(10);
-    newUser.password = await bcrypt.hash(newUser.password, salt);
+      //hashing new user password
+      const salt = await bcrypt.genSalt(10);
+      newUser.password = await bcrypt.hash(newUser.password, salt);
 
-    //assigning default role of regular to user when
-    const regular = await Role.findOne({ title: 'regular' });
-    newUser.role = regular._id;
+      //assigning default role of regular to user when
+      const regular = await Role.findOne({ title: 'regular' });
+      newUser.role = regular._id;
 
-    //saving new user to data base and returning response
-    newUser = await newUser.save();
-    await client.del('users');
-    return res
-      .status(201)
-      .send(_.pick(newUser, ['_id', 'name', 'email', 'userName', 'role']));
+      //saving new user to data base and returning response
+      newUser = await User.create(newUser);
+      await client.del('users');
+      return response.created(
+        res,
+        _.pick(newUser, ['_id', 'name', 'email', 'userName', 'role'])
+      );
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
 
   async getUserDocs(req, res) {
-    const page = req.query.page * 1;
-    const limit = req.query.limit * 1;
+    // convert query to number
+    let page = Number(req.query.page);
+    let limit = Number(req.query.limit);
 
-    //validating that valid query strings are provided
-    if (!page || !limit) res.status(400).send('invalid query');
+    //assign default values if query params are invalid
+    page = page ? page : 1;
+    limit = limit ? limit : 20;
 
-    //if the user is not logged in send only documents with public access
-    if (!req.user) {
-      const cachedDocs = await client.hget(
-        'userDocs',
-        `${req.params.id}/public`
-      );
-      if (cachedDocs) return res.send(cachedDocs);
-      docs = await Document.find({ ownerId: req.params.id, access: 'public' })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
-      await client.hset(
-        'userDocs',
-        `${req.params.id}/public`,
-        JSON.stringify(docs)
-      );
-      return res.send(docs);
-    }
+    const docOwner = await User.findById(req.params.id);
+    if (!docOwner)
+      return response.notFound(res, { message: 'document not found' });
 
-    const admin = await Role.findOne({ title: 'admin' });
-    let docs;
-
+    const admin = await Role.findOne({
+      title: 'admin'
+    });
+    const queryOptions = {
+      skip: (page - 1) * limit,
+      limit: limit,
+      sort: { date: -1 }
+    };
     //if the user is an admin send him all documents except private access docs
-
-    if (req.user.role == admin._id.toHexString()) {
-      docs = await Document.find({
-        access: { $ne: 'private' },
-        ownerId: req.params.id
-      })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
-      return res.send(docs);
+    if (req.user.roleId == admin._id.toHexString()) {
+      let docs = await Document.find(
+        {
+          access: {
+            $ne: 'private'
+          },
+          ownerId: req.params.id
+        },
+        queryOptions
+      );
+      return response.success(res, docs);
     }
 
     //if user is logged in and not an admin send him public documents and documents the one that matches same role as the user
-    docs = await Document.find()
-      .or([
-        { access: 'public', ownerId: req.params.id },
-        { role: req.user.role, access: 'role', ownerId: req.params.id }
-      ])
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ date: -1 });
+    const query = {
+      $or: [
+        {
+          access: 'public',
+          ownerId: req.params.id
+        }
+      ]
+    };
+    if (docOwner.role == req.user.roleId)
+      query.$or.push({
+        access: 'role',
+        ownerId: req.params.id
+      });
+
+    let docs = await Document.find(query, queryOptions);
     return res.send(docs);
   }
 }

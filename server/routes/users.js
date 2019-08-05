@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/', userController.post);
 
 //endpoint to get all document authored by a user
-router.get('/:id/documents', login, userController.getUserDocs);
+router.get('/:id/documents', authenticate, userController.getUserDocs);
 
 //endpoint to  view all users, only admin can view all users
 router.get('/', [authenticate, authorizeAdmin], userController.get);
