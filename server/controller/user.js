@@ -147,60 +147,6 @@ class UserController {
       return response.internalError(res, { error });
     }
   }
-
-  async getUserDocs(req, res) {
-    // convert query to number
-    let page = Number(req.query.page);
-    let limit = Number(req.query.limit);
-
-    //assign default values if query params are invalid
-    page = page ? page : 1;
-    limit = limit ? limit : 20;
-
-    const docOwner = await User.findById(req.params.id);
-    if (!docOwner)
-      return response.notFound(res, { message: 'document not found' });
-
-    const admin = await Role.findOne({
-      title: 'admin'
-    });
-    const queryOptions = {
-      skip: (page - 1) * limit,
-      limit: limit,
-      sort: { date: -1 }
-    };
-    //if the user is an admin send him all documents except private access docs
-    if (req.user.roleId == admin._id.toHexString()) {
-      let docs = await Document.find(
-        {
-          access: {
-            $ne: 'private'
-          },
-          ownerId: req.params.id
-        },
-        queryOptions
-      );
-      return response.success(res, docs);
-    }
-
-    //if user is logged in and not an admin send him public documents and documents the one that matches same role as the user
-    const query = {
-      $or: [
-        {
-          access: 'public',
-          ownerId: req.params.id
-        }
-      ]
-    };
-    if (docOwner.role == req.user.roleId)
-      query.$or.push({
-        access: 'role',
-        ownerId: req.params.id
-      });
-
-    let docs = await Document.find(query, queryOptions);
-    return res.send(docs);
-  }
 }
 
 module.exports = new UserController();

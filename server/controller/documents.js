@@ -199,6 +199,70 @@ class Documents {
       return response.internalError(res, { error });
     }
   }
+
+  /**
+   * Method to get a  documents authored  by a given user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
+  async getUserDocs(req, res) {
+    try {
+      // convert query to number
+      let page = Number(req.query.page);
+      let limit = Number(req.query.limit);
+
+      //assign default values if query params are invalid
+      page = page ? page : 1;
+      limit = limit ? limit : 20;
+
+      const docOwner = await User.findById(req.params.userId);
+      if (!docOwner)
+        return response.notFound(res, { message: 'document not found' });
+
+      const admin = await Role.findOne({
+        title: 'admin'
+      });
+      const queryOptions = {
+        skip: (page - 1) * limit,
+        limit: limit,
+        sort: { date: -1 }
+      };
+      //if the user is an admin send him all documents except private access docs
+      if (req.user.roleId == admin._id.toHexString()) {
+        let docs = await Document.find(
+          {
+            access: {
+              $ne: 'private'
+            },
+            ownerId: req.params.userId
+          },
+          queryOptions
+        );
+        return response.success(res, docs);
+      }
+
+      //if user is logged in and not an admin send him public documents and documents the one that matches same role as the user
+      const query = {
+        $or: [
+          {
+            access: 'public',
+            ownerId: req.params.userId
+          }
+        ]
+      };
+      if (docOwner.role == req.user.roleId)
+        query.$or.push({
+          access: 'role',
+          ownerId: req.params.userId
+        });
+
+      let docs = await Document.find(query, queryOptions);
+      return res.send(docs);
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
+  }
 }
 
 module.exports = new Documents();
