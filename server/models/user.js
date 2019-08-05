@@ -60,14 +60,11 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.methods.generateToken = function () {
-  return jwt.sign(
-    { userId: this._id, roleId: this.role },
-    config.privateKey
-  );
+userSchema.methods.generateToken = function() {
+  return jwt.sign({ userId: this._id, roleId: this.role }, config.privateKey);
 };
 
 //defining the user model
-const User = mongoose.model('users', userSchema);
+const userModel = mongoose.model('users', userSchema);
 
-module.exports = User;
+module.exports = userModel;

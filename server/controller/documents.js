@@ -1,9 +1,5 @@
 const validate = require('../api-validations/document');
-const Document = require('../models/document');
-const Role = require('../models/role');
-const User = require('../models/user');
-const { client } = require('../startup/cache');
-const logger = require('../startup/logger');
+const { Document, User, Role } = require('../models');
 const response = require('../helpers/responses');
 
 class Documents {
@@ -172,31 +168,36 @@ class Documents {
    * @return {object} JSON response
    */
   async getById(req, res) {
-    const doc = await Document.findById(req.params.id);
-    if (!doc) return response.notFound(res, { message: 'document not found' });
+    try {
+      const doc = await Document.findById(req.params.id);
+      if (!doc)
+        return response.notFound(res, { message: 'document not found' });
 
-    //method is called based on the access type of the document
-    const grantAccess = {
-      public: () => true,
-      private: () => {
-        if (doc.ownerId == req.user.userId) return true;
-      },
-      role: async () => {
-        //check if user is an admin and grant access
-        const roles = await Role.find();
-        const adminRole = roles.find(role => role.title === 'admin');
-        if (req.user.roleId == adminRole._id) return true;
+      //method is called based on the access type of the document
+      const grantAccess = {
+        public: () => true,
+        private: () => {
+          if (doc.ownerId == req.user.userId) return true;
+        },
+        role: async () => {
+          //check if user is an admin and grant access
+          const roles = await Role.find();
+          const adminRole = roles.find(role => role.title === 'admin');
+          if (req.user.roleId == adminRole._id) return true;
 
-        //check if the users role is same as the docOwner's role
-        const docOwner = await User.findById(req.user.userId);
-        if (docOwner.role == req.user.role) return true;
-      }
-    };
+          //check if the users role is same as the docOwner's role
+          const docOwner = await User.findById(req.user.userId);
+          if (docOwner.role == req.user.role) return true;
+        }
+      };
 
-    if (grantAccess[doc.access]()) return response.success(res, doc);
-    return response.unAuthorized(res, {
-      message: 'you do not have access to this document'
-    });
+      if (grantAccess[doc.access]()) return response.success(res, doc);
+      return response.unAuthorized(res, {
+        message: 'you do not have access to this document'
+      });
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
 }
 
