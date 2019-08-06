@@ -1,5 +1,5 @@
 const express = require('express');
-const { connectToDb } = require('./startup/db');
+const connectToDb = require('./startup/db');
 const { connectToRedis } = require('./startup/cache');
 const routes = require('./startup/routes');
 const logger = require('./startup/logger');
@@ -13,12 +13,14 @@ prodDevs(app);
 
 const port = process.env.API_PORT || 4000;
 
-const server = app.listen(port, () => {
-  logger.info(`listening on port ${port}`);
-  //connecting to database
-  connectToDb();
-  //connect to redis cache
-  connectToRedis();
+//connect to redis cache
+connectToRedis();
+
+let server;
+//connecting to database
+connectToDb().then(() => {
+  //start server
+  server = app.listen(port, () => logger.info(`listening on port ${port}`));
 });
 
 module.exports = server;
