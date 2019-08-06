@@ -1,8 +1,8 @@
-const express = require ('express');
-const authenticate = require ('../middleware/authentication');
-const adminAuthorization = require ('../middleware/admin-authorization');
-const validateId = require ('../middleware/validate-id');
-const role = require ('../controller/role');
+const express = require('express');
+const authenticate = require('../middleware/authentication');
+const adminAuthorization = require('../middleware/admin-authorization');
+const validateId = require('../middleware/validate-id');
+const role = require('../controller/role');
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/', [authenticate, adminAuthorization], role.post);
 
 //endpoint to get all roles
-router.get('/', role.get);
+router.get('/', [authenticate, adminAuthorization], role.get);
 
 //endpoint to get a role by its id
 router.get('/:id', validateId, role.getById);
