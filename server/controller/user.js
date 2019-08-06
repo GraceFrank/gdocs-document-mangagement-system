@@ -138,7 +138,6 @@ class UserController {
 
       //saving new user to data base and returning response
       newUser = await User.create(newUser);
-      await client.del('users');
       return response.created(
         res,
         _.pick(newUser, ['_id', 'name', 'email', 'userName', 'role'])
