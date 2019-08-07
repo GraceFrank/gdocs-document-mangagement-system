@@ -1,6 +1,8 @@
 const documentModel = require('./document');
 const userModel = require('./user');
 const roleModel = require('./role');
+const { redisClient } = require('../startup/cache');
+const logger = require('../startup/logger');
 
 class Model {
   constructor(model) {
@@ -13,7 +15,15 @@ class Model {
    * @return {object} js object
    */
   async create(doc) {
-    return await this.model.create(doc);
+    //create document in database
+    const doc = await this.model.create(doc);
+    //store document in redis
+    if (doc) {
+      redisClient.set(doc._id, JSON.stringify(doc), (err, reply) => {
+        if (err) logger.error(err);
+      });
+    }
+    return doc;
   }
 
   /**
@@ -47,7 +57,7 @@ class Model {
    * @return {object} updated document
    */
   async findByIdAndUpdate(id, updateObject) {
-    return await this.model.findByIdAndUpdate(id, updateObject, {
+    const update = await this.model.findByIdAndUpdate(id, updateObject, {
       new: true
     });
   }
