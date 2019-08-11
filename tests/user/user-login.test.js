@@ -1,11 +1,10 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import jwt from 'jsonwebtoken';
-import config from '../../config/test';
-import bcrypt from 'bcrypt';
+const request = require('supertest');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const server = require('../../server/index');
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const config = require('../../config/test');
 
 let regular;
 let admin;
@@ -14,9 +13,9 @@ describe('login', () => {
   describe('post/', () => {
     beforeEach(async () => {
       server; //start server
-      await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
-      regular = await Role.findOne({ title: 'regular' });
-      admin = await Role.findOne({ title: 'admin' });
+
+      regular = await Role.create({ title: 'regular' });
+      admin = await Role.create({ title: 'admin' });
 
       await User.insertMany([
         {
@@ -83,10 +82,7 @@ describe('login', () => {
         .send({ email: 'user1@mail.com', password: 'sweetlove' });
 
       //decoding the header set in response
-      const decoded = jwt.decode(
-        res.body['x-auth-token'],
-        config.privateKey
-      );
+      const decoded = jwt.decode(res.body['x-auth-token'], config.privateKey);
 
       expect(decoded).toHaveProperty('_id');
       expect(decoded).toHaveProperty('role');
