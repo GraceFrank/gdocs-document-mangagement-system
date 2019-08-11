@@ -1,5 +1,8 @@
 {
   "name": "es6-node-practice",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -32,7 +35,7 @@
     "node": "11.9.0"
   },
   "scripts": {
-    "test": "export NODE_ENV=test && jest --watchAll --verbose --coverage --runInBand ",
+    "test": "export NODE_ENV=test && jest --watchAll ",
     "startdev": "nodemon server/index.js",
     "start": "export NODE_ENV=production && node server/index.js"
   },
