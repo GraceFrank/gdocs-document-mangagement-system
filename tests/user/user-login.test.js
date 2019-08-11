@@ -4,7 +4,13 @@ const bcrypt = require('bcrypt');
 const server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
-const config = require('../../config/test');
+const config = require('../../config/default');
+
+async function sendRequest(reqBody) {
+  return await request(server)
+    .post('/api/login')
+    .send(reqBody);
+}
 
 let regular;
 let admin;
@@ -41,51 +47,57 @@ describe('login', () => {
     });
 
     test('that user can login with correct credentials', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'user1@mail.com', password: 'sweetlove' });
+      const res = await sendRequest({
+        email: 'user1@mail.com',
+        password: 'sweetlove'
+      });
       expect(res.status).toBe(200);
     }); //test end
 
     it('should return a status of 400 when user provides incorrect login credentials', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'user1@mail.com', password: 'sweetlover' });
+      const res = await sendRequest({
+        email: 'user1@mail.com',
+        password: 'sweetlover'
+      });
       expect(res.status).toBe(400);
     }); //test end
 
     it('should return a status of 400 when client sends invalid payload contennt', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'user1mail.com', password: 'sweetlover' });
+      const res = await sendRequest({
+        email: 'user1mail.com',
+        password: 'sweetlover'
+      });
       expect(res.status).toBe(400);
     }); //test end
 
     it('should return a status of 400 if the email provided does not exist in db', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'random@mail.com', password: 'sweetlover' });
+      const res = await sendRequest({
+        email: 'random@mail.com',
+        password: 'sweetlover'
+      });
       expect(res.status).toBe(400);
     }); //test end
 
     it('should send a token ', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'user1@mail.com', password: 'sweetlove' });
+      const res = await sendRequest({
+        email: 'user1@mail.com',
+        password: 'sweetlove'
+      });
 
       expect(res.body).toHaveProperty('x-auth-token');
     }); //test end
 
     test('token sent in the body is valid', async () => {
-      const res = await request(server)
-        .post('/api/login')
-        .send({ email: 'user1@mail.com', password: 'sweetlove' });
+      const res = await sendRequest({
+        email: 'user1@mail.com',
+        password: 'sweetlove'
+      });
 
       //decoding the header set in response
       const decoded = jwt.decode(res.body['x-auth-token'], config.privateKey);
 
-      expect(decoded).toHaveProperty('_id');
-      expect(decoded).toHaveProperty('role');
+      expect(decoded).toHaveProperty('userId');
+      expect(decoded).toHaveProperty('roleId');
     }); //test end
   });
 });
