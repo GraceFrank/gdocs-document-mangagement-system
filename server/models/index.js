@@ -16,14 +16,8 @@ class Model {
    */
   async create(doc) {
     //create document in database
-    const doc = await this.model.create(doc);
-    //store document in redis
-    if (doc) {
-      redisClient.set(doc._id, JSON.stringify(doc), (err, reply) => {
-        if (err) logger.error(err);
-      });
-    }
-    return doc;
+    const newDoc = await this.model.create(doc);
+    return newDoc;
   }
 
   /**
@@ -31,6 +25,7 @@ class Model {
    * @param {object} queryObject
    * @return {object} js object
    */
+
   async findOne(queryObject) {
     return await this.model.findOne(queryObject);
   }
@@ -57,9 +52,17 @@ class Model {
    * @return {object} updated document
    */
   async findByIdAndUpdate(id, updateObject) {
+    //update document in db
     const update = await this.model.findByIdAndUpdate(id, updateObject, {
       new: true
     });
+    //after successful update, update value in redis cache
+    if (update) {
+      redisClient.set(update._id, JSON.stringify(update), (err, reply) => {
+        if (err) logger.error(err);
+      });
+    }
+    return update;
   }
 
   /**
@@ -68,6 +71,9 @@ class Model {
    * @return {object} deleted document
    */
   async findByIdAndDelete(id) {
+    redisClient.del(id, (err, reply) => {
+      if (err) logger.error(err);
+    });
     return await this.model.findByIdAndDelete(id);
   }
 
@@ -77,7 +83,20 @@ class Model {
    * @return {object} deleted document
    */
   async findById(id) {
-    return await this.model.findById(id);
+    //first find document in cache
+    let doc = await redisClient.get(id);
+    if (doc) return JSON.parse(doc);
+
+    //if not in cache fetch from mongodb
+    doc = await this.model.findById(id);
+    //update redis cache
+    if (doc) {
+      redisClient.set(doc._id, JSON.stringify(doc), (err, reply) => {
+        if (err) logger.error(err);
+      });
+    }
+    //then return fetched doc
+    return doc;
   }
 }
 
@@ -86,4 +105,3 @@ const User = new Model(userModel);
 const Document = new Model(documentModel);
 
 module.exports = { Role, User, Document };
-//Todo: add caching for find one role
