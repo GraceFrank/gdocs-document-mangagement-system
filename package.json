@@ -37,7 +37,8 @@
   "scripts": {
     "test": "export NODE_ENV=test && jest --watchAll ",
     "startdev": "nodemon server/index.js",
-    "start": "export NODE_ENV=production && node server/index.js"
+    "start": "export NODE_ENV=production && node server/index.js",
+    "seed": "node server/seeder/seeder.js"
   },
   "author": "",
   "license": "ISC"
