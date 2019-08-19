@@ -15,6 +15,10 @@ function connectToDb() {
     })
     .then(() => {
       logger.info(`connected to database`);
+    })
+    .catch(err => {
+      logger.error(err);
+      process.exit(1);
     });
 }
 
