@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const request = require('supertest');
-const server = require('../../server/index');
+let server;
 let Role = require('../../server/models/role');
 let User = require('../../server/models/user');
 
@@ -19,7 +19,8 @@ describe('Roles, /', () => {
   let admin;
   let regular;
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     await Role.deleteMany({}); //empty roles collection in db
     await User.deleteMany({});
     regular = await Role.create({ title: 'regular' });
@@ -42,19 +43,20 @@ describe('Roles, /', () => {
   });
 
   afterEach(async () => {
-    await server.close(); //close server
+    //close server
+    await server.close();
   });
 
   describe('POST/ ', () => {
     //test that a role must have title
-    test('that the created role has title property', async () => {
-      const res = await sendRequest({
-        requestType: 'post',
-        role: admin._id,
-        requestBody: { title: 'premium' }
-      });
-      expect(res.body.data).toHaveProperty('title');
-    }); //test end
+    // test('that the created role has title property', async () => {
+    //   const res = await sendRequest({
+    //     requestType: 'post',
+    //     role: admin._id,
+    //     requestBody: { title: 'premium' }
+    //   });
+    //   expect(res.body.data).toHaveProperty('title');
+    // }); //test end
 
     //test that if title is not provided, role should not be created
     test('roles with empty title cannot be created', async () => {
