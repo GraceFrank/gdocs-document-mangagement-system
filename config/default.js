@@ -2,7 +2,9 @@ require('dotenv').config();
 
 const testConfig = {
   db: 'mongodb://localhost/gdocs_test',
-  privateKey: '1234'
+  privateKey: '1234',
+  redisHost: 'localhost',
+  redisPort: '6379'
 };
 
 const defaultConfig = {
@@ -12,4 +14,4 @@ const defaultConfig = {
   redisPort: process.env.REDIS_PORT
 };
 
-module.exports = (process.env.NODE_ENV = 'test') ? testConfig : defaultConfig;
+module.exports = process.env.NODE_ENV === 'test' ? testConfig : defaultConfig;
