@@ -1,5 +1,6 @@
 const validate = require('../api-validations/document');
 const { Document, User, Role } = require('../models');
+const logger = require('../startup/logger');
 const response = require('../helpers/responses');
 
 class Documents {
@@ -37,6 +38,7 @@ class Documents {
 
       return response.created(res, doc);
     } catch (error) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
@@ -57,32 +59,34 @@ class Documents {
       page = page ? page : 1;
       limit = limit ? limit : 20;
 
-      //Queries to run based on the role of the user
-      const roleQuery = {
-        admin: {
-          $or: [
-            { access: 'private', ownerId: req.user.userId },
-            { access: { $ne: 'private' } }
-          ]
-        }, //this query will be run if user is an admin
-        otherRoles: {
-          $or: [
-            { access: 'private', ownerId: req.user._id },
-            { access: 'public' },
-            { role: req.user.role, access: 'role' }
-          ]
-        }, //this query will be run for the other roles
-        public: { access: 'public' } //this query will run if user is not logged in
-      };
-
-      //get the role of the user
-      let userRole = await Role.findById(req.user.roleId);
-      userRole = userRole.title;
-
       //determining which query should run from the users role
       let query;
-      if (req.user) query = roleQuery.public;
-      query = userRole === 'admin' ? roleQuery.admin : roleQuery.otherRoles;
+      if (req.user) {
+        //Queries to run based on the role of the user
+        const roleQuery = {
+          admin: {
+            //this query will be run if user is an admin
+            $or: [
+              { access: 'private', ownerId: req.user.userId },
+              { access: { $ne: 'private' } }
+            ]
+          },
+          otherRoles: {
+            //this query will be run for the other roles
+            $or: [
+              { access: 'private', ownerId: req.user.userId },
+              { access: 'public' },
+              { role: req.user.roleId, access: 'role' }
+            ]
+          }
+        };
+
+        //get the role of the user
+        let userRole = await Role.findById(req.user.roleId);
+        userRole = userRole.title;
+
+        query = userRole === 'admin' ? roleQuery.admin : roleQuery.otherRoles;
+      } else query = { access: 'public' }; //this query will run if user is not logged in
 
       const queryOptions = {
         skip: (page - 1) * limit,
@@ -95,6 +99,7 @@ class Documents {
         'Array of 0 or more documents has been fetched successfully';
       return response.success(res, { message, documents });
     } catch (error) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
@@ -133,6 +138,7 @@ class Documents {
       const update = await Document.findByIdAndUpdate(req.params.id, req.body);
       return response.success(res, update);
     } catch (error) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
@@ -157,6 +163,7 @@ class Documents {
       const deleted = await Document.findByIdAndDelete(doc._id);
       return response.success(res, deleted);
     } catch (err) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
@@ -196,6 +203,7 @@ class Documents {
         message: 'you do not have access to this document'
       });
     } catch (error) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
@@ -260,6 +268,7 @@ class Documents {
       let docs = await Document.find(query, queryOptions);
       return res.send(docs);
     } catch (error) {
+      logger.error(error);
       return response.internalError(res, { error });
     }
   }
