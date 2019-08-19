@@ -58,9 +58,13 @@ class Model {
     });
     //after successful update, update value in redis cache
     if (update) {
-      redisClient.set(update._id, JSON.stringify(update), (err, reply) => {
-        if (err) logger.error(err);
-      });
+      redisClient.set(
+        JSON.stringify(update._id),
+        JSON.stringify(update),
+        (err, reply) => {
+          if (err) logger.error(err);
+        }
+      );
     }
     return update;
   }
@@ -71,10 +75,16 @@ class Model {
    * @return {object} deleted document
    */
   async findByIdAndDelete(id) {
-    redisClient.del(id, (err, reply) => {
-      if (err) logger.error(err);
-    });
-    return await this.model.findByIdAndDelete(id);
+    //delete document
+    const doc = await this.model.findByIdAndDelete(id);
+    // if document was deleted successfully update cache
+    if (doc) {
+      redisClient.del(id, (err, reply) => {
+        if (err) logger.error(err);
+      });
+    }
+    //return the deleted document
+    return doc;
   }
 
   /**
@@ -91,9 +101,13 @@ class Model {
     doc = await this.model.findById(id);
     //update redis cache
     if (doc) {
-      redisClient.set(doc._id, JSON.stringify(doc), (err, reply) => {
-        if (err) logger.error(err);
-      });
+      redisClient.set(
+        JSON.stringify(doc._id),
+        JSON.stringify(doc),
+        (err, reply) => {
+          if (err) logger.error(err);
+        }
+      );
     }
     //then return fetched doc
     return doc;
