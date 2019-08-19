@@ -13,7 +13,7 @@ router.post('/', [authenticate, adminAuthorization], role.post);
 router.get('/', [authenticate, adminAuthorization], role.get);
 
 //endpoint to get a role by its id
-router.get('/:id', validateId, role.getById);
+router.get('/:id', [validateId, authenticate, adminAuthorization], role.getById);
 
 //endpoint to update an existing role
 router.put('/:id', [validateId, authenticate, adminAuthorization], role.put);
