@@ -7,20 +7,23 @@ const prodDevs = require('./startup/prod');
 
 const app = express();
 
+if (!process.env.API_PRIVATE_KEY) {
+  logger.error(`API Private Key not defined. Exiting process...`);
+  process.exit(1);
+}
 //defining routes
 routes(app);
 prodDevs(app);
 
-const port = process.env.API_PORT || 4000;
+const port = process.env.API_PORT || 4400;
 
-//connect to redis cache
-connectToRedis();
-
-let server;
-//connecting to database
-connectToDb().then(() => {
-  //start server
-  server = app.listen(port, () => logger.info(`listening on port ${port}`));
-});
-
-module.exports = server;
+async function startApp(port) {
+  connectToRedis();
+  //connecting to database
+  await connectToDb();
+  let server = app.listen(port, () => logger.info(`listening on port ${port}`));
+  return server;
+}
+// start server
+startApp(port);
+module.exports = startApp;
