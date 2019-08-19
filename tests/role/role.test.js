@@ -48,17 +48,17 @@ describe('Roles, /', () => {
   });
 
   describe('POST/ ', () => {
-    //test that a role must have title
-    // test('that the created role has title property', async () => {
-    //   const res = await sendRequest({
-    //     requestType: 'post',
-    //     role: admin._id,
-    //     requestBody: { title: 'premium' }
-    //   });
-    //   expect(res.body.data).toHaveProperty('title');
-    // }); //test end
+    // test that a role must have title
+    test('that the created role has title property', async () => {
+      const res = await sendRequest({
+        requestType: 'post',
+        role: admin._id,
+        requestBody: { title: 'premium' }
+      });
+      expect(res.body.data).toHaveProperty('title');
+    }); //test end
 
-    //test that if title is not provided, role should not be created
+    // test that if title is not provided, role should not be created
     test('roles with empty title cannot be created', async () => {
       const res = await sendRequest({
         requestType: 'post',
