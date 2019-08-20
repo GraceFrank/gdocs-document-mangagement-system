@@ -1,7 +1,7 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const server = require('../../server/index');
+let server;
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const config = require('../../config/default');
@@ -18,7 +18,8 @@ let admin;
 describe('login', () => {
   describe('post/', () => {
     beforeEach(async () => {
-      server; //start server
+      //start server
+      server = await require('../../server/index')();
 
       regular = await Role.create({ title: 'regular' });
       admin = await Role.create({ title: 'admin' });
