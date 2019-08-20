@@ -10,8 +10,7 @@ const docSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      maxlength: 1000,
-      unique: true
+      maxlength: 1000
     },
     content: {
       type: String,
@@ -31,6 +30,6 @@ const docSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const documentModel = mongoose.model('documents', docSchema)
+const documentModel = mongoose.model('documents', docSchema);
 
-module.exports = documentModel
+module.exports = documentModel;

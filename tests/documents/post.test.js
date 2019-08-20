@@ -1,13 +1,14 @@
-const request = require ('supertest');
-const server = require( '../../index');
-const User = require ('../../models/user');
-const Role = require ('../../models/role');
-const Document = require ('../../models/document');
+const request = require('supertest');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const Document = require('../../server/models/document');
 
 let regular;
 describe('documents/post', () => {
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     await Role.insertMany([{ title: 'regular' }]);
     regular = await Role.findOne({ title: 'regular' });
   });
@@ -31,7 +32,7 @@ describe('documents/post', () => {
     expect(res.status).toBe(401);
   }); //test end
 
-  test('new user document created has a published date defined.', async () => {
+  test('new document created has a published date defined.', async () => {
     const user = new User({ role: regular._id });
     const token = user.generateToken();
 
@@ -43,7 +44,7 @@ describe('documents/post', () => {
         content: 'Document1   kfklflkgnklllk'
       });
     expect(res.status).toBe(201);
-    expect(res.body.createdAt).toBeDefined();
+    expect(res.body.data.createdAt).toBeDefined();
   }); //test end
 
   test('new user document created has a default access set to public ', async () => {
@@ -57,7 +58,7 @@ describe('documents/post', () => {
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
       });
-    expect(res.body.access).toBe('public');
+    expect(res.body.data.access).toBe('public');
   }); //test end
 
   test('new user document created has owner ', async () => {
@@ -71,15 +72,15 @@ describe('documents/post', () => {
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
       });
-    expect(res.body.ownerId).toBeDefined();
-    expect(res.body.ownerId).toBe(user._id.toHexString());
+    expect(res.body.data.ownerId).toBeDefined();
+    expect(res.body.data.ownerId).toBe(user._id.toHexString());
   }); //test end
 
-  test('new user document created has unique title ', async () => {
+  test('new user document created has title unique to the user', async () => {
     const user = new User({ role: regular._id });
     const existingDoc = await Document.create({
       access: 'role',
-      ownerId: '5cc33f7e04fc5f18a52d8354',
+      ownerId: user._id,
       title: 'Document1',
       content: 'Document',
       role: regular._id,
@@ -93,10 +94,10 @@ describe('documents/post', () => {
       .post('/api/documents')
       .set('x-auth-token', token)
       .send({
-        title: 'Document1',
+        title: existingDoc.title,
         content: 'Document1   kfklflkgnklllk'
       });
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(409);
   }); //test end
 
   test('that it saves to database', async () => {
@@ -110,10 +111,10 @@ describe('documents/post', () => {
         content: 'Document1   kfklflkgnklllk'
       });
 
-    const doc = await Document.findById(res.body._id);
+    const doc = await Document.findById(res.body.data._id);
     expect(doc).toBeDefined();
-    expect(doc.title).toBe(res.body.title);
-    expect(doc._id.toHexString()).toBe(res.body._id);
+    expect(doc.title).toBe(res.body.data.title);
+    expect(doc._id.toHexString()).toBe(res.body.data._id);
   });
 
   test('that invalid payload content returns a status of 400', async () => {
