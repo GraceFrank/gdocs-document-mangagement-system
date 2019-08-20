@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../../server/index');
+let server;
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 
@@ -15,7 +15,8 @@ let admin;
 let randomUser;
 describe('users', () => {
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
     regular = await Role.findOne({ title: 'regular' });
     admin = await Role.findOne({ title: 'admin' });
