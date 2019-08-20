@@ -94,7 +94,7 @@ class Model {
    */
   async findById(id) {
     //first find document in cache
-    let doc = await redisClient.get(id);
+    let doc = await redisClient.get(JSON.stringify(id));
     if (doc) return JSON.parse(doc);
 
     //if not in cache fetch from mongodb
@@ -113,6 +113,7 @@ class Model {
     return doc;
   }
 }
+//TODO: TEST all methods
 
 const Role = new Model(roleModel);
 const User = new Model(userModel);
