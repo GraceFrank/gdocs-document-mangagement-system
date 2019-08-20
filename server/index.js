@@ -15,9 +15,9 @@ if (!process.env.API_PRIVATE_KEY) {
 routes(app);
 prodDevs(app);
 
-const port = process.env.API_PORT || 4400;
+const port = process.env.API_PORT;
 
-async function startApp(port) {
+async function startApp(port = 4400) {
   connectToRedis();
   //connecting to database
   await connectToDb();
