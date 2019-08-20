@@ -1,6 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const server = require('../../server/index');
+let server;
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const Document = require('../../server/models/document');
@@ -10,7 +10,7 @@ let user1;
 
 describe('documents/put', () => {
   beforeEach(async () => {
-    server; //start server
+    server = await require('../../server/index')(); //start server
     await User.deleteMany({});
     await Role.deleteMany({});
     await Document.deleteMany({});

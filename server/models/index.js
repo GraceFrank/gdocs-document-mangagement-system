@@ -79,7 +79,7 @@ class Model {
     const doc = await this.model.findByIdAndDelete(id);
     // if document was deleted successfully update cache
     if (doc) {
-      redisClient.del(id, (err, reply) => {
+      redisClient.del(JSON.stringify(id), (err, reply) => {
         if (err) logger.error(err);
       });
     }
