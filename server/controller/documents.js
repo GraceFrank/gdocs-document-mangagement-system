@@ -191,15 +191,13 @@ class Documents {
           const roles = await Role.find();
           const adminRole = roles.find(role => role.title === 'admin');
           if (req.user.roleId == adminRole._id) return true;
-
           //check if the users role is same as the docOwner's role
-          const docOwner = await User.findById(req.user.userId);
-          if (docOwner.role == req.user.role) return true;
+          const docOwner = await User.findById(doc.ownerId);
+          if (docOwner.role == req.user.roleId) return true;
         }
       };
-
-      if (grantAccess[doc.access]()) return response.success(res, doc);
-      return response.unAuthorized(res, {
+      if (await grantAccess[doc.access]()) return response.success(res, doc);
+      return response.forbidden(res, {
         message: 'you do not have access to this document'
       });
     } catch (error) {
