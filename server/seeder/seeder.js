@@ -5,9 +5,6 @@ const Document = require('../models/document');
 const Role = require('../models/role');
 const connectToDb = require('../startup/db');
 
-process.env.NODE_ENV = 'development';
-console.log(process.env.NODE_ENV);
-
 connectToDb();
 class Seeder {
   //method to insert default roles to the role collection in database
@@ -23,7 +20,6 @@ class Seeder {
   async insertUsers(quantity) {
     //get all roles in the db since all users must have a role
     let roles = await Role.find();
-    console.log(roles);
     for (let i = 1; i <= quantity; i++) {
       await User.create({
         name: {
@@ -65,6 +61,7 @@ async function seedAllDbCollections() {
 
   await seeder.insertUsers(5);
   await seeder.insertDocuments(20);
+  process.exit();
 }
 
 seedAllDbCollections();
