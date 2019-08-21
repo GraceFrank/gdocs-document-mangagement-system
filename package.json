@@ -35,7 +35,7 @@
     "node": "11.9.0"
   },
   "scripts": {
-    "test": "export NODE_ENV=test && jest   --watchAll --verbose --runInBand",
+    "test": "export NODE_ENV=test && jest --watchAll --verbose --runInBand",
     "startdev": "npm run seed && node server/index.js",
     "start": "export NODE_ENV=production && node server/index.js",
     "seed": "node server/seeder/seeder.js"

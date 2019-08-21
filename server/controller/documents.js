@@ -131,9 +131,9 @@ class Documents {
         _id: { $ne: req.params.id },
         ownerId: req.userId
       });
-      if (existingDoc)
+      if (existingDoc) {
         return response.badRequest(res, { message: 'document already exists' });
-
+      }
       //update the document in the db
       const update = await Document.findByIdAndUpdate(req.params.id, req.body);
       return response.success(res, update);
@@ -264,7 +264,7 @@ class Documents {
         });
 
       let docs = await Document.find(query, queryOptions);
-      return res.send(docs);
+      return response.success(res, docs);
     } catch (error) {
       logger.error(error);
       return response.internalError(res, { error });
