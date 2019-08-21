@@ -1,4 +1,4 @@
-FROM node:11.15.0
+FROM node:10.16.3
 
 WORKDIR /usr/src/gdoc-api
 
@@ -6,4 +6,4 @@ COPY package*.json ./
 
 RUN npm install
 
-CMD [ "/bin/bash" ]
+CMD [ "/bin/bash source.env" ]
