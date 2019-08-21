@@ -1,10 +1,8 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require('supertest');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const Document = require('../../server/models/document');
 
 describe('documents/Get all', () => {
   let roleAccessDoc;
@@ -16,7 +14,7 @@ describe('documents/Get all', () => {
   let regularUser;
 
   beforeEach(async () => {
-    server; //start server
+    server = await require('../../server/index')(); //start server
     //roles
     const regular = await Role.create({ title: 'regular' });
     const admin = await Role.create({ title: 'admin' });
@@ -128,26 +126,14 @@ describe('documents/Get all', () => {
     await Document.deleteMany({});
   });
 
-  test('that a user not logged in can view only public documents', async () => {
-    const res = await request(server).get(
-      `/api/users/${author._id}/documents?page=1&limit=10`
-    );
-    const privateDocs = res.body.find(doc => doc.access === 'private');
-    const publicDocs = res.body.find(doc => doc.access === 'public');
-
-    expect(res.status).toBe(200);
-    expect(privateDocs).not.toBeTruthy();
-    expect(publicDocs).toBeTruthy();
-  });
-
   test('that a an admin user  can view all documents except private', async () => {
     const token = adminUser.generateToken();
     const res = await request(server)
-      .get(`/api/users/${author._id}/documents?page=1&limit=10`)
+      .get(`/api/documents/${author._id}/documents?page=1&limit=10`)
       .set('x-auth-token', token);
-    const privateDocs = res.body.find(doc => doc.access === 'private');
-    const publicDocs = res.body.find(doc => doc.access === 'public');
-    const roleDocs = res.body.find(doc => doc.access === 'role');
+    const privateDocs = res.body.data.find(doc => doc.access === 'private');
+    const publicDocs = res.body.data.find(doc => doc.access === 'public');
+    const roleDocs = res.body.data.find(doc => doc.access === 'role');
 
     expect(res.status).toBe(200);
     expect(privateDocs).not.toBeTruthy();
@@ -158,11 +144,11 @@ describe('documents/Get all', () => {
   test('that a an non-admin user  cannot view docs with access role from an author of different  role', async () => {
     const token = premiumUser.generateToken();
     const res = await request(server)
-      .get(`/api/users/${author._id}/documents?page=1&limit=10`)
+      .get(`/api/documents/${author._id}/documents?page=1&limit=10`)
       .set('x-auth-token', token);
-    const privateDocs = res.body.find(doc => doc.access === 'private');
-    const publicDocs = res.body.find(doc => doc.access === 'public');
-    const roleDocs = res.body.find(doc => doc.access === 'role');
+    const privateDocs = res.body.data.find(doc => doc.access === 'private');
+    const publicDocs = res.body.data.find(doc => doc.access === 'public');
+    const roleDocs = res.body.data.find(doc => doc.access === 'role');
 
     expect(res.status).toBe(200);
     expect(privateDocs).not.toBeTruthy();
@@ -170,12 +156,13 @@ describe('documents/Get all', () => {
     expect(roleDocs).not.toBeTruthy();
   });
 
-  test('that a status of 400 is returned when invalid queries are passed', async () => {
+  test('that if invalid queries are passed, default query params are used', async () => {
     const token = premiumUser.generateToken();
     const res = await request(server)
-      .get(`/api/users/${author._id}/documents?page=a&limit=10`)
+      .get(`/api/documents/${author._id}/documents?page=a&limit=10`)
       .set('x-auth-token', token);
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(200);
+    expect(res.body.data.length).toBeLessThanOrEqual(10);
   });
 });

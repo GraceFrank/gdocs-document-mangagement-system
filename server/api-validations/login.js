@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require ('joi');
 
 //function to validate that user provides required valid login details
 function validateLoginDetails(payload) {
@@ -15,4 +15,4 @@ function validateLoginDetails(payload) {
   return Joi.validate(payload, schema);
 }
 
-export default validateLoginDetails;
+module.exports = validateLoginDetails;

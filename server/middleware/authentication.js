@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
-import config from 'config';
+const jwt = require('jsonwebtoken');
+const config = require('../../config/default');
 
 function authenticate(req, res, next) {
   const token = req.header('x-auth-token');
   if (!token)
     return res.status(401).send({ error: 'access denied no token provided' });
-  jwt.verify(token, config.get('jwtPrivateKey'), (err, decoded) => {
+  jwt.verify(token, config.privateKey, (err, decoded) => {
     if (decoded) {
       req.user = decoded;
       next();
@@ -13,4 +13,4 @@ function authenticate(req, res, next) {
   });
 }
 
-export default authenticate;
+module.exports = authenticate;

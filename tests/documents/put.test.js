@@ -1,17 +1,17 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require('supertest');
+const mongoose = require('mongoose');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const Document = require('../../server/models/document');
 
 let doc1;
 let user1;
 
 describe('documents/put', () => {
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     const regular = await Role.create({ title: 'regular' });
 
     user1 = await User.create({
@@ -60,7 +60,7 @@ describe('documents/put', () => {
     const res = await request(server)
       .put(`/api/documents/090024ikjfj`)
       .send({ title: 'Document1' });
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(400);
   }); //test end
 
   test('that update are reflected in the database', async () => {
@@ -73,7 +73,7 @@ describe('documents/put', () => {
     const dbVersion = await Document.findById(doc1._id);
     expect(res.status).toBe(200);
     expect(dbVersion.title).not.toBe(doc1.title);
-    expect(dbVersion.title).toBe(res.body.title);
+    expect(dbVersion.title).toBe(res.body.data.title);
   }); //test end
 
   test('that a 400 is returned when invalid payload is provided', async () => {

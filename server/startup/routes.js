@@ -1,9 +1,9 @@
-import express from 'express';
-import roles from '../routes/roles';
-import users from '../routes/users';
-import login from '../routes/login';
-import documents from '../routes/document';
-import swagger from '../documentation/swagger';
+const express = require('express');
+const roles = require('../routes/roles');
+const users = require('../routes/users');
+const login = require('../routes/login');
+const documents = require('../routes/document');
+const swagger = require('../documentation/swagger');
 
 function routes(app) {
   app.use(express.json());
@@ -15,4 +15,4 @@ function routes(app) {
   app.use('/api-docs', swagger);
 }
 
-export default routes;
+module.exports = routes;

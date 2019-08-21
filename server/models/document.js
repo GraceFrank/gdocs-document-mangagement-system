@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const docSchema = new mongoose.Schema(
   {
@@ -10,8 +10,7 @@ const docSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      maxlength: 1000,
-      unique: true
+      maxlength: 1000
     },
     content: {
       type: String,
@@ -26,12 +25,11 @@ const docSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
       ref: 'roles'
-    },
-    timestamp: { type: Number, default: new Date().getTime() }
+    }
   },
   { timestamps: true }
 );
 
-const Document = mongoose.model('documents', docSchema);
+const documentModel = mongoose.model('documents', docSchema);
 
-export default Document;
+module.exports = documentModel;

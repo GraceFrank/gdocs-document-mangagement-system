@@ -1,9 +1,11 @@
-import faker from 'faker';
-import User from '../models/user';
-import bcrypt from 'bcrypt';
-import Document from '../models/document';
-import Role from '../models/role';
+const faker = require('faker');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
+const Document = require('../models/document');
+const Role = require('../models/role');
+const connectToDb = require('../startup/db');
 
+connectToDb();
 class Seeder {
   //method to insert default roles to the role collection in database
   async insertDefaultRoles() {
@@ -52,4 +54,14 @@ class Seeder {
   } //fakeDocuments Method
 } //seeder class
 
-export default new Seeder();
+async function seedAllDbCollections() {
+  await connectToDb();
+  const seeder = new Seeder();
+  await seeder.insertDefaultRoles();
+
+  await seeder.insertUsers(5);
+  await seeder.insertDocuments(20);
+  process.exit();
+}
+
+seedAllDbCollections();

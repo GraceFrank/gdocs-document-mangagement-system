@@ -1,22 +1,29 @@
-import express from 'express';
-import { connectToDb } from './startup/db';
-import routes from './startup/routes';
-import logger from './startup/logger';
-import prodDevs from './startup/prod';
-import seeder from './seeder/seeder';
+const express = require('express');
+const connectToDb = require('./startup/db');
+const { connectToRedis } = require('./startup/cache');
+const routes = require('./startup/routes');
+const logger = require('./startup/logger');
+const prodDevs = require('./startup/prod');
 
 const app = express();
 
-//connecting to database
-connectToDb();
+if (!process.env.API_PRIVATE_KEY) {
+  logger.error(`API Private Key not defined. Exiting process...`);
+  process.exit(1);
+}
 //defining routes
-
 routes(app);
 prodDevs(app);
 
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  logger.info(`listening on port ${port}`);
-});
+const port = process.env.API_PORT;
 
-export default server;
+async function startApp(port = 4400) {
+  connectToRedis();
+  //connecting to database
+  await connectToDb();
+  let server = app.listen(port, () => logger.info(`listening on port ${port}`));
+  return server;
+}
+// start server
+startApp(port);
+module.exports = startApp;

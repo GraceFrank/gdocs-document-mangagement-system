@@ -1,4 +1,0 @@
-{ 
-  "db":"gdoc_db",
-  "jwtPrivateKey": "gdoc_jwtPrivateKey"
-}

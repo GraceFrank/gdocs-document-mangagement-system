@@ -1,10 +1,9 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require('supertest');
+const mongoose = require('mongoose');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const Document = require('../../server/models/document');
 
 describe('documents/put', () => {
   let roleAccessDoc;
@@ -15,7 +14,8 @@ describe('documents/put', () => {
   let regularUser;
 
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     //roles
     const regular = await Role.create({ title: 'regular' });
     const admin = await Role.create({ title: 'admin' });
@@ -79,19 +79,23 @@ describe('documents/put', () => {
   });
 
   test('that 404 is returned if document is not in db', async () => {
-    const res = await request(server).get(
-      `/api/documents/${new mongoose.Types.ObjectId()}`
-    );
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${new mongoose.Types.ObjectId()}`)
+      .set('x-auth-token', token);
 
     expect(res.status).toBe(404);
   }); //test end
 
   test('that if the document access is public it can be viewed by anyone', async () => {
-    const res = await request(server).get(`/api/documents/${publicDoc._id}`);
+    const token = adminUser.generateToken();
+    const res = await request(server)
+      .get(`/api/documents/${publicDoc._id}`)
+      .set('x-auth-token', token);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('title');
-    expect(res.body).toHaveProperty('_id', publicDoc._id.toHexString());
+    expect(res.body.data).toHaveProperty('title');
+    expect(res.body.data).toHaveProperty('_id', publicDoc._id.toHexString());
   }); //test end
 
   test('that if the document access is set to role  it can be viewed by user with same role as author', async () => {
@@ -101,8 +105,11 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('title');
-    expect(res.body).toHaveProperty('_id', roleAccessDoc._id.toHexString());
+    expect(res.body.data).toHaveProperty('title');
+    expect(res.body.data).toHaveProperty(
+      '_id',
+      roleAccessDoc._id.toHexString()
+    );
   }); //test end
 
   test('that if the document access is set to role  it can be viewed by an admin user', async () => {
@@ -112,21 +119,24 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('title');
-    expect(res.body).toHaveProperty('_id', roleAccessDoc._id.toHexString());
+    expect(res.body.data).toHaveProperty('title');
+    expect(res.body.data).toHaveProperty(
+      '_id',
+      roleAccessDoc._id.toHexString()
+    );
   }); //test end
 
-  test('that if the document access is set to role  it cannot be viewed by a user with different role from the author', async () => {
+  test('that if the document access is set to role  it cannot be viewed by a user with different role', async () => {
     const token = new User({
       role: new mongoose.Types.ObjectId()
     }).generateToken();
+
     const res = await request(server)
       .get(`/api/documents/${roleAccessDoc._id}`)
       .set('x-auth-token', token);
 
     expect(res.status).toBe(403);
-    expect(res.body).not.toHaveProperty('title');
-    expect(res.body).not.toHaveProperty('_id', roleAccessDoc._id.toHexString());
+    expect(res.body.data).toBeUndefined;
   }); //test end
 
   test('that if the document access is set to private  it can be viewed by the author', async () => {
@@ -136,8 +146,8 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('title');
-    expect(res.body).toHaveProperty('_id', privateDoc._id.toHexString());
+    expect(res.body.data).toHaveProperty('title');
+    expect(res.body.data).toHaveProperty('_id', privateDoc._id.toHexString());
   }); //test end
 
   test('that private docs can oly be viewed by author', async () => {
@@ -147,7 +157,6 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     expect(res.status).toBe(403);
-    expect(res.body).not.toHaveProperty('title');
-    expect(res.body).not.toHaveProperty('_id', privateDoc._id.toHexString());
+    expect(res.body.data).toBeUndefined();
   }); //test end
 }); //describe end

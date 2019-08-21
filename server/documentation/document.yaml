@@ -108,7 +108,7 @@ path:
             properties:
               error: 
                 type: string
-                example: 'name must be provided'
+                example: 'tittle must be provided'
         401:
           description: a user has to be logged in before he can create a document
           schema:
@@ -124,7 +124,7 @@ path:
             properties:
               error: 
                 type: string
-                example: 'email already in use'
+                example: 'document title already in use'
   /api/documents/{id}:
     get:
       tags: 

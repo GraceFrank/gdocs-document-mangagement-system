@@ -227,8 +227,6 @@ path:
                     email:
                       type: string
                       example: frankgracey@mail.com
-                    password:
-                      type: string
                     role:    
                       type: string
         401:
@@ -330,24 +328,8 @@ definitions:
       email:
         type: string
         format: email
-      password:
-        type: string
-        writeOnly: true
       role:
-        type: object
-        properties:
-          _id:
-            type: string
-            pattern: '^[a-fA-F0-9]{24}$'
-          title:
-            type: string
-            example: regular
-    required:
-      - username
-      - email
-      - name
-      - roleId
-      - password
+        type: string
 
   newUserPayload:
     type: object

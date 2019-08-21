@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import config from 'config';
+const jwt = require('jsonwebtoken');
+const config = require('../../config/default');
 
 //this middle ware is routes that can be accessed by both logged in and not logged in users like the document.get all
 function login(req, res, next) {
@@ -9,12 +9,12 @@ function login(req, res, next) {
     return next();
   }
   //if token is provided and its valid, move to the next function in the route handler
-  jwt.verify(token, config.get('jwtPrivateKey'), (err, decoded) => {
+  jwt.verify(token, config.privateKey, (err, decoded) => {
     if (decoded) {
       req.user = decoded;
       next();
-    } else return res.status(401).send({error: 'access denied, invalid signature'});
+    } else return res.status(401).send({ error: 'access denied, invalid signature' });
   });
 }
 
-export default login;
+module.exports = login;

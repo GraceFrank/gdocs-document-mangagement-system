@@ -1,6 +1,7 @@
-import validate from '../api-validations/login';
-import User from '../models/user';
-import bcrypt from 'bcrypt';
+const validate = require('../api-validations/login');
+const User = require('../models/user');
+const bcrypt = require('bcrypt');
+const _ = require('lodash');
 
 class Login {
   async post(req, res) {
@@ -23,7 +24,12 @@ class Login {
 
     const token = user.generateToken();
 
-    res.send({ 'x-auth-token': token, message: `welcome ${user.name.first}` });
+    res.send({
+      'x-auth-token': token,
+      message: 'ok',
+      data: _.pick(user, ['_id', 'name', 'email', 'userName', 'role'])
+    });
   }
 }
+
 module.exports = new Login();

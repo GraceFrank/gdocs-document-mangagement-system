@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require ('joi');
 // import objId from 'joi-objectid';
 // Joi.objectId = objId(Joi);
 
@@ -13,4 +13,4 @@ function validateDoc(document) {
   return Joi.validate(document, schema);
 }
 
-export default validateDoc;
+module.exports = validateDoc;

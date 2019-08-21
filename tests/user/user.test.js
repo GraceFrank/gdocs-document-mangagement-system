@@ -1,8 +1,7 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
+const request = require('supertest');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
 
 //Todo:
 /**
@@ -16,7 +15,8 @@ let admin;
 let randomUser;
 describe('users', () => {
   beforeEach(async () => {
-    server; //start server
+    //start server
+    server = await require('../../server/index')();
     await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
     regular = await Role.findOne({ title: 'regular' });
     admin = await Role.findOne({ title: 'admin' });
@@ -81,8 +81,8 @@ describe('users', () => {
           password: 'sweetlove'
         });
 
-      expect(res.body).toHaveProperty('role');
-      expect(res.body.role).toBe(regular._id.toHexString());
+      expect(res.body.data).toHaveProperty('role');
+      expect(res.body.data.role).toBe(regular._id.toHexString());
     }); //test end
 
     // validate that a new user created has both first and last names.
@@ -97,9 +97,9 @@ describe('users', () => {
         });
 
       expect(res.status).toBe(201);
-      expect(res.body).toHaveProperty('name');
-      expect(res.body.name).toHaveProperty('first', 'user2');
-      expect(res.body.name).toHaveProperty('last', 'lawal');
+      expect(res.body.data).toHaveProperty('name');
+      expect(res.body.data.name).toHaveProperty('first', 'user2');
+      expect(res.body.data.name).toHaveProperty('last', 'lawal');
     }); //test end
 
     it('should return a 400 if invalid properties are passed ', async () => {

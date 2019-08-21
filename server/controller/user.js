@@ -1,114 +1,150 @@
-import bcrypt from 'bcrypt';
-import _ from 'lodash';
-import validate from '../api-validations/user';
-import User from '../models/user';
-import Role from '../models/role';
-import Document from '../models/document';
+const bcrypt = require('bcrypt');
+const _ = require('lodash');
+const validate = require('../api-validations/user');
+const { User, Document, Role } = require('../models/');
+const response = require('../helpers/responses');
 
 class UserController {
+  /**
+   * Method to get users
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async get(req, res) {
-    const users = await User.find();
-    return res.send({ message: 'ok', data: users });
+    try {
+      // convert query to number
+      let page = Number(req.query.page);
+      let limit = Number(req.query.limit);
+
+      //assign default values if query params are invalid
+      page = page ? page : 1;
+      limit = limit ? limit : 20;
+
+      const users = await User.find(
+        {},
+        {
+          skip: (page - 1) * limit,
+          limit: limit
+        }
+      );
+
+      const message =
+        'Array of 0 or more documents has been fetched successfully';
+      return response.success(res, { message, users });
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
+
+  /**
+   * Method to update a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async put(req, res) {
-    //validating the payload sent by client
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send({ error: error.details[0].message });
-    const update = req.body;
-    update.password = await bcrypt.hash(update.password, 10);
-    const user = await User.findByIdAndUpdate(req.user._id, update, {
-      new: true
-    });
-    //any update the role of all documents created by the user
-    await Document.updateMany({ ownerId: user._id }, { role: user.role });
-    return res.send({
-      message: 'ok',
-      data: _.pick(user, ['name', 'email', 'userName', 'role'])
-    });
+    try {
+      //validating the payload sent by client
+      const { error } = validate(req.body);
+      if (error)
+        return res.status(400).send({ error: error.details[0].message });
+      const update = req.body;
+
+      //hash new passworkd
+      update.password = await bcrypt.hash(update.password, 10);
+
+      //check if new email address is unique
+      const userWithSameEmail = await User.findOne({
+        email: req.body.email,
+        _id: { $ne: req.user.userId }
+      });
+      if (userWithSameEmail)
+        return response.alreadyExists(res, { message: 'email already in use' });
+      //update the user in database
+      const user = await User.findByIdAndUpdate(req.user.userId, req.body);
+
+      return response.success(
+        res,
+        _.pick(user, ['name', 'email', 'userName', 'role'])
+      );
+    } catch (error) {
+      return response.send(res, { error });
+    }
   }
 
+  /**
+   * Method to delete a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async delete(req, res) {
-    const user = await User.findByIdAndDelete(req.user._id);
-    return res.send(user);
+    try {
+      const user = await User.findByIdAndDelete(req.user._id);
+      return response.success(res, user);
+    } catch (error) {
+      return response.internalError(res, {
+        message: 'error deleting user',
+        error
+      });
+    }
   }
 
+  /**
+   * Method to fetch logedin  user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async getMe(req, res) {
-    const user = await User.findById(req.user._id);
-    return res.send({ message: 'ok', data: user });
+    try {
+      const user = await User.findById(req.user.userId);
+      return response.success(res, user);
+    } catch (error) {
+      return response.internalError(res, { error });
+    }
   }
 
+  /**
+   * Method to create a user
+   * @param {object} req
+   * @param {object} res
+   * @return {object} JSON response
+   */
   async post(req, res) {
-    //validating request payload
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    try {
+      //validating request payload
+      const { error } = validate(req.body);
+      if (error) return res.status(400).send(error.details[0].message);
 
-    //validating that new user is unique by checking if email or username is already in use
-    const existingUser = await User.findOne().or([
-      { email: req.body.email },
-      { userName: req.body.userName }
-    ]);
-    if (existingUser)
-      return res.status(409).send('email or username already in use');
+      //validating that new user is unique by checking if email or username is already in use
+      const existingUser = await User.findOne({
+        $or: [{ email: req.body.email }, { userName: req.body.userName }]
+      });
+      if (existingUser)
+        return res.status(409).send('email or username already in use');
 
-    //instantiating new user
-    let newUser = new User(req.body);
+      //instantiating new user
+      let newUser = req.body;
 
-    //hashing new user password
-    const salt = await bcrypt.genSalt(10);
-    newUser.password = await bcrypt.hash(newUser.password, salt);
+      //hashing new user password
+      const salt = await bcrypt.genSalt(10);
+      newUser.password = await bcrypt.hash(newUser.password, salt);
 
-    //assigning default role of regular to user when
-    const regular = await Role.findOne({ title: 'regular' });
-    newUser.role = regular._id;
+      //assigning default role of regular to user when
+      const regular = await Role.findOne({ title: 'regular' });
+      newUser.role = regular._id;
 
-    //saving new user to data base and returning response
-    newUser = await newUser.save();
-    return res
-      .status(201)
-      .send(_.pick(newUser, ['_id', 'name', 'email', 'userName', 'role']));
-  }
-
-  async getUserDocs(req, res) {
-    const page = req.query.page * 1;
-    const limit = req.query.limit * 1;
-
-    //validating that valid query strings are provided
-    if (!page || !limit) res.status(400).send('invalid query');
-
-    //if the user is not logged in send only documents with public access
-    if (!req.user) {
-      docs = await Document.find({ ownerId: req.params.id, access: 'public' })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
-      return res.send(docs);
+      //saving new user to data base and returning response
+      newUser = await User.create(newUser);
+      return response.created(
+        res,
+        _.pick(newUser, ['_id', 'name', 'email', 'userName', 'role'])
+      );
+    } catch (error) {
+      return response.internalError(res, { error });
     }
-
-    const admin = await Role.findOne({ title: 'admin' });
-    let docs;
-
-    //if the user is an admin send him all documents except private access docs
-    if (req.user.role == admin._id.toHexString()) {
-      docs = await Document.find({
-        access: { $ne: 'private' },
-        ownerId: req.params.id
-      })
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({ date: -1 });
-      return res.send(docs);
-    }
-
-    //if user is logged in and not an admin send him public documents and documents the one that matches same role as the user
-    docs = await Document.find()
-      .or([
-        { access: 'public', ownerId: req.params.id },
-        { role: req.user.role, access: 'role', ownerId: req.params.id }
-      ])
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .sort({ date: -1 });
-    return res.send(docs);
   }
 }
 

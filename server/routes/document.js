@@ -1,8 +1,8 @@
-import express from 'express';
-import authenticate from '../middleware/authentication';
-import login from '../middleware/login';
-import validateId from '../middleware/validate-id';
-import documentController from '../controller/documents';
+const express = require('express');
+const authenticate = require('../middleware/authentication');
+const login = require('../middleware/login');
+const validateId = require('../middleware/validate-id');
+const documentController = require('../controller/documents');
 const router = express.Router();
 
 router.post('/', authenticate, documentController.post);
@@ -13,6 +13,9 @@ router.get('/', login, documentController.get);
 
 router.delete('/:id', [validateId, authenticate], documentController.delete);
 
-router.get('/:id', [validateId, login], documentController.getById);
+router.get('/:id', [validateId, authenticate], documentController.getById);
 
-export default router;
+//endpoint to get all document authored by a user
+router.get('/:userId/documents', authenticate, documentController.getUserDocs);
+
+module.exports = router;
