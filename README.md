@@ -5,23 +5,27 @@ A document management system where users can create documents and define who and
 ## Getting Started
 
 you should have the following already
-Node.js,
-MongoDb compass for visualizing the database(optional)
-git
+Docker Installed on your computer or have the following:
+nodejs, Redis and MongoDb
 
-### Installing
+### Installing/ StartUp
+
+Clone the App
 
 ```
 git clone https://github.com/GraceFrank/gdocs-document-mangagement-system
-cd readme-api-example
+```
+
+Before running the app, you have to set environment variables defined in the .env_sample in a .env file
+
+####Starting the App With Docker
+All you have to do is run `docker-compose up`
+
+####With Node
+
+```
+cd app-directory
 npm install
-```
-
-### Running
-
-Before running the app, you have to set an environment variable for jwt private key
-
-```
 npm start
 ```
 
