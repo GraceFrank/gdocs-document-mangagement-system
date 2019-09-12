@@ -17,13 +17,10 @@ prodDevs(app);
 
 const port = process.env.API_PORT;
 
-async function startApp(port = 4400) {
-  connectToRedis();
-  //connecting to database
-  await connectToDb();
-  let server = app.listen(port, () => logger.info(`listening on port ${port}`));
-  return server;
-}
-// start server
-startApp(port);
-module.exports = startApp;
+connectToRedis();
+//connecting to database
+connectToDb().then(() => {
+  app.listen(port, () => logger.info(`listening on port ${port}`));
+});
+
+module.exports = app;
