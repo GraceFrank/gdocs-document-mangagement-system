@@ -113,7 +113,6 @@ class Model {
     return doc;
   }
 }
-//TODO: TEST all methods
 
 const Role = new Model(roleModel);
 const User = new Model(userModel);
