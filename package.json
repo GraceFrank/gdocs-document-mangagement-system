@@ -19,7 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "loadash": "^1.0.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.5.1",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.19.0",
     "redis": "^2.8.0",
     "regenerator-runtime": "^0.13.2",
