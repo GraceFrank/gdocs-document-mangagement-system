@@ -1,5 +1,5 @@
 const request = require('supertest');
-let server;
+let server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const Document = require('../../server/models/document');
@@ -14,7 +14,6 @@ describe('documents/Get all', () => {
   let regularUser;
 
   beforeEach(async () => {
-    server = await require('../../server/index')(); //start server
     //roles
     const regular = await Role.create({ title: 'regular' });
     const admin = await Role.create({ title: 'admin' });
@@ -120,7 +119,6 @@ describe('documents/Get all', () => {
   });
 
   afterEach(async () => {
-    await server.close(); //close server
     await User.deleteMany({});
     await Role.deleteMany({});
     await Document.deleteMany({});
@@ -130,7 +128,7 @@ describe('documents/Get all', () => {
     const token = adminUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${author._id}/documents?page=1&limit=10`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
     const privateDocs = res.body.data.find(doc => doc.access === 'private');
     const publicDocs = res.body.data.find(doc => doc.access === 'public');
     const roleDocs = res.body.data.find(doc => doc.access === 'role');
@@ -145,7 +143,7 @@ describe('documents/Get all', () => {
     const token = premiumUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${author._id}/documents?page=1&limit=10`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
     const privateDocs = res.body.data.find(doc => doc.access === 'private');
     const publicDocs = res.body.data.find(doc => doc.access === 'public');
     const roleDocs = res.body.data.find(doc => doc.access === 'role');
@@ -160,7 +158,7 @@ describe('documents/Get all', () => {
     const token = premiumUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${author._id}/documents?page=a&limit=10`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(200);
     expect(res.body.data.length).toBeLessThanOrEqual(10);

@@ -1,6 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-let server;
+let server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const Document = require('../../server/models/document');
@@ -10,10 +10,7 @@ let user1;
 
 describe('documents/put', () => {
   beforeEach(async () => {
-    //start server
-    server = await require('../../server/index')();
     const regular = await Role.create({ title: 'regular' });
-
     user1 = await User.create({
       name: { first: 'nnamdi', last: 'lawal' },
       email: '66nnamdi@mail.com',
@@ -34,7 +31,6 @@ describe('documents/put', () => {
   });
 
   afterEach(async () => {
-    await server.close(); //close server
     await User.deleteMany({});
     await Role.deleteMany({});
     await Document.deleteMany({});
@@ -51,7 +47,7 @@ describe('documents/put', () => {
     const token = new User().generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({ title: 'Document1' });
     expect(res.status).toBe(404);
   });
@@ -67,7 +63,7 @@ describe('documents/put', () => {
     const token = user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({ title: 'Document1111' });
 
     const dbVersion = await Document.findById(doc1._id);
@@ -80,7 +76,7 @@ describe('documents/put', () => {
     const token = user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({ title: '' });
 
     expect(res.status).toBe(400);
@@ -90,7 +86,7 @@ describe('documents/put', () => {
     const token = user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${new mongoose.Types.ObjectId()}`)
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({ title: 'Document1111' });
 
     expect(res.status).toBe(404);
@@ -108,7 +104,7 @@ describe('documents/put', () => {
     const token = await user1.generateToken();
     const res = await request(server)
       .put(`/api/documents/${doc1._id}`)
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({ title: 'sameTitle' });
 
     expect(res.status).toBe(400);

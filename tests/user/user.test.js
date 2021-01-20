@@ -1,5 +1,5 @@
 const request = require('supertest');
-let server;
+let server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 
@@ -15,8 +15,6 @@ let admin;
 let randomUser;
 describe('users', () => {
   beforeEach(async () => {
-    //start server
-    server = await require('../../server/index')();
     await Role.insertMany([{ title: 'regular' }, { title: 'admin' }]);
     regular = await Role.findOne({ title: 'regular' });
     admin = await Role.findOne({ title: 'admin' });
@@ -39,7 +37,6 @@ describe('users', () => {
     ]);
   });
   afterEach(async () => {
-    await server.close(); //close server
     await User.deleteMany({});
     await Role.deleteMany({});
   });
@@ -120,14 +117,14 @@ describe('users', () => {
       const token = new User({ role: admin._id }).generateToken();
       const res = await request(server)
         .get('/api/users')
-        .set('x-auth-token', token);
+        .set('Authorization', token);
       expect(res.status).toBe(200);
     });
     test('that a non-admin cannot  view all users', async () => {
       const token = new User({ role: regular._id }).generateToken();
       const res = await request(server)
         .get('/api/users')
-        .set('x-auth-token', token);
+        .set('Authorization', token);
       expect(res.status).toBe(403);
     });
   });
@@ -139,7 +136,7 @@ describe('users', () => {
       const token = user.generateToken();
       const res = await request(server)
         .get('/api/users/me')
-        .set('x-auth-token', token);
+        .set('Authorization', token);
       expect(res.status).toBe(200);
     }); //test end;
 
@@ -163,7 +160,7 @@ describe('users', () => {
       const token = randomUser.generateToken();
       const res = await request(server)
         .put('/api/users')
-        .set('x-auth-token', token)
+        .set('Authorization', token)
         .send({
           name: { first: 'user12', last: 'lawal' },
           email: 'user12@gmail.com',
@@ -176,7 +173,7 @@ describe('users', () => {
       const token = randomUser.generateToken();
       const res = await request(server)
         .put('/api/users')
-        .set('x-auth-token', token)
+        .set('Authorization', token)
         .send({
           name: { first: 'user12', last: 'lawal' },
           email: 'user12gmail.com',
@@ -213,7 +210,7 @@ describe('users', () => {
       const token = randomUser.generateToken();
       const res = await request(server)
         .delete('/api/users')
-        .set('x-auth-token', token);
+        .set('Authorization', token);
       expect(res.status).toBe(200);
     }); //test end
 

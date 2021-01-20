@@ -1,5 +1,5 @@
 const request = require('supertest');
-let server;
+let server =  require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const Document = require('../../server/models/document');
@@ -7,13 +7,10 @@ const Document = require('../../server/models/document');
 let regular;
 describe('documents/post', () => {
   beforeEach(async () => {
-    //start server
-    server = await require('../../server/index')();
     await Role.insertMany([{ title: 'regular' }]);
     regular = await Role.findOne({ title: 'regular' });
   });
   afterEach(async () => {
-    await server.close(); //close server
     await User.deleteMany({});
     await Role.deleteMany({});
     await Document.deleteMany({});
@@ -38,7 +35,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
@@ -53,7 +50,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
@@ -67,7 +64,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
@@ -92,7 +89,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: existingDoc.title,
         content: 'Document1   kfklflkgnklllk'
@@ -105,7 +102,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: 'Document1',
         content: 'Document1   kfklflkgnklllk'
@@ -123,7 +120,7 @@ describe('documents/post', () => {
 
     const res = await request(server)
       .post('/api/documents')
-      .set('x-auth-token', token)
+      .set('Authorization', token)
       .send({
         title: '',
         content: 'Document1   kfklflkgnklllk'

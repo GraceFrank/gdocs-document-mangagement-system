@@ -1,11 +1,11 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-let server;
+let server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const Document = require('../../server/models/document');
 
-describe('documents/put', () => {
+describe('documents/getById', () => {
   let roleAccessDoc;
   let publicDoc;
   let privateDoc;
@@ -15,7 +15,7 @@ describe('documents/put', () => {
 
   beforeEach(async () => {
     //start server
-    server = await require('../../server/index')();
+
     //roles
     const regular = await Role.create({ title: 'regular' });
     const admin = await Role.create({ title: 'admin' });
@@ -72,7 +72,7 @@ describe('documents/put', () => {
   });
 
   afterEach(async () => {
-    await server.close(); //close server
+    // await server.close(); //close server
     await User.deleteMany({});
     await Role.deleteMany({});
     await Document.deleteMany({});
@@ -82,7 +82,7 @@ describe('documents/put', () => {
     const token = adminUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${new mongoose.Types.ObjectId()}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(404);
   }); //test end
@@ -91,7 +91,7 @@ describe('documents/put', () => {
     const token = adminUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${publicDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveProperty('title');
@@ -102,7 +102,7 @@ describe('documents/put', () => {
     const token = regularUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${roleAccessDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveProperty('title');
@@ -116,7 +116,7 @@ describe('documents/put', () => {
     const token = adminUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${roleAccessDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveProperty('title');
@@ -133,7 +133,7 @@ describe('documents/put', () => {
 
     const res = await request(server)
       .get(`/api/documents/${roleAccessDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(403);
     expect(res.body.data).toBeUndefined;
@@ -143,7 +143,7 @@ describe('documents/put', () => {
     const token = author.generateToken();
     const res = await request(server)
       .get(`/api/documents/${privateDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveProperty('title');
@@ -154,7 +154,7 @@ describe('documents/put', () => {
     const token = adminUser.generateToken();
     const res = await request(server)
       .get(`/api/documents/${privateDoc._id}`)
-      .set('x-auth-token', token);
+      .set('Authorization', token);
 
     expect(res.status).toBe(403);
     expect(res.body.data).toBeUndefined();

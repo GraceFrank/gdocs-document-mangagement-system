@@ -1,7 +1,7 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-let server;
+let server = require('../../server/index');
 const Role = require('../../server/models/role');
 const User = require('../../server/models/user');
 const config = require('../../config/default');
@@ -18,9 +18,6 @@ let admin;
 describe('login', () => {
   describe('post/', () => {
     beforeEach(async () => {
-      //start server
-      server = await require('../../server/index')();
-
       regular = await Role.create({ title: 'regular' });
       admin = await Role.create({ title: 'admin' });
 
@@ -42,7 +39,6 @@ describe('login', () => {
       ]);
     });
     afterEach(async () => {
-      await server.close(); //close server
       await User.deleteMany({});
       await Role.deleteMany({});
     });
@@ -85,7 +81,7 @@ describe('login', () => {
         password: 'sweetlove'
       });
 
-      expect(res.body).toHaveProperty('x-auth-token');
+      expect(res.body).toHaveProperty('Authorization');
     }); //test end
 
     test('token sent in the body is valid', async () => {
@@ -95,7 +91,7 @@ describe('login', () => {
       });
 
       //decoding the header set in response
-      const decoded = jwt.decode(res.body['x-auth-token'], config.privateKey);
+      const decoded = jwt.decode(res.body['Authorization'], config.privateKey);
 
       expect(decoded).toHaveProperty('userId');
       expect(decoded).toHaveProperty('roleId');

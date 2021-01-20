@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const request = require('supertest');
-let server;
+let server = require('../../server/index');
 let Role = require('../../server/models/role');
 let User = require('../../server/models/user');
 
 async function sendRequest({ requestUrl, requestType, role, requestBody }) {
   const token = role ? new User({ role: role }).generateToken() : '';
   return await request(server)
-    [requestType](requestUrl || '/api/roles')
-    .set('x-auth-token', token)
+    [requestType](requestUrl || "/api/roles")
+    .set("Authorization", token)
     .send(requestBody);
 }
 //test Creating a role
@@ -19,10 +19,6 @@ describe('Roles, /', () => {
   let admin;
   let regular;
   beforeEach(async () => {
-    //start server
-    server = await require('../../server/index')();
-    await Role.deleteMany({}); //empty roles collection in db
-    await User.deleteMany({});
     regular = await Role.create({ title: 'regular' });
     admin = await Role.create({ title: 'admin' });
 
@@ -43,8 +39,8 @@ describe('Roles, /', () => {
   });
 
   afterEach(async () => {
-    //close server
-    await server.close();
+    await Role.deleteMany({}); //empty roles collection in db
+    await User.deleteMany({});
   });
 
   describe('POST/ ', () => {
