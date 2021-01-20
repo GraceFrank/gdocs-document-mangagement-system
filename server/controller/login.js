@@ -1,7 +1,7 @@
-const validate = require('../api-validations/login');
-const User = require('../models/user');
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
+const validate = require("../api-validations/login");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const _ = require("lodash");
 
 class Login {
   async post(req, res) {
@@ -11,7 +11,7 @@ class Login {
     //checking if email exist in db
     const user = await User.findOne({ email: req.body.email });
     if (!user)
-      return res.status(400).send({ error: 'invalid email or password' });
+      return res.status(400).send({ error: "invalid email or password" });
 
     //validating the user password is correct
     const validPassword = await bcrypt.compare(
@@ -20,14 +20,15 @@ class Login {
     );
 
     if (!validPassword)
-      return res.status(400).send({ error: 'invalid email or password' });
+      return res.status(400).send({ error: "invalid email or password" });
 
     const token = user.generateToken();
+    res.cookie("token", token, { httpOnly: true });
 
     res.send({
-      'x-auth-token': token,
-      message: 'ok',
-      data: _.pick(user, ['_id', 'name', 'email', 'userName', 'role'])
+      Authorization: token,
+      message: "ok",
+      data: _.pick(user, ["_id", "name", "email", "userName", "role"]),
     });
   }
 }

@@ -1,8 +1,8 @@
-const bcrypt = require('bcrypt');
-const _ = require('lodash');
-const validate = require('../api-validations/user');
-const { User, Document, Role } = require('../models/');
-const response = require('../helpers/responses');
+const bcrypt = require("bcrypt");
+const _ = require("lodash");
+const validate = require("../api-validations/user");
+const { User, Document, Role } = require("../models/");
+const response = require("../helpers/responses");
 
 class UserController {
   /**
@@ -25,12 +25,12 @@ class UserController {
         {},
         {
           skip: (page - 1) * limit,
-          limit: limit
+          limit: limit,
         }
       );
 
       const message =
-        'Array of 0 or more documents has been fetched successfully';
+        "Array of 0 or more documents has been fetched successfully";
       return response.success(res, { message, users });
     } catch (error) {
       return response.internalError(res, { error });
@@ -57,16 +57,16 @@ class UserController {
       //check if new email address is unique
       const userWithSameEmail = await User.findOne({
         email: req.body.email,
-        _id: { $ne: req.user.userId }
+        _id: { $ne: req.user.userId },
       });
       if (userWithSameEmail)
-        return response.alreadyExists(res, { message: 'email already in use' });
+        return response.alreadyExists(res, { message: "email already in use" });
       //update the user in database
       const user = await User.findByIdAndUpdate(req.user.userId, req.body);
 
       return response.success(
         res,
-        _.pick(user, ['name', 'email', 'userName', 'role'])
+        _.pick(user, ["name", "email", "userName", "role"])
       );
     } catch (error) {
       return response.send(res, { error });
@@ -85,8 +85,8 @@ class UserController {
       return response.success(res, user);
     } catch (error) {
       return response.internalError(res, {
-        message: 'error deleting user',
-        error
+        message: "error deleting user",
+        error,
       });
     }
   }
@@ -114,16 +114,17 @@ class UserController {
    */
   async post(req, res) {
     try {
+      console.log("here");
       //validating request payload
       const { error } = validate(req.body);
       if (error) return res.status(400).send(error.details[0].message);
 
       //validating that new user is unique by checking if email or username is already in use
       const existingUser = await User.findOne({
-        $or: [{ email: req.body.email }, { userName: req.body.userName }]
+        $or: [{ email: req.body.email }, { userName: req.body.userName }],
       });
       if (existingUser)
-        return res.status(409).send('email or username already in use');
+        return res.status(409).send("email or username already in use");
 
       //instantiating new user
       let newUser = req.body;
@@ -133,16 +134,17 @@ class UserController {
       newUser.password = await bcrypt.hash(newUser.password, salt);
 
       //assigning default role of regular to user when
-      const regular = await Role.findOne({ title: 'regular' });
+      const regular = await Role.findOne({ title: "regular" });
       newUser.role = regular._id;
 
       //saving new user to data base and returning response
       newUser = await User.create(newUser);
       return response.created(
         res,
-        _.pick(newUser, ['_id', 'name', 'email', 'userName', 'role'])
+        _.pick(newUser, ["_id", "name", "email", "userName", "role"])
       );
     } catch (error) {
+      console.log(error);
       return response.internalError(res, { error });
     }
   }

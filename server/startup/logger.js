@@ -11,7 +11,6 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.File({ filename: 'error.log', level: 'error' }),
     new winston.transports.Console()
-    // new winston.transports.MongoDb({db: db, level: 'error'}),
   ],
   //winston exception handler
   exceptionHandlers: [

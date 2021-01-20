@@ -1,6 +1,6 @@
 FROM node:10.16.3
 
-WORKDIR /app/src/gdoc-api
+WORKDIR /src/app/gdoc-api
 
 COPY package*.json ./
 
