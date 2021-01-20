@@ -23,6 +23,7 @@ class Login {
       return res.status(400).send({ error: "invalid email or password" });
 
     const token = user.generateToken();
+
     res.cookie("token", token, { httpOnly: true });
 
     res.send({

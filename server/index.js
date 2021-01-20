@@ -9,7 +9,13 @@ const logger = require("./startup/logger");
 const prodDevs = require("./startup/prod");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
+);
 app.use(cookieParser());
 
 if (!process.env.API_PRIVATE_KEY) {
