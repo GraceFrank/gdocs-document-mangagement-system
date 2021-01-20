@@ -19,7 +19,7 @@ path:
           schema: 
             type: string
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
       responses:
@@ -85,7 +85,7 @@ path:
           schema:
             $ref: "#/definitions/new-doc"
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
         
@@ -134,7 +134,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
         - in: path
@@ -177,7 +177,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
         - in: path
@@ -233,7 +233,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
         - in: path

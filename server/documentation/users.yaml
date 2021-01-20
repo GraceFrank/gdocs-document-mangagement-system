@@ -9,7 +9,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
       responses:
@@ -121,7 +121,7 @@ path:
             type: string
           required: true
         - in: header
-          name: x-auth-token
+          name: Authorization
           description: token is needed for user to be confirmed logged in
           schema:
             type: string            
@@ -172,7 +172,7 @@ path:
           description: the user's id
           schema:
             type: string
-        - name: x-auth-token
+        - name: Authorization
           in: header
           description: token is required to verify that the user is logged in.
           schema:
@@ -195,7 +195,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
       responses:
@@ -246,7 +246,7 @@ path:
         - application/json
       parameters:
         - in: header
-          name: x-auth-token
+          name: Authorization
           schema: 
             type: string
         - in: path

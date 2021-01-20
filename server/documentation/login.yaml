@@ -26,7 +26,7 @@ path:
               message: 
                 type: string
                 example: ok
-              x-auth-token: 
+              Authorization: 
                 type: string
                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjYjI5OWZmOWQwYTIyMDIzZDA1N2M3MCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTU1NTM3Mzc2NH0.LTKrqRV16tICCeoANOUROTnWN6JGE-eY53_lrgM0FIM
               data:
