@@ -28,6 +28,7 @@ class Login {
 
     res.send({
       Authorization: token,
+      expiresIn: 86400,
       message: "ok",
       data: _.pick(user, ["_id", "name", "email", "userName", "role"]),
     });

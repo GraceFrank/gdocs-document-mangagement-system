@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const config = require('../../config/default');
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const config = require("../../config/default");
 
 //name schema
 const nameschema = new mongoose.Schema({
@@ -9,7 +9,7 @@ const nameschema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 255,
-    lowercase: true
+    lowercase: true,
   },
 
   last: {
@@ -17,15 +17,15 @@ const nameschema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxlength: 255,
-    lowercase: true
-  }
+    lowercase: true,
+  },
 });
 
 //defining the user schema,
 const userSchema = new mongoose.Schema({
   name: {
     type: nameschema,
-    required: true
+    required: true,
   },
 
   userName: {
@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 255,
     lowercase: true,
-    unique: true
+    unique: true,
   },
 
   email: {
@@ -43,28 +43,30 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 255,
     lowercase: true,
-    unique: true
+    unique: true,
   },
 
   password: {
     type: String,
     required: true,
     minlength: 8,
-    maxlength: 255
+    maxlength: 255,
   },
 
   role: {
     type: mongoose.Types.ObjectId,
-    ref: 'roles',
-    required: true
-  }
+    ref: "roles",
+    required: true,
+  },
 });
 
-userSchema.methods.generateToken = function() {
-  return jwt.sign({ userId: this._id, roleId: this.role }, config.privateKey);
+userSchema.methods.generateToken = function () {
+  return jwt.sign({ userId: this._id, roleId: this.role }, config.privateKey, {
+    expiresIn: "24h",
+  });
 };
 
 //defining the user model
-const userModel = mongoose.model('users', userSchema);
+const userModel = mongoose.model("users", userSchema);
 
 module.exports = userModel;
