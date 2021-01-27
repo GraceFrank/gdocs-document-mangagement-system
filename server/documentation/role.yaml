@@ -1,0 +1,215 @@
+path:
+  /api/roles/:
+    get:
+      tags: 
+        - Role
+      description: returns All roles when requested by admins
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: x-auth-token
+          schema: 
+            type: string
+      responses:
+        200:
+          description: ok  successful
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: ok
+              data: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type:string
+                    title:
+                      type: string
+                      example: admin
+        401:
+          description: only a logged in Admin user can access this route. so if a user is not logged in a status code of 401 is sent
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'access denied no token provided'
+        403:
+          description: only an in Admin user can access this route. so if a logged in user who  is not an Admin tries to access this route, a status code of 403 is sent
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'forbidden'
+    post:
+      tags: 
+        - Role
+      description: creates an new role
+        - application/json
+      parameters:
+        - name: x-auth-token
+          in: header
+          description: token is required to verify that the user is logged in and the user is an admin
+          schema:
+            type: string
+        - name: payload
+          in: body
+          description: data required for user creation
+          schema:
+            $ref: "#/definitions/newRole"
+      responses:
+        200:
+          description: ok  successfully created role
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: created
+              data: 
+                type:
+                $ref: "#/definitions/createdRole"
+        400:
+          description: a 400 is sent when a user passes invalid contents in the body payload
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'name must be provided'
+        409:
+          description: when a user tries to use an already existing email or username
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'email already in use'
+  /api/roles/{id}:
+    put:
+      tags: 
+        - Role
+      description: updates an existing role
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: the user's id
+          schema:
+            type: string
+        - name: x-auth-token
+          in: header
+          description: token is required to verify that the user is logged in.
+          schema:
+            type: string      
+        - name: payload
+          in: body
+          description: data required for updating a role
+          schema:
+            $ref: "#/definitions/createdRole"
+      responses:
+        200:
+          description: ok  successfully updated role
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: updated
+              data: 
+                type:
+                $ref: "#/definitions/createdRole"
+        400:
+          description: a 400 is sent when a user passes invalid contents in the body payload
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'name must be provided'
+        409:
+          description: when a user tries to use an already existing email or username
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'email already in use'
+    get:
+      tags: 
+        - Role
+      description: returns All roles when requested by admins
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: the user's id
+          schema:
+            type: string
+        - in: header
+          name: x-auth-token
+          schema: 
+            type: string
+      responses:
+        200:
+          description: ok  successful
+          schema:
+            type: object
+            properties:
+              message: 
+                type: string
+                example: ok
+              data: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    title:
+                      type: string
+                      example: admin
+        401:
+          description: only a logged in Admin user can access this route. so if a user is not logged in a status code of 401 is sent
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'access denied no token provided'
+        403:
+          description: only an in Admin user can access this route. so if a logged in user who  is not an Admin tries to access this route, a status code of 403 is sent
+          schema:
+            type: object
+            properties:
+              error: 
+                type: string
+                example: 'forbidden'               
+
+
+
+definitions:
+  newRole:
+    type: object
+    properties:
+      title: 
+        type: string
+        example: admin
+    required:
+      - title
+  createdRole:
+    type: object
+    properties:
+      _id: 
+        type: string
+      title: 
+        type: string
+        example: admin
+    required:
+      - title
