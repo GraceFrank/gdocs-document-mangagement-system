@@ -1,4 +1,0 @@
-{
-  "db": "mongodb+srv://grace:engine132@cluster0-7txuj.gcp.mongodb.net/test?retryWrites=true",
-  "jwtPrivateKey": ""
-}

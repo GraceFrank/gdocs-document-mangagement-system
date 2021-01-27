@@ -1,9 +1,8 @@
-import 'babel-polyfill';
-import login from '../../middleware/login';
-import mongoose from 'mongoose';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
+const mongoose = require('mongoose');
+const request = require('supertest');
+let server;
+const User = require('../../server/models/user');
+const login = require('../../server/middleware/login');
 
 describe('testing the middleware function', () => {
   it('should populate the req.user', () => {
@@ -21,7 +20,8 @@ describe('testing the middleware function', () => {
 
     login(req, res, next);
 
-    expect(req.user).toMatchObject(user);
+    expect(req.user).toMatchObject({ roleId: user.role, userId: user._id });
+    expect(next).toHaveBeenCalled();
   });
 
   it('should not populate the req.user if token is not provided', () => {
@@ -45,8 +45,8 @@ describe('testing the middleware function', () => {
 });
 
 describe('integration test', () => {
-  beforeEach(() => {
-    server;
+  beforeEach(async () => {
+    server = await require('../../server/index')();
   });
   afterEach(async () => {
     await server.close();

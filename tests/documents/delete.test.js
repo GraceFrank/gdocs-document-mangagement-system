@@ -1,17 +1,20 @@
-import 'babel-polyfill';
-import request from 'supertest';
-import server from '../../index';
-import User from '../../models/user';
-import Role from '../../models/role';
-import Document from '../../models/document';
-import mongoose from 'mongoose';
+const request = require('supertest');
+const mongoose = require('mongoose');
+let server;
+const Role = require('../../server/models/role');
+const User = require('../../server/models/user');
+const Document = require('../../server/models/document');
 
 let doc1;
 let user1;
 
 describe('documents/put', () => {
   beforeEach(async () => {
-    server; //start server
+    server = await require('../../server/index')(); //start server
+    await User.deleteMany({});
+    await Role.deleteMany({});
+    await Document.deleteMany({});
+
     const regular = await Role.create({ title: 'regular' });
 
     user1 = await User.create({
@@ -35,9 +38,6 @@ describe('documents/put', () => {
 
   afterEach(async () => {
     await server.close(); //close server
-    await User.deleteMany({});
-    await Role.deleteMany({});
-    await Document.deleteMany({});
   });
 
   test('that it deletes from db', async () => {
@@ -47,7 +47,7 @@ describe('documents/put', () => {
       .set('x-auth-token', token);
 
     const docInDb = await Document.findById(doc1._id);
-    expect(res.body).toHaveProperty('_id');
+    expect(res.body.data).toHaveProperty('_id');
     expect(res.status).toBe(200);
     expect(docInDb).not.toBeTruthy();
   }); //test end
@@ -58,10 +58,10 @@ describe('documents/put', () => {
       .delete(`/api/documents/${doc1._id}`)
       .set('x-auth-token', token);
 
-    expect(res.status).toBe(403);
+    expect(res.status).not.toBe(200);
   }); //test end
 
-  test('that it deletes from db', async () => {
+  test('that a document dose not exsist cannot be deleted', async () => {
     const token = user1.generateToken();
     const res = await request(server)
       .delete(`/api/documents/${new mongoose.Types.ObjectId()}`)

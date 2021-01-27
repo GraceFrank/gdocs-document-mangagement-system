@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  gdoc-app-api:
+    container_name: api
+    # image: node:'11.15.0'
+    build: ./
+    command: npm run startdev
+    working_dir: /usr/src/gdoc-api
+
+    ports: 
+      - "4000:4000"
+    links:
+      - mongoDb
+      - redis
+    volumes:
+      - ./:/usr/src/gdoc-api
+      - /usr/src/gdoc-api/node_modules/
+
+  mongoDb:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+    - "6379:6379"
+
+
